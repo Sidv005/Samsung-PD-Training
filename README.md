@@ -98,8 +98,6 @@ Faster cells vs Slower cells:- Faster cells are requried to take care of setup v
 
 <details>
  <summary>Labs on Yosys </summary>
-PrimeTime is an essential Electronic Design Automation (EDA) tool developed by Synopsys. It's used for analyzing and optimizing the timing performance of digital integrated circuits. By evaluating signal propagation delays, setup times, and other factors, PrimeTime helps designers ensure that circuits operate reliably and meet performance targets.
-I invoked pt_shell using the following commands: pt_shell
-Below is the screenshot showing sucessful launch:
+Overwiew of Yosys tool is explained to us. Later on implementation of latch is demonstrated and gate level netlist is genrated.    
 <img width="1085" alt="pt_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/70cb8795964d3ef80b73d1e016eaf5bf6b8315b8/SamsungPD%23Day0/pt_shell.png">
 </details>
