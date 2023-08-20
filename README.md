@@ -98,7 +98,12 @@ Faster cells vs Slower cells:- Faster cells are requried to take care of setup v
 
 <details>
  <summary>Labs on Yosys </summary>
-Overwiew of Yosys tool is explained to us. Later on implementation of latch is demonstrated and gate level netlist is genrated. Command used for generating graphical representation are as follows:
+Overwiew of Yosys tool is explained to us. Later on implementation of latch is demonstrated and gate level netlist is generated. 
+ 
+Firstly, Yosys is invoked using "yosys" command. the screenshot is shown below:
+<img width="1085" alt="netlist_graph" src="">
+  
+ Commands used for generating graphical representation are as follows:
  
  read_liberty -lib <.lib path>
   
