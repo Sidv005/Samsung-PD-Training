@@ -98,6 +98,12 @@ Faster cells vs Slower cells:- Faster cells are requried to take care of setup v
 
 <details>
  <summary>Labs on Yosys </summary>
-Overwiew of Yosys tool is explained to us. Later on implementation of latch is demonstrated and gate level netlist is genrated.    
-<img width="1085" alt="pt_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/70cb8795964d3ef80b73d1e016eaf5bf6b8315b8/SamsungPD%23Day0/pt_shell.png">
+Overwiew of Yosys tool is explained to us. Later on implementation of latch is demonstrated and gate level netlist is genrated. Command used for generating graphical representation are as follows:
+ read_liberty -lib <.lib path>
+ read_verilog<RTL_design >
+ For synthesis : synth -top<module_name>
+ to generate netlist: abc -liberty<.lib path>
+ "show" command is used to view the grapghical representation of netlist generated. 
+<img width="1085" alt="netlist_graph" src="https://github.com/Sidv005/Samsung-PD-Training/blob/863e8e2726d04a43ad749d2b72a31ab01b21925c/netlist_graph.PNG">
+  
 </details>
