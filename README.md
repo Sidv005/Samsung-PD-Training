@@ -11,18 +11,39 @@ Below is the screenshot showing sucessful launch:
  <summary>dc_shell </summary>
 I invoked dc_shell using the following commands: dc_shell
 Below is the screenshot showing sucessful launch:
-<img width="1085" alt="icc2_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/32946b9e5b01c48e7e3ea5e00f246180e8ce5419/SamsungPD%23Day0/dc_shell.png">
+<img width="1085" alt="dc_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/32946b9e5b01c48e7e3ea5e00f246180e8ce5419/SamsungPD%23Day0/dc_shell.png">
 </details>
 
 <details>
  <summary>lc_shell </summary>
 I invoked lc_shell using the following commands: lc_shell
 Below is the screenshot showing sucessful launch:
-<img width="1085" alt="icc2_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/70cb8795964d3ef80b73d1e016eaf5bf6b8315b8/SamsungPD%23Day0/lc_shell.png">
+<img width="1085" alt="lc_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/70cb8795964d3ef80b73d1e016eaf5bf6b8315b8/SamsungPD%23Day0/lc_shell.png">
 </details>
 <details>
  <summary>pt_shell </summary>
 I invoked pt_shell using the following commands: pt_shell
 Below is the screenshot showing sucessful launch:
-<img width="1085" alt="icc2_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/70cb8795964d3ef80b73d1e016eaf5bf6b8315b8/SamsungPD%23Day0/pt_shell.png">
+<img width="1085" alt="pt_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/70cb8795964d3ef80b73d1e016eaf5bf6b8315b8/SamsungPD%23Day0/pt_shell.png">
+</details>
+
+<details>
+ <summary>iverilog </summary>
+I invoked iverilog using the following commands: iverilog
+Below is the screenshot showing sucessful launch:
+<img width="1085" alt="iverilog" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6a01e81a5310edd8e0ee2e8719fc0d3b0204f026/SamsungPD%23Day0/iverilog.PNG">
+</details>
+
+<details>
+ <summary>gtkwave </summary>
+I invoked gtkwave using the following commands: gtkwave
+Below is the screenshot showing sucessful launch:
+<img width="1085" alt="gtkwave" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6a01e81a5310edd8e0ee2e8719fc0d3b0204f026/SamsungPD%23Day0/gtkwave.PNG">
+</details>
+
+<details>
+ <summary>yosys </summary>
+I invoked yosys using the following commands: yosys
+Below is the screenshot showing sucessful launch:
+<img width="1085" alt="yosys" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6a01e81a5310edd8e0ee2e8719fc0d3b0204f026/SamsungPD%23Day0/yosys.PNG">
 </details>
