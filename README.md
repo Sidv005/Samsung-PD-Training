@@ -114,6 +114,6 @@ The Netlist code is following:
 <img width="1085" alt="netlist_ini" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9c9468c78babff96e0e25143a4c2d96d641e55d3/netlist_ini.PNG">
   
  After simplification the switched netlist code is shown below:
-<img width="1085" alt="netlist_switched" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9c9468c78babff96e0e25143a4c2d96d641e55d3/netlist_switched.PNG">
+<img width="1085" alt="netlist_switched" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6e71349c6cea71f31b30a9feb915b27596a2d638/netlist_switched.PNG">
 </details>
 
