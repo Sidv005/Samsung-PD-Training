@@ -75,7 +75,7 @@ GTKWave is an open-source waveform viewer used in digital circuit design. It hel
 We created a directory named as siddhant.v and the cloned vsdflow repostry as well as we cloned sky130RTLDesignAndSynthesisWorkshop repostry. These repostitories contains  the necessary .lib files and verilog design files and testbeches for practice.
 The screenshots of RTL Design code, Testbench and gtkwave viewer are shown as follows:
 RTL Design code :-
-<img width="1085" alt="dc_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/32946b9e5b01c48e7e3ea5e00f246180e8ce5419/SamsungPD%23Day0/dc_shell.png">
+<img width="1085" alt="dc_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/44f51a59e7ccacf4af7dfd90e3d56e24c0f36174/good_latch.PNG">
 </details>
 
 <details>
