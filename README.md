@@ -101,7 +101,7 @@ Faster cells vs Slower cells:- Faster cells are requried to take care of setup v
 Overwiew of Yosys tool is explained to us. Later on implementation of latch is demonstrated and gate level netlist is generated. 
  
 Firstly, Yosys is invoked using "yosys" command. the screenshot is shown below:
-<img width="1085" alt="netlist_graph" src="">
+<img width="1085" alt="netlist_graph" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7ec89b24e4a07e8257d00e4b1f45b11704c11dec/yosys_2.PNG">
   
  Commands used for generating graphical representation are as follows:
  
