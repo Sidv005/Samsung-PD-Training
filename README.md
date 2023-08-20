@@ -5,6 +5,5 @@
  <summary>icc2_shell </summary>
 I invoked icc2_shell using the following commands: icc2_shell
 Below is the screenshot showing sucessful launch:
-
-<img width="1085" alt="icc2_shell" src="https://github.com/AbhishekChinchani/Samsung_pd/blob/3e0e2b03e90d202a407834f16c21cc39f0c6500c/Samsung_PD_%23day0/icc2.png">
+<img width="1085" alt="icc2_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9132f919f1b97fafb5a77a49d680d8d767232e17/SamsungPD%23Day0/icc2_shell.png">
 </details>
