@@ -56,3 +56,5 @@ I invoked yosys using the following commands: yosys
 Below is the screenshot showing sucessful launch:
 <img width="1085" alt="yosys" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6a01e81a5310edd8e0ee2e8719fc0d3b0204f026/SamsungPD%23Day0/yosys.PNG">
 </details>
+
+## Day-1-Introduction to Verilog RTL Design and Synthesis
