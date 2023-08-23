@@ -128,11 +128,11 @@ The Netlist code is following:
  <summary>Introduction to timing .libs </summary>
 When it comes to digital design and RTL (Register Transfer Level) descriptions, timing is crucial to ensure the correct operation of the designed circuit. Timing analysis is essential to verify that signals propagate correctly and meet timing constraints. The standard library that we use is sky130_fd_sc_hd_tt_025C_1v80.lib, from this we can observe synthesis will be performed for 130 nm technology . here tt denotes process is typical , 025C indicates temperature is 25 deg Celcius and 1v80 shows that voltage is 1.8V. Cells list can be shown by using following commands :
  
- gvim ../lib/sky130_fd_sc_hd_tt_025C_1v80.lib 
+ **gvim ../lib/sky130_fd_sc_hd_tt_025C_1v80.lib**
  
- :/cell
+ **:/cell**
  
- :g//
+ **:g//**
  
  Below is screenshot of standard library :
  <img width="1085" alt="cell_list" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6c505b0ebf4d2da86a7de3b3c7eaa97a9b48e0dc/SamsungPD%23day2/cell_list.png">
@@ -147,9 +147,9 @@ Hierarchical synthesis: Hierarchical synthesis is a design methodology used in d
  In this image submodule 1 shows AND gate and submodule 2 shows OR gate. Now yosys is invoked for synthesis and after technology mapping netlist generated in graphical form is shown in below figure.
  <img width="1085" alt="multiple_netlist_graph" src="https://github.com/Sidv005/Samsung-PD-Training/blob/551d8b32d1ccf8f89ea945cad50698966c109016/SamsungPD%23day2/multiple_netlist_graph.png">
  
- write_verilog -nioattr multiple_modules_hier.v
+ **write_verilog -nioattr multiple_modules_hier.v**
  
- !gvim multiple_modules_hier.v
+ **!gvim multiple_modules_hier.v**
 
  The above two commands are used to generate optimized netlist code. The obtained netlist code is present below:
  ```ruby
@@ -205,4 +205,15 @@ module sub_module2(a, b, y);
   assign y = _2_;
 endmodule
 ```
+From this we can observe that submodules are instantiated but gate cells are not synthesized.
+
+*Flat synthesis* : Flat synthesis for netlist involves synthesizing a digital design without hierarchical division into modules. It treats the entire design as a single entity, simplifying the synthesis process but potentially sacrificing optimization and modularity. While suitable for smaller designs or interim steps, it may not achieve the same level of efficiency as hierarchical synthesis, which is preferred for complex designs. Furthermore, yosys is evoked and flat synthesis is performed by applying following commands :
+**read_liberty -lib <.lib path>**
+**read_verilog multiple_modules.v**
+**synth -top multiple_modules**
+**abc -liberty <.lib path>**
+**flatten**
+**show**
+Here **multiple_modules.v** is RTL Design file and **multiple_modules** is instance name which is synthesized in our case. The below figure shows the generated circuit of flattened netlist in graphical form.
+ <img width="1085" alt="flat_netlist_graph" src="https://github.com/Sidv005/Samsung-PD-Training/blob/ac0e7bc26ca2a12ebd8a5dd4a181261a1b20e965/SamsungPD%23day2/flat_netlist_graph.png">
 </details>
