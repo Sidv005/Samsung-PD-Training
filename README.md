@@ -136,8 +136,7 @@ When it comes to digital design and RTL (Register Transfer Level) descriptions, 
  
  Below is screenshot of standard library :
  <img width="1085" alt="cell_list" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6c505b0ebf4d2da86a7de3b3c7eaa97a9b48e0dc/SamsungPD%23day2/cell_list.png">
-  For each gate cell 2^N input combinations are possible for N no. of inputs. Different leakage power, area and various parameters are displayed as per their combinations. Comparison of power consumption of different flavours of same gate is shown below:
-  <img width="1085" alt="cell_list" src="">
+For each gate cell 2^N input combinations are possible for N no. of inputs. Different leakage power, area and various parameters are displayed as per their combinations.
 </details>
 
 <details>
@@ -301,6 +300,29 @@ Synthesized Netlist:
 </details>
 
 <details>
- <summary>Optimization Techniques </summary>
+ <summary>Interesting Optimization Techniques </summary>
+Here we will discuss about special cases where additional hardwares are not required to implement the circuit. For instance consider a design where 3bit number is multipied by 2. Here we need connecting bits to the output and LSB is needed to be grounded. RTL code of multipying by 2 is shown below:
+	
+```ruby
+module mul2 (input [2:0] a, output [3:0] y);
+	assign y = a * 2;
+endmodule
+```
+For multipying any no. by 2 shifting the bits to left and appending extra bit as 0 is needed to be done. Same is described through synthesized netlist circuit as seen below:
 
+<img width="1085" alt="mult2_netlist" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6e28ddc230185ce2d77a588dbb28051e9717a353/SamsungPD%23day2/mult2_netlist.png">
+
+Generated netlist code is presented in the following figure:
+<img width="1085" alt="mult2_netlist_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6e28ddc230185ce2d77a588dbb28051e9717a353/SamsungPD%23day2/mult2_netlist_code.png">
+Consider another special case where any no. is multipied by 9. The RTL Design code is given below:
+
+```ruby
+module mult8 (input [2:0] a , output [5:0] y);
+	assign y = a * 9;
+endmodule
+```
+The synthesized netlist circuit is shown in the following figure:
+<img width="1085" alt="mult8_netlist" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6e28ddc230185ce2d77a588dbb28051e9717a353/SamsungPD%23day2/mult8_netlist.png">
+The generated netlist code is represented by the below image.
+<img width="1085" alt="mult8_netlist_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6e28ddc230185ce2d77a588dbb28051e9717a353/SamsungPD%23day2/mult8_netlist_code.png">
 </details>
