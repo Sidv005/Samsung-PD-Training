@@ -146,4 +146,63 @@ Hierarchical synthesis: Hierarchical synthesis is a design methodology used in d
 <img width="1085" alt="multiple_modules_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/551d8b32d1ccf8f89ea945cad50698966c109016/SamsungPD%23day2/multiple_modules_code.png">
  In this image submodule 1 shows AND gate and submodule 2 shows OR gate. Now yosys is invoked for synthesis and after technology mapping netlist generated in graphical form is shown in below figure.
  <img width="1085" alt="multiple_netlist_graph" src="https://github.com/Sidv005/Samsung-PD-Training/blob/551d8b32d1ccf8f89ea945cad50698966c109016/SamsungPD%23day2/multiple_netlist_graph.png">
+ 
+ write_verilog -nioattr multiple_modules_hier.v
+ 
+ !gvim multiple_modules_hier.v
+
+ The above two commands are used to generate optimized netlist code. The obtained netlist code is present below:
+ ```ruby
+module multiple_modules(a, b, c, y);
+  input a;
+  input b;
+  input c;
+  wire net2;
+  output y;
+  sub_module2 u1 (
+    .a(a),
+    .b(b),
+    .y(net2)
+  );
+  sub_module3 u2 (
+    .a(net2),
+    .b(c),
+    .y(y)
+  );
+endmodule
+
+module sub_module1(a, b, y);
+  wire _1_;
+  wire _2_;
+  wire _3_;
+  input a;
+  input b;
+  output y;
+  sky131_fd_sc_hd__and2_0 _3_ (
+    .A(_2_),
+    .B(_1_),
+    .X(_3_)
+  );
+  assign _2_ = b;
+  assign _1_ = a;
+  assign y = _3_;
+endmodule
+
+module sub_module2(a, b, y);
+  wire _0_;
+  wire _1_;
+  wire _2_;
+  input a;
+  input b;
+  output y;
+  sky130_fd_sc_hd__or2_0 _3_ (
+    .A(_1_),
+    .B(_0_),
+    .X(_2_)
+  );
+  assign _1_ = b;
+  assign _0_ = a;
+  assign y = _2_;
+endmodule
+```
 </details>
