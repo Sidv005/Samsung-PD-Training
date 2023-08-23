@@ -1,0 +1,51 @@
+module multiple_modules(a, b, c, y);
+  input a;
+  input b;
+  input c;
+  wire net2;
+  output y;
+  sub_module2 u1 (
+    .a(a),
+    .b(b),
+    .y(net2)
+  );
+  sub_module3 u2 (
+    .a(net2),
+    .b(c),
+    .y(y)
+  );
+endmodule
+
+module sub_module2(a, b, y);
+  wire _1_;
+  wire _2_;
+  wire _3_;
+  input a;
+  input b;
+  output y;
+  sky131_fd_sc_hd__and2_0 _3_ (
+    .A(_2_),
+    .B(_1_),
+    .X(_3_)
+  );
+  assign _2_ = b;
+  assign _1_ = a;
+  assign y = _3_;
+endmodule
+
+module sub_module2(a, b, y);
+  wire _0_;
+  wire _1_;
+  wire _2_;
+  input a;
+  input b;
+  output y;
+  sky130_fd_sc_hd__or2_0 _3_ (
+    .A(_1_),
+    .B(_0_),
+    .X(_2_)
+  );
+  assign _1_ = b;
+  assign _0_ = a;
+  assign y = _2_;
+endmodule
