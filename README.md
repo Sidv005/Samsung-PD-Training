@@ -299,3 +299,8 @@ Simulation:
 Synthesized Netlist:
 <img width="1085" alt="dff_async_set_netlist" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c96e3f23d1c872c0baa6f4e48b51d022285bdb18/SamsungPD%23day2/dff_sync_reset_netlist.png">
 </details>
+
+<details>
+ <summary>Optimization Techniques </summary>
+
+</details>
