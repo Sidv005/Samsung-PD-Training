@@ -327,3 +327,20 @@ The synthesized netlist circuit is shown in the following figure:
 The generated netlist code is represented by the below image.
 <img width="1085" alt="mult8_netlist_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6e28ddc230185ce2d77a588dbb28051e9717a353/SamsungPD%23day2/mult8_netlist_code.png">
 </details>
+
+## Day-3-Intoduction to Optimizations
+
+<details>
+ <summary>Combinational Logic Optimization with examples </summary>
+**Combinational Logic Optimization** This term refers to squeezing of logic to get best possible optimized designin terms of area and power saving. This divided in two categories as follows:-
+*constant propogation* also called Direct Propogation example - Consider output Y=(A+B)' if implemented using CMOS technology it will have 6 MOS transistors but it can also be simplified if an input A=0 then only 2 MOS  transistors are used for implementation.
+*Boolean Logic Optimization* which are analysed using K-Map and Quine McKluskey. For instance consider a statement y=a?(b?c:(c?a:0)):!c this will contain 3 2x1 mux but after simplification y=a xnor c i.e. 1 xnor gate is sufficient to implement the logic.
+**opt_clean -purge** : this command is useed to optimize circuit in yosys.
+```ruby
+module opt_check (input a, input b,output y);
+  assign y= a?b:0;
+endmodule
+```
+<img width="1085" alt="icc2_shell" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9132f919f1b97fafb5a77a49d680d8d767232e17/SamsungPD%23Day0/icc2_shell.png">
+
+</details>
