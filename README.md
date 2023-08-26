@@ -336,8 +336,10 @@ The generated netlist code is represented by the below image.
 **Combinational Logic Optimization** This term refers to squeezing of logic to get best possible optimized designin terms of area and power saving. This divided in two categories as follows:-
 *constant propogation* also called Direct Propogation example - Consider output Y=(A+B)' if implemented using CMOS technology it will have 6 MOS transistors but it can also be simplified if an input A=0 then only 2 MOS  transistors are used for implementation.
 *Boolean Logic Optimization* which are analysed using K-Map and Quine McKluskey. For instance consider a statement y=a?(b?c:(c?a:0)):!c this will contain 3 2x1 mux but after simplification y=a xnor c i.e. 1 xnor gate is sufficient to implement the logic.
-**opt_clean -purge** : this command is useed to optimize circuit in yosys.
 
+**opt_clean -purge** : this command is used to optimize circuit in yosys.
+
+**Example 1**: For opt_check1.v file
 ```ruby
 module opt_check (input a, input b,output y);
   assign y= a?b:0;
@@ -348,7 +350,7 @@ endmodule
 The generated netlist code is mentioned in the following image. The command used is **write_verilog opt_check_netlist.v**
 <img width="1085" alt="opt_check_netlist_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1046d1469b68aab2d132e038bafb6b03d7e0019d/SamsungPD/%23day3/opt_check_netlist_code.png">
 
-Example 2: For opt_check2.v file
+**Example 2**: For opt_check2.v file
 ```ruby
 module opt_check (input a , input b , output y);
    assign y = a?1:b;
@@ -360,7 +362,7 @@ Synthesized circuit is shown in below figure.
 The generated netlist code is mentioned in the following image. The command used is **write_verilog opt_check2_netlist.v**
 <img width="1085" alt="opt_check2_netlist_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1046d1469b68aab2d132e038bafb6b03d7e0019d/SamsungPD/%23day3/opt_check2_netlist_code.png">
 
-Example-3 For opt_check3.v file
+**Example 3** For opt_check3.v file
 ```ruby
 module opt_check3 (input a , input b, input c , output y);
    assign y = a?(c?b:0):0;
@@ -372,7 +374,7 @@ Synthesized circuit is shown in below figure.
 The generated netlist code is mentioned in the following image. The command used is **write_verilog opt_check3_netlist.v**
 <img width="1085" alt="opt_check3_netlist_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1046d1469b68aab2d132e038bafb6b03d7e0019d/SamsungPD/%23day3/opt%E2%80%AD_check3_netlsit_code.png">
 
-Example-4 For opt_check3.v file
+**Example 4** For opt_check3.v file
 ```ruby
 module opt_check4 (input a , input b , input c , output y);
    assign y = a?(b?(a & c ):c):(!c);
@@ -384,7 +386,7 @@ Synthesized circuit is shown in below figure.
 The generated netlist code is mentioned in the following image. The command used is **write_verilog opt_check4_netlist.v**
 <img width="1085" alt="opt_check4=_netlist_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1046d1469b68aab2d132e038bafb6b03d7e0019d/SamsungPD/%23day3/opt_check4_netlist_code.png">
 
-Example 5 Optimize multimodule (RTL file name- multiple_module_opt.v). 
+**Example 5** Optimize multimodule (RTL file name- multiple_module_opt.v). 
 The following commands are used for generating the netlist in possible optimized form  :
 
 **read_liberty -lib <library_path>**
@@ -422,7 +424,7 @@ Before flatten
 After flatten
 <img width="1085" alt="before_flat_multiple_module__circuit" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b83c1033ea83fb3523aa6e996bb86fadeb6c9b7/SamsungPD/%23day3/after_flat_multiple_module_circuit.PNG">
 
-Example 6 Optimize multimodule (RTL file name- multiple_module_opt2.v). 
+**Example 6** Optimize multimodule (RTL file name- multiple_module_opt2.v). 
 ```ruby
 module sub_module(input a , input b , output y);
 	assign y = a & b;
@@ -438,6 +440,7 @@ endmodule
 ```
 Before flatten
 <img width="1085" alt="before_flat_multiple_module_opt2_circuit" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b83c1033ea83fb3523aa6e996bb86fadeb6c9b7/SamsungPD/%23day3/before_flat_multiple_module_opt2_circuit.PNG">
+
 After flatten
 <img width="1085" alt="after_flat_multiple_module_opt2_circuit" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b83c1033ea83fb3523aa6e996bb86fadeb6c9b7/SamsungPD/%23day3/after_flat_multiple_module_opt2_circuit.PNG">
 
@@ -456,7 +459,7 @@ After flatten
 
 *Retiming* : Retime optimization is a strategy employed to enhance sequential circuits. Its impact is limited to the arrangement of registers within the circuit, leaving the combinational segment untouched. This robust technique for sequential optimization facilitates the shifting of registers throughout the combinational logic or the enhancement of register count, thereby enhancing performance by striking a balance between power consumption and delay. Importantly, these improvements are achieved without altering the overall input-output behavior of the circuit.
 
-Example 1 Here D flip flop is the result in synthesized circuit
+**Example 1** Here D flip flop is the result in synthesized circuit
 ```ruby
 module dff_const1(input clk, input reset, output reg q);
 	always @(posedge clk, posedge reset)
@@ -474,7 +477,7 @@ Simulation
 Synthesized circuit is shown below 
 <img width="1085" alt="dff_const1_circuit" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8a0fc3e0728ce7bb23438d3d1a5703ca9b4ce921/SamsungPD/%23day3/dff_const1_circuit.png">
 
-Example 2 Here D flip flop is not yielded in synthesized circuit
+**Example 2** Here D flip flop is not yielded in synthesized circuit
 ```ruby
 module dff_const2(input clk, input reset, output reg q);
 	always @(posedge clk, posedge reset)
@@ -492,7 +495,7 @@ Simulation
 Synthesized circuit is shown below 
 <img width="1085" alt="dff_const2_circuit" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8a0fc3e0728ce7bb23438d3d1a5703ca9b4ce921/SamsungPD/%23day3/dff_const2_circuit.png">
 
-Example 3
+**Example 3**
 ```ruby
 module dff_const3(input clk, input reset, output reg q);
 	reg q1;
