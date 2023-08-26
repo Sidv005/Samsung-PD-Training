@@ -443,7 +443,9 @@ Before flatten
 
 After flatten
 <img width="1085" alt="after_flat_multiple_module_opt2_circuit" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b83c1033ea83fb3523aa6e996bb86fadeb6c9b7/SamsungPD/%23day3/after_flat_multiple_module_opt2_circuit.PNG">
+</details>
 
+<details>
  <summary>Sequential Logic optimization </summary>
  There are few techniques for Sequential Logic Optimization which are as follows:
  BASIC (Sequential Constant Propogation)
@@ -571,7 +573,9 @@ Simulation
 
 Synthesized circuit is shown below 
 <img width="1085" alt="dff_const5_circuit" src="hhttps://github.com/Sidv005/Samsung-PD-Training/blob/8a0fc3e0728ce7bb23438d3d1a5703ca9b4ce921/SamsungPD/%23day3/dff_const5_circuit.png">
+</details>
 
+<details>
 <summary>Sequential optimization of unused outputs </summary>
 
 **Example 1**
