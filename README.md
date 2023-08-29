@@ -645,7 +645,7 @@ To avoid missing sensitivity lists, designers need to ensure that all the signal
 *Blocking and Non Blocking Assignments*:-
 Blocking statements: When a blocking statement is encountered in a procedural block, it is executed sequentially, and the next statement in the block will not begin execution until the current statement completes. This can lead to a specific and predictable order of operations, but it also means that the execution of subsequent statements is blocked until the current one finishes. They reflect a clear sequence of operations and are commonly used to model synchronous circuit behavior where order matters.
 
-Example:-
+**Example-1**:-
 ```ruby
 always @(posedge clk) begin
     a = b + c;  // Blocking assignment
@@ -654,7 +654,7 @@ end
 ```
 Non Blocking statements: This executes all RHS when always block is entered and assigns to LHS. Here parallel evaluation is done. When a non-blocking statement is encountered in a procedural block, it is scheduled for execution but does not take immediate effect. Instead, the assignment occurs at the end of the current time step, ensuring that all statements within the block are evaluated independently of the order in which they appear in the code. 
 
-Example:-
+**Example-2**:-
 ```ruby
 always @(posedge clk) begin
     a <= b + c;  // Non-blocking assignment
@@ -684,7 +684,7 @@ Netlist Simulation:
 From the above two waveforms it is observed that when *sel* is 0 output follows i0 and when *sel* is 1 output follows i1. The RTL simulated waveform and Netlist simulated waveform obtained is same. 
 There is no synth-sim mismatch.
 
-**Example 2** RTL Cede of bad_mux.v file. Here always block is activated only when sel line is changed.
+**Example 2** RTL Cede of bad_mux.v file. Here always block is activated only when *sel* line is changed.
 ```ruby
 module bad_mux (input i0 , input i1 , input sel , output reg y);
 always @ (sel)
@@ -749,6 +749,18 @@ end
 endmodule
 ```
 Simulation waveform of RTL:-
+<img width="1085" alt="wave_blocking_caveat" src="https://github.com/Sidv005/Samsung-PD-Training/blob/42b6ce6beab111a67f38498028f57a28c9323852/SamsungPD%23day4/wave_blocking_caveat.png">
+From this image observe thutput is acting like a imaginary flop since it is beholding previous values of *a* and *b*.
 
+Now yosys is invoked for synthesis. The synthesized circuit is shown below.
+<img width="1085" alt="blocking_caviat_circuit" src="https://github.com/Sidv005/Samsung-PD-Training/blob/42b6ce6beab111a67f38498028f57a28c9323852/SamsungPD%23day4/blocking_caviat_circuit.png">
+
+The generated netlist code is illustrated below.
+<img width="1085" alt="blocking_caveat_netlist_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/42b6ce6beab111a67f38498028f57a28c9323852/SamsungPD%23day4/blocking_caveat_netlist_code.png">
+
+Simulated waveform for synthesized netlist is in following figure.
+<img width="1085" alt="wave_blockin_caveat_GLS" src="https://github.com/Sidv005/Samsung-PD-Training/blob/42b6ce6beab111a67f38498028f57a28c9323852/SamsungPD%23day4/wave_blockin_caveat_GLS.png">
+
+The above .v file describes a combinational circuit having *or and gate*, where output (x) of or is internally connected to and gate giving final output as *d*. In RTL code *or and* operations are operating in reverse order due to bolocking assignments. Hence AND gate is taking input from previous output of OR gate which acts like imaginary flop this leads to wrong output *d* waveform. The netlist simulated waveform shows correct functionality of combinational circuit this can be observed from above figure. This is example of synth-sim mismatch due to *Blocking statements*. This issue can be tackeled by using Non Blocking statements.
 
 </details>
