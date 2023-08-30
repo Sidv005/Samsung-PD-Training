@@ -764,3 +764,21 @@ Simulated waveform for synthesized netlist is in following figure.
 The above .v file describes a combinational circuit having *or and gate*, where output (x) of or is internally connected to and gate giving final output as *d*. In RTL code *or and* operations are operating in reverse order due to bolocking assignments. Hence AND gate is taking input from previous output of OR gate which acts like imaginary flop this leads to wrong output *d* waveform. The netlist simulated waveform shows correct functionality of combinational circuit this can be observed from above figure. This is example of synth-sim mismatch due to *Blocking statements*. This issue can be tackeled by using Non Blocking statements.
 
 </details>
+
+## Day-5-Intoduction to Design for Testability
+<details>
+<summary>Fundamentals of DFT</summary>
+	
+-***Testability***- This term refers to the degree of easiness towards checking a chip for detecting faults and errors. It is executed during synthesis of RTL Design in ASIC design flow. Testability features involves scan chains, BIST, etc. which improves reliability of the integrated circuits.
+
+-***DFT***- Deisgn for Testability is a technique which provides a design to become testable after production. It is the extra logic which need to be inserted during design process which is helpful in post-production testing.
+**Why need DFT ?**- There are defects in silicon which leads to errors in the device. The manufacturing process is not 100% error free. For manufacturing millions of chip running full exhaustive tests on the device is not feasible so a design is necessary required to detect the defects and faults which results to correct manufacturing. Thus, DFT technique is used to implement such a design which detects the faults in the physical device.
+
+*Levels of testing* : The 3 main levels of testing are are follows:
+a. Chip-level :- stage at which chips are manufactured. Example:*Built-in self-test(BIST)*
+b.Board-level :- stage at which chips are integrated on boards.
+c.System-level:- stage at which various boards are gathered together. Example:*Boundary scan*
+
+
+
+
