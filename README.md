@@ -828,7 +828,11 @@ The value at the nodes is shifted out through scan patterns and is observed in s
 **Defect level**: It is the fraction of faulty parts that are shipped to customers
 </details>
 
-<summary>Introduction of DFT Techniques</summary>
 <details>
+<summary>Introduction of DFT Techniques</summary>
+DFT is categorized into two techniques which are as follows:
+1. Ad-hoc technique
+
+
 	
 </details>
