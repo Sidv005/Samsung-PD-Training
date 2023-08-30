@@ -769,16 +769,66 @@ The above .v file describes a combinational circuit having *or and gate*, where 
 <details>
 <summary>Fundamentals of DFT</summary>
 	
--***Testability***- This term refers to the degree of easiness towards checking a chip for detecting faults and errors. It is executed during synthesis of RTL Design in ASIC design flow. Testability features involves scan chains, BIST, etc. which improves reliability of the integrated circuits.
+***Testability***- This term refers to the degree of easiness towards checking a chip for detecting faults and errors. It is executed during synthesis of RTL Design in ASIC design flow. Testability features involves scan chains, BIST, etc. which improves reliability of the integrated circuits.
 
--***DFT***- Deisgn for Testability is a technique which provides a design to become testable after production. It is the extra logic which need to be inserted during design process which is helpful in post-production testing.
-**Why need DFT ?**- There are defects in silicon which leads to errors in the device. The manufacturing process is not 100% error free. For manufacturing millions of chip running full exhaustive tests on the device is not feasible so a design is necessary required to detect the defects and faults which results to correct manufacturing. Thus, DFT technique is used to implement such a design which detects the faults in the physical device.
+***DFT***- Design for Testability is a technique which provides a design to become testable after production. It is the extra logic which need to be inserted during design process which is helpful in post-production testing.
 
-*Levels of testing* : The 3 main levels of testing are are follows:
-a. Chip-level :- stage at which chips are manufactured. Example:*Built-in self-test(BIST)*
-b.Board-level :- stage at which chips are integrated on boards.
-c.System-level:- stage at which various boards are gathered together. Example:*Boundary scan*
+**Why need DFT ?** - There are defects in silicon which leads to errors in the device. The manufacturing process is not 100% error free. For manufacturing millions of chip running full exhaustive tests on the device is not feasible so a design is necessary required to detect the defects and faults which results to correct manufacturing. Thus, DFT technique is used to implement such a design which detects the faults in the physical device.
 
+- DFT assures the detection of all faults in circuit.
+  
+- DFT reduces cost and time associated with test development.
+  
+- DFT reduces the execution time of performing test on fabrication chips.
 
+**Levels of testing** : The 3 main levels of testing are are follows:
 
+- a.Chip-level :- stage at which chips are manufactured. Example:*Built-in self-test(BIST)*
 
+- b.Board-level :- stage at which chips are integrated on boards.
+
+- c.System-level:- stage at which various boards are gathered together. Example:*Boundary scan*
+
+**Benefits** of DFT are as follows:
+
+- a. DFT methods contributes to the overall test coverage of circuit.
+
+- b. Assists in localizing faults and makes debugging and fault isolation easier.
+
+- c. Reduces test time by allowing concurrent testing of multiple parts of ICs.
+
+- d. DFT simplifies the testing process and is cost effectiveduring manufacturing.
+
+**Tradeoffs** of DFT are listed below:
+
+- a. Increases design compexity so design time also increases.
+
+- b. Potentially affects performance.
+
+- c. Due to extra circuitry more chip area is consumed.
+
+- d. Additional costs because of extra testing circuitry.
+
+**Basic teminologies**
+DFT increases the accessibility of internal nodes 
+
+- **Controllability**: this term refers to tendency to establish specific signal value in any net.i.e ability to drive the node to "1" or"0".
+
+- **Observability**: This term refers to ability to determine internal values by controlling stimulus inputs and observing outputs.i.e. ability to observe the effect of controlling.
+The value at the nodes is shifted out through scan patterns and is observed in scan out ports.
+
+**Fault**: It is a defect which might results to system malfunction and errors.
+
+**Error**: Error is consequence of faults which leads to unstable state.
+
+**Failure**: System is said to be failure if it does not perform expected functions.
+
+**Fault coverage**: It can be defined as a percentage ratio representing total no. of faults detected over total no. of possible faults.
+
+**Defect level**: It is the fraction of faulty parts that are shipped to customers
+</details>
+
+<summary>Introduction of DFT Techniques</summary>
+<details>
+	
+</details>
