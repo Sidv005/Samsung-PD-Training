@@ -924,3 +924,86 @@ dc_shell> write -f verilog -out lab1_net_with_sky130.v
 ```
 Upon assigning files to the libraries, the design is linked and compiled in the following manner. In this process, the link_library is specified to append data to the existing list without replacing it. Consequently, the resulting outnetlist is as follows:
 </details>
+
+<details>
+<summary>Labs on Tcl Scripting</summary>
+The Tool Command Language (Tcl) is employed for crafting SDCs.
+	
+**Set**
+- It is utilized for generating and assigning variables.
+- For example, set a 5 --> a=5
+- set a [expr $a+$b] --> a=a+b
+- Square brackets serve the purpose of encapsulating commands within TCL for nesting.
+
+**if-else**
+```ruby
+if {condition} {
+statements if true
+} else {
+statements if false
+}
+```
+In TCL, conditions should consistently be enclosed within curly braces. The dollar sign ($) is employed when referencing the value of a variable, not when initially assigning it using the "set" command.
+An example is given below:
+
+```ruby
+if {$a < 10} {
+echo "$a is less than 10"
+}else {
+echo "$a is greater than 10"
+}
+```
+
+**while**
+```ruby
+ while {condition} {
+ statements
+ }
+```
+The "incr" command in TCL performs the same function as setting a variable using the expression "i [expr $i+1]" or "i=i+1."
+An example is given below:
+```ruby
+set i 0
+while {$i < 10} {
+  echo $i;
+ incr i;
+}
+```
+
+**for**
+```ruby
+for {looping var} {condition} {looping var modification} {
+statements
+}
+```
+An example is given below:
+  for {set i 0} {$i < 10} {incr i} {
+  echo $i;
+  }
+  
+**foreach**
+```ruby
+ foreach var list {
+ statements
+}
+```
+
+```ruby
+set my_design_list [list u_top/u_mod1 \
+			 u_top/u_mod3 ]
+foreach my_module $my_design_list {
+set_size_only $my_module;
+  }
+```
+- In this example, "my_design_list" serves as the identifier for the list. Lists in TCL can be likened to arrays in C.
+- \ is used as line breaker. 
+- set_size_only is a DC specific command.
+
+**foreach_in_collection**
+The command "foreach_in_collection" is specific to DC (Design Compiler).
+```ruby
+foreach_in_collection var collection {
+   statements
+ }
+```
+</details>
