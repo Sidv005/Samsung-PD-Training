@@ -843,5 +843,84 @@ Logic synthesis aims to create a functional digital circuit that is both logical
 <img width="1085" alt="illustration" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4e5ba100ac404f70ff959d99e8266aa741ca3b14/SamsungPD%23day6/illustration.PNG">
 
 - Constraints serve as directives for the synthesizer, instructing it to select the most suitable library cells that are ideal for achieving an optimal design.
+</details>
 
+<details>
+<summary>Introduction to DC Shell</summary>
+The Design Compiler, developed by Synopsys, is a synthesis tool designed specifically for the ASIC (Application-Specific Integrated Circuit) design flow. The features are as follows:
+	
+- Has the ability to perform DFT Scan stitch
+- Can handle huge designs with extreme complexity and provide very good QoR.
+- Compatibility with different tools made by Synopsys.
+- Recognized as a top-quality synthesis tool widely used in the semiconductor industry.
+  
+***Common Terminology associated with DC:***
+*Synopsys Design Constraints(SDC)* : These design constraints are given to DC (Design Compiler) to facilitate the necessary optimizations for achieving the best possible implementation.
+*.lib* : A design library housing standard cells.
+*.db* : Similar to .lib, but in an alternate format that DC (Design Compiler) can comprehend, libraries are provided in .db format.
+*.ddc* : Synopsys uses its own exclusive format called DDC for storing design data, and DC (Design Compiler) has the ability to both produce and interpret this format.
+*Design* : RTL files which has the behavioral model of the design.
+</details>
+
+***SDC : Synopsys Design Constraints***
+The SDC format defines design intentions regarding timing, power, and area constraints, with power described using UPF. SDC commands can extract UPF information. This format is compatible with various EDA tools in the semiconductor industry and is built upon the Tool Command Language (Tcl).
+
+***DC Setup:***
+The DC setup process involves taking RTL files, .lib files (similar to Yosys), and SDC files as inputs to produce gate-level netlists, DDC format files, and synthesis reports as outputs.
+The ASIC flow is the steps involved in converting RTL to the Graphical Data set(GDS). The Application Specific IC flow is shown in figure below:
+<img width="1085" alt="ASICflow" src="https://github.com/Sidv005/Samsung-PD-Training/blob/23a9599941c49214a1e3a55031833afe2746c3db/SamsungPD%23day6/ASICflow.jpeg">
+- The DC Synthesis process can be described in the following manner: In this scenario, the "Design.lib" is a specific design library, distinct from the standard .lib or technology library, and it may represent third-party intellectual property (IP) or pre-designed modules. The Design Compiler ensures that the connections of inputs and outputs from this module are correctly integrated into the overall design and optimizes the logic accordingly.
+
+- The Design Compiler reads the Verilog files of the design, along with the standard library files and constraints, and generates reports as it links and synthesizes the design. Eventually, it produces a netlist as its final output. The DC Synthesis flow is given below in the figure.
+<img width="1085" alt="dc_synth" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/719d1466aee2cae41ec2f89fb81f4a2ae151f877/SamsungPD%23day6/dc_synth.png">
+
+***Invoking dc basic setup***
+- We understand that the library name contains crucial information regarding the PVT (Process, Voltage, Temperature) conditions under which a design operates. The performance of any electronic circuit is influenced by factors like voltage, temperature, and manufacturing process. Therefore, a unique .lib file is defined for each PVT corner, with this particular PVT corner representing typical conditions at 25°C temperature and 1.8V voltage.
+
+- Within the .lib file, you can find valuable data such as the units for resistance (R), inductance (L), capacitance (C), time measurements, technology specifications, and the various versions or flavors of each cell.
+
+- To initiate the DC (Design Compiler) shell, the following commands are executed:
+
+```ruby
+$ csh
+$ dc_shell
+dc_shell> 
+```
+To initiate the process, we must activate the C shell and subsequently launch the DC shell. Within the DC shell, a series of license checks are performed for various compilers, including the VHDL compiler, HDL compiler (used for interpreting Verilog or other Hardware Description Languages), DFT compiler (for enabling scan stitching), Design Vision (the graphical version of DC), and Power Compiler (essential for power-aware synthesis).
+
+```ruby
+dc_shell> echo $target_library
+ your_library.db
+dc_shell> echo $link_library
+ * your_library.db
+```
+In DC, the technology file is in the form of target library or link library. These both libraries are used by DC shell to pick standard cells. your_library.db is an imaginary non-existent library, just pointed for dummy purpose.
+
+```ruby
+dc_shell> read_verilog DC_WORKSHOP/verilog_files/lab1_flop_with_en.v
+dc_shell> write -f verilog -out lab1_net.v
+dc_shell> sh gvim lab1_net.v &
+```
+We provide the input Verilog file (which contains the RTL code) to be read and written in the same format as understood by the design. To access the file editor within the shell, we need to utilize the specified command "sh gvim." The behavioral code of the design that is being read is:
+
+```ruby
+module lab1_flop_with_en
+endmodule
+```
+The dc shell reads lib files in .db format.
+
+```ruby
+dc_shell> read_db ~/DC_WORKSHOP/lib/sky130_fd_sc_hd_tt_025c_1v80.db
+dc_shell> sh gvim lab1_net.v &
+```
+The resulting netlist appears as follows: The cells are within SEQGEN, but they are not in the sky130 cell format. This situation arises because no file has been designated for the target and link library. "gtech" serves as the virtual library within DC's memory, used to interpret the design.
+
+```ruby
+dc_shell> set target_library /home/usha.m/DC_WORKSHOP/lib/sky130_fd_sc_hd_tt_025c_1v80.db
+dc_shell> set link_library {* <path to standardcell library> }
+dc_shell> link
+dc_shell> compile
+dc_shell> write -f verilog -out lab1_net_with_sky130.v
+```
+Upon assigning files to the libraries, the design is linked and compiled in the following manner. In this process, the link_library is specified to append data to the existing list without replacing it. Consequently, the resulting outnetlist is as follows:
 </details>
