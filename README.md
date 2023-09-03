@@ -828,7 +828,7 @@ The value at the nodes is shifted out through scan patterns and is observed in s
 **Defect level**: It is the fraction of faulty parts that are shipped to customers
 </details>
 
-## Day6 INTODUCTION TO LOGIC SYNTHESIS
+## Day6 - Introduction To Logic Synthesis 
 <details>
 <summary>Fundamentals of Digital Logic Design and Synthesis</summary>
 Digital Logic, as a switching mechanism, possesses significant capabilities in the realms of automation and decision-making. Many automation tasks heavily rely on decision-making circuits, and these functionalities are typically described using behavioral design specifications written in Hardware Description Languages (HDLs). Notable examples of HDLs include VHDL and Verilog.
