@@ -842,5 +842,6 @@ Digital Logic, as a switching mechanism, possesses significant capabilities in t
 Logic synthesis aims to create a functional digital circuit that is both logically and electrically accurate while adhering to specified timing requirements. To illustrate this concept, let's delve into an example. Here output *y* is assigned as *ab+bc+ac* the output can be achieved using 3 implementations. Refering to below figure the table shows that implemetation 3 is best option for designing logic circuit. Meanwhile consider a situation where this circuit is present in hold sensitive path then we need to add buffers to increase combinational delay and this may lead to kore area consumption. So synthesizer needs to be guided by *sdc* file as per requirements. 
 <img width="1085" alt="illustration" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4e5ba100ac404f70ff959d99e8266aa741ca3b14/SamsungPD%23day6/illustration.PNG">
 
+- Constraints serve as directives for the synthesizer, instructing it to select the most suitable library cells that are ideal for achieving an optimal design.
 
 </details>
