@@ -828,11 +828,18 @@ The value at the nodes is shifted out through scan patterns and is observed in s
 **Defect level**: It is the fraction of faulty parts that are shipped to customers
 </details>
 
+## Day6 INTODUCTION TO LOGIC SYNTHESIS
 <details>
-<summary>Introduction of DFT Techniques</summary>
-DFT is categorized into two techniques which are as follows:
-1. Ad-hoc technique
+<summary>Fundamentals of Digital Logic Design and Synthesis</summary>
+Digital Logic, as a switching mechanism, possesses significant capabilities in the realms of automation and decision-making. Many automation tasks heavily rely on decision-making circuits, and these functionalities are typically described using behavioral design specifications written in Hardware Description Languages (HDLs). Notable examples of HDLs include VHDL and Verilog.
 
+- The RTL is the behavioral code. We require the actual gates i.e., gates, flops etc.
+- The RTL code is converted into gate level netlist by Synthesis. The synthesis tool takes .lib, verilog file and sdc file (constraint file) as input and generates netlist as output.
+- A ".lib" file comprises a variety of logical modules such as AND, OR, NOT, NAND, each with distinct performance characteristics, including Fast, Typical, and Slow variations. Faster cells are essential to satisfy setup time constraints and enhance overall performance, while slower cells are necessary to fulfill hold time requirements.
+- The synthesizer is directed to choose the most suitable cell variations for constructing a logic circuit, and this guidance is commonly known as constraints.
 
-	
+**LOGIC SYNTHESIS:**
+Logic synthesis aims to create a functional digital circuit that is both logically and electrically accurate while adhering to specified timing requirements. To illustrate this concept, let's delve into an example. Here output *y* is assigned as *ab+bc+ac* the output can be achieved using 3 implementations. Refering to below figure the table shows that implemetation 3 is best option for designing logic circuit. Meanwhile consider a situation where this circuit is present in hold sensitive path then we need to add buffers to increase combinational delay and this may lead to kore area consumption. So synthesizer needs to be guided by *sdc* file as per requirements. 
+<img width="1085" alt="" src="">
+
 </details>
