@@ -872,7 +872,7 @@ The ASIC flow is the steps involved in converting RTL to the Graphical Data set(
 - The DC Synthesis process can be described in the following manner: In this scenario, the "Design.lib" is a specific design library, distinct from the standard .lib or technology library, and it may represent third-party intellectual property (IP) or pre-designed modules. The Design Compiler ensures that the connections of inputs and outputs from this module are correctly integrated into the overall design and optimizes the logic accordingly.
 
 - The Design Compiler reads the Verilog files of the design, along with the standard library files and constraints, and generates reports as it links and synthesizes the design. Eventually, it produces a netlist as its final output. The DC Synthesis flow is given below in the figure.
-<img width="1085" alt="dc_synth" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/719d1466aee2cae41ec2f89fb81f4a2ae151f877/SamsungPD%23day6/dc_synth.png">
+<img width="1085" alt="dc_synth" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7662963a9a31c04b318faed24f35b77eb406fb9e/SamsungPD%23day6/dc_synth.png">
 
 ***Invoking dc basic setup***
 - We understand that the library name contains crucial information regarding the PVT (Process, Voltage, Temperature) conditions under which a design operates. The performance of any electronic circuit is influenced by factors like voltage, temperature, and manufacturing process. Therefore, a unique .lib file is defined for each PVT corner, with this particular PVT corner representing typical conditions at 25°C temperature and 1.8V voltage.
