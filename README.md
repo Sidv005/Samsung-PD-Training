@@ -938,10 +938,10 @@ Now the library is assigned which is shown in following figure. <br>
 <img width="500" alt="synopsys_dc_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/synopsys_dc_setup.png"><br>
 
  In this process, the link_library is specified to append data to the existing list without replacing it. Consequently, the resulting outnetlist is as follows:<br>
-<img width="1000" alt="sky130" src="https://github.com/Sidv005/Samsung-PD-Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/sky130.png"><br>
+<img width="600" alt="sky130" src="https://github.com/Sidv005/Samsung-PD-Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/sky130.png"><br>
 
  Below image shows the comparison between the two netlist obtained.<br>
- <img width="1000" alt="comparison(SEQ_sky)" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/comparison(SEQ_sky).png"><br>
+ <img width="600" alt="comparison(SEQ_sky)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c1daf0e62aa3c9adafef173f74452d66d2b8808b/SamsungPD%23day6/dc_shell_labs/comparison(SEQ_sky).png"><br>
 
 ## Lab on ddc gui with design_vision##
 For launching the design vision tool, we need to load cshell and design_vision command. GUI version of design vision is evoked. The command to write out a ddc file as output of dc_shell after writing out netlist is:
