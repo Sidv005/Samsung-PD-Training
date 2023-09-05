@@ -886,7 +886,8 @@ $ csh
 $ dc_shell
 dc_shell> 
 ```
-To initiate the process, we must activate the C shell and subsequently launch the DC shell. Within the DC shell, a series of license checks are performed for various compilers, including the VHDL compiler, HDL compiler (used for interpreting Verilog or other Hardware Description Languages), DFT compiler (for enabling scan stitching), Design Vision (the graphical version of DC), and Power Compiler (essential for power-aware synthesis).
+To initiate the process, we must activate the C shell and subsequently launch the DC shell. Within the DC shell, a series of license checks are performed for various compilers, including the VHDL compiler, HDL compiler (used for interpreting Verilog or other Hardware Description Languages), DFT compiler (for enabling scan stitching), Design Vision (the graphical version of DC), and Power Compiler (essential for power-aware synthesis). Below image shows the dc_shell activatation.
+<img width="1085" alt="dc_shell_invoke" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/dc_shell_invoke.png">
 
 ```ruby
 dc_shell> echo $target_library
@@ -904,7 +905,14 @@ dc_shell> sh gvim lab1_net.v &
 We provide the input Verilog file (which contains the RTL code) to be read and written in the same format as understood by the design. To access the file editor within the shell, we need to utilize the specified command "sh gvim." The behavioral code of the design that is being read is:
 
 ```ruby
-module lab1_flop_with_en
+module lab1_flop_with_en ( input res , input clk , input d , input en , output reg q);
+always @ (posedge clk , posedge res)
+begin
+	if(res)
+		q <= 1'b0;
+	else if(en)
+		q <= d;	
+end
 endmodule
 ```
 The dc shell reads lib files in .db format.
@@ -913,8 +921,12 @@ The dc shell reads lib files in .db format.
 dc_shell> read_db ~/DC_WORKSHOP/lib/sky130_fd_sc_hd_tt_025c_1v80.db
 dc_shell> sh gvim lab1_net.v &
 ```
-The resulting netlist appears as follows: The cells are within SEQGEN, but they are not in the sky130 cell format. This situation arises because no file has been designated for the target and link library. "gtech" serves as the virtual library within DC's memory, used to interpret the design.
+The resulting netlist appears as follows: 
+<img width="1085" alt="SEQGEN" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/SEQGEN.png">
 
+The cells are within SEQGEN, but they are not in the sky130 cell format. This situation arises because no file has been designated for the target and link library. "gtech" serves as the virtual library within DC's memory, used to interpret the design. A dummy library file is indicated when set library is not assigned. Below image shows the same. 
+<img width="1085" alt="your_lib" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/your_lib.png">
+Upon assigning files to the libraries, the design is linked and compiled in the following manner.
 ```ruby
 dc_shell> set target_library /home/usha.m/DC_WORKSHOP/lib/sky130_fd_sc_hd_tt_025c_1v80.db
 dc_shell> set link_library {* <path to standardcell library> }
@@ -922,7 +934,34 @@ dc_shell> link
 dc_shell> compile
 dc_shell> write -f verilog -out lab1_net_with_sky130.v
 ```
-Upon assigning files to the libraries, the design is linked and compiled in the following manner. In this process, the link_library is specified to append data to the existing list without replacing it. Consequently, the resulting outnetlist is as follows:
+Now the library is assigned which is shown in following figure. 
+<img width="1085" alt="synopsys_dc_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/synopsys_dc_setup.png">
+
+ In this process, the link_library is specified to append data to the existing list without replacing it. Consequently, the resulting outnetlist is as follows:
+<img width="1085" alt="sky130" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/sky130.png">
+
+ Below image shows the comparison between the two netlist obtained.
+ <img width="1085" alt="comparison(SEQ_sky)" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/comparison(SEQ_sky).png">
+
+## Lab on ddc gui with design_vision##
+For launching the design vision tool, we need to load cshell and design_vision command. GUI version of design vision is evoked. The command to write out a ddc file as output of dc_shell after writing out netlist is:
+```ruby
+dc_shell> write -f ddc -out lab1_flop.ddc
+```
+The major benefit of ddc is that all the information loaded in one tool can be saved and used in another tool with one command. Following command is used inside the GUI. 
+```ruby
+design_vision> read_ddc lab1.ddc
+```
+The resulted netlist is shown in below image.
+<img width="1085" alt="ddc_netlist" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/ddc_netlist.png">
+
+## Lab on .synopsys dc setup ##
+Everytime setting link and target library is cumbersum and error prone. Hence, following commands are used in terminal to setup library.
+```ruby
+gvim .synopsys_dc.setup
+```
+Below screenshot show the expected result in the terminal.
+<img width="1085" alt="synopsys_dc_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/synopsys_dc_setup.png">
 </details>
 
 <details>
