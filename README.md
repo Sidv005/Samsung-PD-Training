@@ -871,8 +871,8 @@ The ASIC flow is the steps involved in converting RTL to the Graphical Data set(
 <img width="1085" alt="ASICflow" src="https://github.com/Sidv005/Samsung-PD-Training/blob/23a9599941c49214a1e3a55031833afe2746c3db/SamsungPD%23day6/ASICflow.jpeg">
 - The DC Synthesis process can be described in the following manner: In this scenario, the "Design.lib" is a specific design library, distinct from the standard .lib or technology library, and it may represent third-party intellectual property (IP) or pre-designed modules. The Design Compiler ensures that the connections of inputs and outputs from this module are correctly integrated into the overall design and optimizes the logic accordingly.
 
-- The Design Compiler reads the Verilog files of the design, along with the standard library files and constraints, and generates reports as it links and synthesizes the design. Eventually, it produces a netlist as its final output. The DC Synthesis flow is given below in the figure.
-<img width="1085" alt="dc_synth" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7662963a9a31c04b318faed24f35b77eb406fb9e/SamsungPD%23day6/dc_synth.png">
+- The Design Compiler reads the Verilog files of the design, along with the standard library files and constraints, and generates reports as it links and synthesizes the design. Eventually, it produces a netlist as its final output. The DC Synthesis flow is given below in the figure.<br>
+<img width="1085" alt="dc_synth" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7662963a9a31c04b318faed24f35b77eb406fb9e/SamsungPD%23day6/dc_synth.png"><br>
 
 ***Invoking dc basic setup***
 - We understand that the library name contains crucial information regarding the PVT (Process, Voltage, Temperature) conditions under which a design operates. The performance of any electronic circuit is influenced by factors like voltage, temperature, and manufacturing process. Therefore, a unique .lib file is defined for each PVT corner, with this particular PVT corner representing typical conditions at 25°C temperature and 1.8V voltage.
@@ -886,8 +886,8 @@ $ csh
 $ dc_shell
 dc_shell> 
 ```
-To initiate the process, we must activate the C shell and subsequently launch the DC shell. Within the DC shell, a series of license checks are performed for various compilers, including the VHDL compiler, HDL compiler (used for interpreting Verilog or other Hardware Description Languages), DFT compiler (for enabling scan stitching), Design Vision (the graphical version of DC), and Power Compiler (essential for power-aware synthesis). Below image shows the dc_shell activatation.
-<img width="1085" alt="dc_shell_invoke" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/dc_shell_invoke.png">
+To initiate the process, we must activate the C shell and subsequently launch the DC shell. Within the DC shell, a series of license checks are performed for various compilers, including the VHDL compiler, HDL compiler (used for interpreting Verilog or other Hardware Description Languages), DFT compiler (for enabling scan stitching), Design Vision (the graphical version of DC), and Power Compiler (essential for power-aware synthesis). Below image shows the dc_shell activatation.<br>
+<img width="800" alt="dc_shell_invoke" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/dc_shell_invoke.png"><br>
 
 ```ruby
 dc_shell> echo $target_library
@@ -921,11 +921,11 @@ The dc shell reads lib files in .db format.
 dc_shell> read_db ~/DC_WORKSHOP/lib/sky130_fd_sc_hd_tt_025c_1v80.db
 dc_shell> sh gvim lab1_net.v &
 ```
-The resulting netlist appears as follows: 
-<img width="1085" alt="SEQGEN" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/SEQGEN.png">
+The resulting netlist appears as follows: <br>
+<img width="600" alt="SEQGEN" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/SEQGEN.png"><br>
 
-The cells are within SEQGEN, but they are not in the sky130 cell format. This situation arises because no file has been designated for the target and link library. "gtech" serves as the virtual library within DC's memory, used to interpret the design. A dummy library file is indicated when set library is not assigned. Below image shows the same. 
-<img width="1085" alt="your_lib" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/your_lib.png">
+The cells are within SEQGEN, but they are not in the sky130 cell format. This situation arises because no file has been designated for the target and link library. "gtech" serves as the virtual library within DC's memory, used to interpret the design. A dummy library file is indicated when set library is not assigned. Below image shows the same. <br>
+<img width="600" alt="your_lib" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/your_lib.png"><br>
 Upon assigning files to the libraries, the design is linked and compiled in the following manner.
 ```ruby
 dc_shell> set target_library /home/usha.m/DC_WORKSHOP/lib/sky130_fd_sc_hd_tt_025c_1v80.db
@@ -934,14 +934,14 @@ dc_shell> link
 dc_shell> compile
 dc_shell> write -f verilog -out lab1_net_with_sky130.v
 ```
-Now the library is assigned which is shown in following figure. 
-<img width="1085" alt="synopsys_dc_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/synopsys_dc_setup.png">
+Now the library is assigned which is shown in following figure. <br>
+<img width="500" alt="synopsys_dc_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/synopsys_dc_setup.png"><br>
 
- In this process, the link_library is specified to append data to the existing list without replacing it. Consequently, the resulting outnetlist is as follows:
-<img width="1085" alt="sky130" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/sky130.png">
+ In this process, the link_library is specified to append data to the existing list without replacing it. Consequently, the resulting outnetlist is as follows:<br>
+<img width="1000" alt="sky130" src="https://github.com/Sidv005/Samsung-PD-Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/sky130.png"><br>
 
- Below image shows the comparison between the two netlist obtained.
- <img width="1085" alt="comparison(SEQ_sky)" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/comparison(SEQ_sky).png">
+ Below image shows the comparison between the two netlist obtained.<br>
+ <img width="1000" alt="comparison(SEQ_sky)" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/comparison(SEQ_sky).png"><br>
 
 ## Lab on ddc gui with design_vision##
 For launching the design vision tool, we need to load cshell and design_vision command. GUI version of design vision is evoked. The command to write out a ddc file as output of dc_shell after writing out netlist is:
@@ -952,26 +952,27 @@ The major benefit of ddc is that all the information loaded in one tool can be s
 ```ruby
 design_vision> read_ddc lab1.ddc
 ```
-The resulted netlist is shown in below image.
-<img width="1085" alt="ddc_netlist" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/ddc_netlist.png">
+The resulted netlist is shown in below image.<br>
+<img width="1085" alt="ddc_netlist" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/ddc_netlist.png"><br>
 
 ## Lab on .synopsys dc setup ##
 Everytime setting link and target library is cumbersum and error prone. Hence, following commands are used in terminal to setup library.
 ```ruby
 gvim .synopsys_dc.setup
 ```
-Below screenshot show the expected result in the terminal.
-<img width="1085" alt="synopsys_dc_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/synopsys_dc_setup.png">
+Below screenshot show the expected result in the terminal.<br>
+<img width="600" alt="synopsys_dc_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4ca2a060e41021014edb7705e94c38d2a137ff95/SamsungPD%23day6/dc_shell_labs/synopsys_dc_setup.png"><br>
 </details>
 
 <details>
 <summary>Labs on Tcl Scripting</summary>
+	
 The Tool Command Language (Tcl) is employed for crafting SDCs.
 	
 **Set**
 - It is utilized for generating and assigning variables.
-- For example, set a 5 --> a=5
-- set a [expr $a+$b] --> a=a+b
+- For example, set x 10 => x=10
+- set a [expr $x+$y] => x=x+y
 - Square brackets serve the purpose of encapsulating commands within TCL for nesting.
 
 **if-else**
@@ -1019,7 +1020,10 @@ An example is given below:
   for {set i 0} {$i < 10} {incr i} {
   echo $i;
   }
-  
+
+Below image show the loop commands like for and while.<br>
+<img width="400" alt="for_while" src="https://github.com/Sidv005/Samsung-PD-Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/for_while.png"><br>
+
 **foreach**
 ```ruby
  foreach var list {
@@ -1037,6 +1041,8 @@ set_size_only $my_module;
 - In this example, "my_design_list" serves as the identifier for the list. Lists in TCL can be likened to arrays in C.
 - \ is used as line breaker. 
 - set_size_only is a DC specific command.
+Below image show the instruction set and obtained result in the terminal.<br>
+<img width="600" alt="foreach" src="https://github.com/Sidv005/Samsung-PD-Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/foreach.png"><br>
 
 **foreach_in_collection**
 The command "foreach_in_collection" is specific to DC (Design Compiler).
@@ -1045,4 +1051,22 @@ foreach_in_collection var collection {
    statements
  }
 ```
+The following figure shows the instruction set for *foreach_in_collection*.<br>
+<img width="600" alt="foreach_in_collection" src="https://github.com/Sidv005/Samsung-PD-Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/foreach_in_collection.png"><br>
+
+*dc_shell> sh gvim &* 
+
+The above command is utilized to open gvim window
+
+The following command is used in the gvim window to create a tcl file.
+```ruby
+source myscript.tcl
+```
+where *myscript.tcl* is the name of the tcl file.
+The following screenshot shows the myscript.tcl that is being used.<br>
+<img width="600" alt="foreach_in_collection_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/foreach_in_collection_tcl.png"><br>
+
+The result obtained is printed in the terminal which is shown below.<br>
+<img width="1085" alt="foreach_in_collection_multipy" src="https://github.com/Sidv005/Samsung-PD Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/foreach_in_collection_multipy.png"><br>
+
 </details>
