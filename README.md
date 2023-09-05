@@ -856,25 +856,25 @@ The Design Compiler, developed by Synopsys, is a synthesis tool designed specifi
   
 ***Common Terminology associated with DC:***
 *Synopsys Design Constraints(SDC)* : These design constraints are given to DC (Design Compiler) to facilitate the necessary optimizations for achieving the best possible implementation.
-*.lib* : A design library housing standard cells.
-*.db* : Similar to .lib, but in an alternate format that DC (Design Compiler) can comprehend, libraries are provided in .db format.
-*.ddc* : Synopsys uses its own exclusive format called DDC for storing design data, and DC (Design Compiler) has the ability to both produce and interpret this format.
-*Design* : RTL files which has the behavioral model of the design.
-</details>
 
-***SDC : Synopsys Design Constraints***
+- *.lib* : A design library housing standard cells.
+- *.db* : Similar to .lib, but in an alternate format that DC (Design Compiler) can comprehend, libraries are provided in .db format.
+- *.ddc* : Synopsys uses its own exclusive format called DDC for storing design data, and DC (Design Compiler) has the ability to both produce and interpret this format.
+- *Design* : RTL files which has the behavioral model of the design.
+
+**SDC : Synopsys Design Constraints**
 The SDC format defines design intentions regarding timing, power, and area constraints, with power described using UPF. SDC commands can extract UPF information. This format is compatible with various EDA tools in the semiconductor industry and is built upon the Tool Command Language (Tcl).
 
-***DC Setup:***
+**DC Setup:**
 The DC setup process involves taking RTL files, .lib files (similar to Yosys), and SDC files as inputs to produce gate-level netlists, DDC format files, and synthesis reports as outputs.
-The ASIC flow is the steps involved in converting RTL to the Graphical Data set(GDS). The Application Specific IC flow is shown in figure below:
-<img width="1085" alt="ASICflow" src="https://github.com/Sidv005/Samsung-PD-Training/blob/23a9599941c49214a1e3a55031833afe2746c3db/SamsungPD%23day6/ASICflow.jpeg">
+The ASIC flow is the steps involved in converting RTL to the Graphical Data set(GDS). The Application Specific IC flow is shown in figure below: <br>
+<img width="600" alt="ASICflow" src="https://github.com/Sidv005/Samsung-PD-Training/blob/23a9599941c49214a1e3a55031833afe2746c3db/SamsungPD%23day6/ASICflow.jpeg"> <br>
 - The DC Synthesis process can be described in the following manner: In this scenario, the "Design.lib" is a specific design library, distinct from the standard .lib or technology library, and it may represent third-party intellectual property (IP) or pre-designed modules. The Design Compiler ensures that the connections of inputs and outputs from this module are correctly integrated into the overall design and optimizes the logic accordingly.
 
 - The Design Compiler reads the Verilog files of the design, along with the standard library files and constraints, and generates reports as it links and synthesizes the design. Eventually, it produces a netlist as its final output. The DC Synthesis flow is given below in the figure.<br>
-<img width="1085" alt="dc_synth" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7662963a9a31c04b318faed24f35b77eb406fb9e/SamsungPD%23day6/dc_synth.png"><br>
+<img width="600" alt="dc_synth" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7662963a9a31c04b318faed24f35b77eb406fb9e/SamsungPD%23day6/dc_synth.png"><br>
 
-***Invoking dc basic setup***
+**Invoking dc basic setup**
 - We understand that the library name contains crucial information regarding the PVT (Process, Voltage, Temperature) conditions under which a design operates. The performance of any electronic circuit is influenced by factors like voltage, temperature, and manufacturing process. Therefore, a unique .lib file is defined for each PVT corner, with this particular PVT corner representing typical conditions at 25°C temperature and 1.8V voltage.
 
 - Within the .lib file, you can find valuable data such as the units for resistance (R), inductance (L), capacitance (C), time measurements, technology specifications, and the various versions or flavors of each cell.
@@ -1067,6 +1067,6 @@ The following screenshot shows the myscript.tcl that is being used.<br>
 <img width="600" alt="foreach_in_collection_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/foreach_in_collection_tcl.png"><br>
 
 The result obtained is printed in the terminal which is shown below.<br>
-<img width="1085" alt="foreach_in_collection_multipy" src="https://github.com/Sidv005/Samsung-PD Training/blob/678497056bdef97e7199d0db48ade549231d629a/SamsungPD%23day6/dc_shell_labs/foreach_in_collection_multipy.png"><br>
+<img width="600" alt="foreach_in_collection_multipy" src="https://github.com/Sidv005/Samsung-PD-Training/blob/52cdbfaad0368eb4c82aa6bfaeaa27567d3394f0/SamsungPD%23day6/dc_shell_labs/foreach_in_collection_multipy.png"><br>
 
 </details>
