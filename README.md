@@ -1068,5 +1068,159 @@ The following screenshot shows the myscript.tcl that is being used.<br>
 
 The result obtained is printed in the terminal which is shown below.<br>
 <img width="600" alt="foreach_in_collection_multipy" src="https://github.com/Sidv005/Samsung-PD-Training/blob/52cdbfaad0368eb4c82aa6bfaeaa27567d3394f0/SamsungPD%23day6/dc_shell_labs/foreach_in_collection_multipy.png"><br>
+</details>
 
+## Day-7- Fundamentals of STA
+
+<details>
+ <summary>Introduction to STA(Static Timing Analysis) </summary>
+
+***Static Timing Analysis (STA)*** plays a vital role in the validation and assurance of digital integrated circuit designs, verifying that they adhere to timing criteria and function dependably.
+
+STA evaluates the timing behavior of digital circuits without the necessity for real-time simulation. It confirms that signals traverse the circuit while adhering to predetermined timing constraints, thereby ensuring correct operation and the attainment of performance objectives.
+
+***Delay***
+Delay is the duration required for a signal to travel from one location within a digital circuit to another. This metric holds immense significance in the design process, as it exerts a direct influence on the integrated circuit's performance, power efficiency, and overall reliability.
+
+A *Maximum Delay* Constraint represents a design parameter or condition that sets an upper threshold on the time it requires for a signal to travel through a specific route or segment within an integrated circuit. As an illustration, think of a situation where two D flip-flops are linked with a combinational logic component in between them.
+
+Tclk >= Tcq + Tcombi + Tsetup
+
+The term *Minimum Delay constraint* denotes a design specification or stipulation that establishes a mandatory lower limit for the delay a signal must experience when traveling through a particular route or component within an integrated circuit. This constraint is implemented to guarantee that specific signals within the circuit do not propagate too swiftly, thereby preventing potential timing conflicts and operational complications.
+
+Thold < Tcq + Tcombi
+
+The concept of delay can be easily grasped by drawing an analogy with a water bucket. The aim is to fill both the buckets. One bucket is having higher inflow while the other one is having lesser inflow of water. So, the one having higher inflow will get fill first. This can be corelated with input transition i.e. we can infer that higher input transition less will be the dealy. 
+
+Considering another example where one bucket is bigger than the other bucket and both have same inflow. In that case the smaller bucket will fill first. This can be corelated with load capacitance i.e lower the load capacitance lesser will be delay. We can conclude that Delay is the function of *input transition and load capacitance*.
+
+***Timing Arc***
+iming arcs are essential elements within VLSI (Very Large Scale Integration) design, playing a pivotal role in the process of timing analysis. These arcs outline how a particular logic element, such as a flip-flop or gate, interacts with input and output transitions, elucidating the resultant delay incurred during signal processing. They encapsulate the intricate dynamics of digital components, including considerations like rising and falling signal edges, setup and hold requirements, and the time it takes for signals to propagate through the element.
+
+Combinational Cells Timing arcs : It gathers delay data for each input pin to every output pin that falls within its jurisdiction or control.
+
+Below is the screenshot showing sucessful launch: <br>
+<img width="600" alt="mux" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d325849fd723c189376cb0bd1f6cc979bd667e89/day7/mux.png"> <br>
+The timing arcs are as follows:
+
+- I0 => Y
+- I1 => Y
+- S => Y
+
+Y depends on all 3 inputs.
+
+***Constraints***
+In VLSI tools are used to synthesize a design so a VLSI designer can understand functionality under boundaries but for tool it is not possible. Hence constraints are required by the tool to synthesize the design. 
+
+*The need of Constraints.*
+In VLSI circuits if we consider a case where a launch FF is transporting data to capture FF through any combinational logic then some amount of delay will occur practicaly. Every FF will have their setup and hold timing constraint which are necessary otherwise the data will get corrupted or lost. Critical path is the path which decides the clock frequency. The VLSI circuits must not disobey setup and hold timing constraints. 
+
+***Timing paths***
+Timing paths in VLSI design refer to particular signal routes or pathways within a digital circuit, where the timing properties, such as signal propagation delays, setup times, hold times, and clock-to-q delays, are scrutinized to guarantee the circuit's accuracy and dependable functioning. These pathways are of utmost importance for timing analysis and serve as a cornerstone in attaining the desired performance and functionality of the integrated circuit. Typically, a timing path encompasses an initial point (usually a flip-flop or input pin), an array of logic gates and connections, and a concluding point (another flip-flop or output pin).
+
+Start points of timing path
+
+- Input ports
+- Clock pins of regs
+
+End point of timing path
+
+- Output ports
+- D pin of D flip flop / D Latch
+
+A circuit is shown below. <br>
+<img width="600" alt="timingpath" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/timingpath.png"> <br>
+
+- In this Reg 2 Reg is constrained by clock
+- Reg to out is constrained by Output external delay , load and clock .
+- In 2 Reg is constrained by input external delay ,clock, input transition.
+
+Here we should consider the rising and falling time of the signal as constraint also then only this circuit is practically feasible.
+</details>
+
+<details>
+ <summary>LABS </summary>
+
+***Timing (.lib) file***
+During the ASIC design flow, designers use this ".lib" file to select appropriate standard cells, estimate the circuit's timing and power characteristics, and perform optimizations to meet the project's requirements and constraints. It serves as a crucial resource for ensuring the successful implementation of the desired ASIC design.
+
+As an illustration, our chosen standard library in this instance is "sky130_fd_sc_hd_tt_025C_1v8." This nomenclature indicates that we are employing a technology based on 130 nanometers, employing a typical manufacturing process, operating at a temperature of 25 degrees Celsius, and utilizing a voltage level of 1.8 volts. This also encompasses various variations or configurations of the same logic gates.
+
+Within the ".lib" file, you'll also find details about each distinct version of gate cells, including information on their leakage power, physical area, and timing characteristics. Below screenshot shows the comparison between and2_0 and and2_2 interms of area and leakage power. <br>
+<img width="900" alt="lib_and2gate" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/lib_and2gate.png"> <br>
+
+
+A *Look-Up Table (LUT)* in a Liberty file is a data structure that defines the logical functionality of a specific digital logic cell or gate in terms of its input combinations and corresponding output values.
+It comprises of two indices where index 1 shows the input transition and  index2 shows output load capacitance. The matrix is selected using interpolation when any information is provided regarding  input transition and output load capacitance. Below image shows the index of and2_0 , and2_2. <br>
+<img width="900" alt="lib_and_index" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/lib_and_index.png"> <br>
+
+*Unateness*
+There are two major types of unateness: 
+
+A positive unate function, concerning a specific input variable, behaves in a way that, regardless of how you set the other input variables, the function either stays the same or becomes larger as you change the designated input variable from 0 to 1. Essentially, this function relies solely on the presence of positive (1) values for that particular input variable
+
+A negative unate function, concerning a specific input variable, exhibits a behavior where, regardless of the settings of the other input variables, the function either remains constant or decreases as the designated input variable changes from 0 to 1. In this scenario, the function relies solely on the presence of negative (0) values for that particular input variable. Below screenshot demonstrates the comparison of and2_0 and DFF in terms of timing_sense (unateness) and timing_type. <br>
+<img width="900" alt="unateness" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/unateness.png"> <br>
+
+Below image shows the unateness of the D latch. <br>
+<img width="900" alt="unatness_latch" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/unatness_latch.png"> <br>
+
+Below screenshot shows the comparison between Negedge D FF and Negedge D Latch. <br>
+<img width="1000" alt="setup_timing_ff_latch" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/setup_timing_ff_latch.png"> <br>
+
+***lab on .lib in dc_shell***
+1) to display all the sequential gates <br>
+<img width="1080" alt="get_lib_cells" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/get_lib_cells.png"> <br>
+
+2) Display the library linked <br>
+<img width="900" alt="list_lib" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/list_lib.png"> <br>
+
+3) Displays the cells list from the collection <br>
+<img width="600" alt="forech_in_collection_get_lib_cells" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/forech_in_collection_get_lib_cells.png"> <br>
+
+4) Displays the pins of the gate cell and functionality of a particular gate <br>
+<img width="900" alt="get_lib_pins" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/get_lib_pins.png"> <br>
+
+5) Displays the pins along with the direction of nand4bb_2 gate <br>
+<img width="900" alt="get_lib_pin_dir" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/get_lib_pin_dir.png"> <br>
+
+6) Here's a Tcl program that takes a list of cells as input and prints the output pins along with their corresponding functionalities:
+
+```ruby
+set mylist [list sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand2_1 \
+sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand2_2 \
+sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand2_4 \
+sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand2_8 \
+sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand2b_1 \
+sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand2b_2 \
+sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand2b_4 \
+sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand3_1 \
+sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand3_2 \
+sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__nand3_4 ];
+
+foreach var $mylist {
+  foreach_in_collection var_pins [get_lib_pins ${var}/* ] {
+      set pin_name [get_object_name $var_pins];
+      set pin_dir [get_lib_attribute $pin_name direction];
+      if { $pin_dir == 2 } {
+
+
+          set pin_func [get_lib_attribute $pin_name function];
+
+          echo $pin_name $pin_dir $pin_func ;
+       }
+    }
+} 
+```
+<img width="800" alt="critical_prog" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/critical_prog.png"> <br>
+
+7) Displays the functionality of nand4bb_2 <br>
+<img width="600" alt="get_lib_pin_function" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/get_lib_pin_function.png"><br>
+
+8)  Displays the attributes of the cell/pin<br>
+ <img width="1000" alt="attributes" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/attributes.png"><br>
+
+9)  Displays all the attributes in a list <br>
+  <img width="600" alt="list_attributes" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/list_attributes.png"> <br>
+ 
 </details>
