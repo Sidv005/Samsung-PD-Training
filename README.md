@@ -1296,10 +1296,9 @@ assign out_clk = clk;
 endmodule
 ```
 The circuit to be modeled is below:- <br>
-
 <img width="800" alt="ckt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/071d8ece53c37beb047910f894aa4a573e614377/SamsungPD%23day8%23lab8/ckt.jpeg"> <br>
 
-Below screenshot is a display of linking and compiling via dc_shell.
+Below screenshot is a display of linking and compiling via dc_shell.<br>
 <img width="900" alt="link_compile" src="https://github.com/Sidv005/Samsung-PD-Training/blob/59c270a1ebf2d2a576c596367f3378daeb1dc07a/SamsungPD%23day8%23lab8/link_compile.png"> <br>
 
 ```ruby
@@ -1349,13 +1348,13 @@ The below command is used to match the tow parameters and if yes then it returns
 ```ruby
 regexp [<parameter_1> <parameter_2>]
 ```
-A tcl script is written and executed to display the pin name and clock name associated with it. The script is mentioned below.
+A tcl script is written and executed to display the pin name and clock name associated with it. The script is mentioned below.<br>
 <img width="1090" alt="query_clock_pin_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d214e4a767053dcbad92f3fda2fe3bc47f021f59/SamsungPD%23Day8%23lab10/query_clock_pin_tcl.png"> <br>
 
-The obtained result is presented below.
+The obtained result is presented below.<br>
 <img width="600" alt="clock_tcl_output" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d214e4a767053dcbad92f3fda2fe3bc47f021f59/SamsungPD%23Day8%23lab10/clock_tcl_output.png"> <br>
 
-Now an example of unvalid clock is discussed. Here a BADCLK is created on the nand gate output pin (U14 /Y). Below screenshot represents the same.
+Now an example of unvalid clock is discussed. Here a BADCLK is created on the nand gate output pin (U14 /Y). Below screenshot represents the same.<br>
 <img width="600" alt="BADCLK" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d214e4a767053dcbad92f3fda2fe3bc47f021f59/SamsungPD%23Day8%23lab10/BADCLK.png"> <br>
 
 Below image shows how a 25% duty cycle clock can be created.<br>
@@ -1363,5 +1362,176 @@ Below image shows how a 25% duty cycle clock can be created.<br>
 
 **Clock Network Modeling and Uncertainty**
 
+The commands used to set the clock latency source end and clock network latency are as follows:
+
+```ruby
+set_clock_latency -source 1 [get_clocks MYCLK]
+set_clock_latency 1 [get_clocks MYCLK]
+```
+The below image shows the setup of setup and hold delay. Later clock is removed to observe that path is unconstrained.<br>
+<img width="600" alt="set_clock_latency" src="https://github.com/Sidv005/Samsung-PD-Training/blob/985826bcbf9eeb5a0f3c415d28cae6043de14973/SamsungPD%23day8%23lab11/set_clock_latency.png"> <br>
+
+Now we will add the constraints once again by changing source latency to 2ns. We see that the clock delay is added to the clock period and clock_uncertainity gets subtracted in case of max. From the below image we can observe that slack has gone down.<br>
+<img width="600" alt="slack_down" src="https://github.com/Sidv005/Samsung-PD-Training/blob/985826bcbf9eeb5a0f3c415d28cae6043de14973/SamsungPD%23day8%23lab11/slack_down.png"> <br>
+
+In case of hold clock_uncertainity gets added to the clock delay.<br>
+<img width="600" alt="slack_down_hold" src="https://github.com/Sidv005/Samsung-PD-Training/blob/985826bcbf9eeb5a0f3c415d28cae6043de14973/SamsungPD%23day8%23lab11/slack_down_hold.png"> <br>
+
+**IO Delays**
+
+Now Path is unconstrained for input and output external port. The below command is used to setup the input delay for max delay.
+```ruby
+set_input_delay -max 5 -clock [get_clocks MYCLK] [get_ports IN_A]
+set_input_delay -max 5 -clock [get_clocks MYCLK] [get_ports IN_B]
+```
+The below image shows the report for the same.<br>
+<img width="600" alt="set_input_delay" src="https://github.com/Sidv005/Samsung-PD-Training/blob/985826bcbf9eeb5a0f3c415d28cae6043de14973/SamsungPD%23day8%23lab12/set_input_delay.png"> <br>
+<img width="600" alt="set_input_delay_report" src="https://github.com/Sidv005/Samsung-PD-Training/blob/985826bcbf9eeb5a0f3c415d28cae6043de14973/SamsungPD%23day8%23lab12/set_input_delay_report.png"> <br>
+
+The below command is used to setup the input delay for min delay.
+```ruby
+set_input_delay -max 5 -clock [get_clocks MYCLK] [get_ports IN_A]
+set_input_delay -max 5 -clock [get_clocks MYCLK] [get_ports IN_B]
+```
+
+The below image shows the report for the same.<br>
+<img width="600" alt="set_input_min_rep" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab12/set_input_min_rep.png"> <br>
+
+```ruby
+set_input_transition -max 0.3 [get_ports IN_A]
+set_input_transition -max 0.3 [get_ports IN_B]
+set_input_transition -min 0.1 [get_ports IN_A]
+set_input_transition -min 0.1 [get_ports IN_B]
+```
+Screenshot of input transition delay from port IN_A as as follows:<br>
+<img width="600" alt="set_input_trans_report" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab12/set_input_trans_report.png"> <br>
+
+Adding constraints to output
+
+```ruby
+set_output_delay -max 5 [get_clocks MYCLK] [get_ports OUT_Y]
+set_output_delay -min 1 [get_clocks MYCLK][get_ports OUT_Y]
+```
+Screenshot of output_delay is given below:<br>
+<img width="600" alt="set_output_delay_report" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab12/set_output_delay_report.png"> <br>
+
+Now we need to add load  constraint
+```ruby
+set_load -max 0.4 [get_ports OUT_Y]
+```
+Below is the report for max path type where 0.4 ns is added as load cap.<br>
+<img width="600" alt="set_load_report" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab12/set_load_report.png"> <br>
+
+```ruby
+set_load -min 0.1 [get_ports OUT_Y]
+```
+
+Below is the report for min path type where 0.1 ns is added as load cap.<br>
+<img width="600" alt="set_load(min)_report1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab12/set_load(min)_report1.png"> <br>
+
+**Generated clock**
+
+Generated clocks are always created w.r.t master clocks. The OUT_CLK needs to be constrained w.r.t OUT_CLK and the input clock. The below figure shows the commmands and result of new genrated clock.<br> 
+<img width="600" alt="create_generated_clock" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab13/create_generated_clock.png"> <br>
+
+Till now OUT_Y is constrained w.r.t MY_CLK which is a master clock as we can see in below figure.<br>
+<img width="600" alt="OUT_Y%20wrt%20MYCLK" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab13/OUT_Y%20wrt%20MYCLK.png"> <br>
+
+When we add constraints to the MYGEN_CLK we get timing with repect to MYGEN_CLK as we can see in below figure. <br>
+<img width="600" alt="OUT_Y%20wrt%20MYGEN" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab13/OUT_Y%20wrt%20MYGEN.png"> <br>
+
+The design used for this experiment is as follows:
+
+```ruby
+module lab8 circuit (input rst, input clk , input IN_A , input IN_B , output OUT_Y , output out_clk output reg out_div_clk)
+reg REGA, REGB , REGC ;
+always @ (posedge clk , posedge rst )
+begin
+	if(rst)
+	begin
+		REGA <= 1'b0 ;
+		REGB <= 1'b0 ;
+		REGC <= 1'b0 ;
+		out_div_clk <= 1'b0 ;
+	end
+	else
+	begin
+		REGA= IN_A | IN_B;
+		REGB<- IN_A ^ IN_B;
+		REGC <= !(REGA & REGB) ;
+		out_div_clk <= ~out_div_clk
+	end
+end
+assign OUT_Y = ~REGC ;
+assign out_clk = clk;
+endmodule
+```
+Loading the modified design.<br>
+<img width="1000" alt="read_verilog_modified" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab13/read_verilog_modified.png"> <br>
+
+We can create a .tcl program and then source it to avoid writing command for constraints. Below image shows the tcl file.<br>
+<img width="600" alt="lab8_cons_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab13/lab8_cons_tcl.png"> <br>
+
+The report_timing after sourcing the tcl script is as follows:<br>
+<img width="600" alt="lab8_cons_tcl_report_clock" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab13/lab8_cons_tcl_report_clocks.png"><br>
+
+**Creating virtual clock for constraining a combinational circuit and using set_max_delay**
+
+Now consider the case where two inputs In_C and In_D are given to combinational logic and it should be constraint , This design is independent of the original design.<br>
+<img width="600" alt="comb_logic" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15/comb_logic.jpeg"><br>
+
+After loading new modified verilog file clock report is genrated which is present in the below image.<br>
+<img width="600" alt="report_clocks_ports" src="https://github.com/Sidv005/Samsung-PD-Training/blob/df06222e0016e18df64560f8483c86817b7f4b35/SamsungPD%23day8%23lab15/report_clocks_ports.png"><br>
+
+In the below figure observe that path is unconstrained.<br>
+<img width="600" alt="report_path_unconstrained" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15/report_path_unconstrained.png"><br>
+
+Some new command are shown in the figure below with their results.<br>
+<img width="600" alt="all_new_commands" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15/all_new_commands.png"><br>
+
+All fanout command is shown below with its results.<br>
+<img width="600" alt="all_fanout" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15/all_fanout.png"><br>
+
+Script is written to display the collection of pins connected to IN_A along with their reference name.<br>
+<img width="600" alt="foreach_in(all_fanout)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15/foreach_in(all_fanout).png"><br>
+
+All fanin command is shown below with its results.<br>
+<img width="600" alt="all_fanin" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15/all_fanin.png"><br>
+
+We need to constrain path from IN_C & D to OUT_Z.
+The command is :-
+```ruby
+set_max_latency -from [<source_port_name>] -to [<destination_port_name>]
+```
+Observe in below image that slack is viloated because earlier no path constraint was present. So tool has not optimized it.<br>
+<img width="600" alt="constraint_slack(violated)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15/constraint_slack(violated).png"><br>
+
+Now write *compile_ultra* and observe thet slack is not viloated now since the tool has optimized it by using inv_4 and xnor2_1 for D to Z path.<br>
+<img width="600" alt="slack(good)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15/slack(good).png"><br>
+
+The schematic of the design is represented in below figure.<br> 
+<img width="1000" alt="schematic%20(out_Z)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15/schematic%20(out_Z).png"><br>
+
+**Virtual CLock**
+
+Virtual CLock is a clock created without a definition point.
+Creating virtual clock.<br>
+<img width="600" alt="create_MYVCLK" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15(P2)/create_MYVCLK.png"><br>
+
+Observe in below figure that path is unconstrained.<br>
+<img width="600" alt="path_unconstrain" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15(P2)/path_unconstrain.png"><br>
+
+Constraining the clock is done using below commands.
+
+```ruby
+set_input_delay -max 5 [get_ports IN_C] -clock [det_clocks MYVCLK]
+set_input_delay -max 5 [get_ports IN_D] -clock [det_clocks MYVCLK]
+set_output_delay -max 4.9 [get_ports OUT_Z] -clock [det_clocks MYVCLK]
+```
+When we execute report_timing -to OUT_Z -sig 4 , we get the slack violated.<br>
+<img width="600" alt="slack(violate)_MYVCLK" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15(P2)/slack(violate)_MYVCLK.png"><br>
+
+WHen we execute *compile_ultra* the DC tool optimizes the design and slack is met as shown in figure below.<br>
+<img width="600" alt="slack(good)_MYVCLK1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15(P2)/slack(good)_MYVCLK1.png"><br>
 
 </details>
