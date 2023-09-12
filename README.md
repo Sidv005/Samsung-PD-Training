@@ -1335,5 +1335,33 @@ The above commands are used to obtain collection of nets. Same is illustrated in
 The below image shows how the scripting is done to display the driver cells and driven cells associated to a net.<br>
 <img width="900" alt="ref_name" src="https://github.com/Sidv005/Samsung-PD-Training/blob/071d8ece53c37beb047910f894aa4a573e614377/SamsungPD%23day8%23lab8/net_driver%26driven_cell.png"> <br>
 
+**Creating master Clock**
+
+Here we will discuss how master clock is created in the network. The below screenshot shows how MYCLK (master clock) is created wherre the period is 10.<br>
+<img width="600" alt="create_MYCLK" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d214e4a767053dcbad92f3fda2fe3bc47f021f59/SamsungPD%23Day8%23lab10/create_MYCLK.png"> <br>
+
+```ruby
+report_clocks
+```
+The above command is used to give list of all clocks.
+The below command is used to match the tow parameters and if yes then it returns 1 else 0.
+
+```ruby
+regexp [<parameter_1> <parameter_2>]
+```
+A tcl script is written and executed to display the pin name and clock name associated with it. The script is mentioned below.
+<img width="1090" alt="query_clock_pin_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d214e4a767053dcbad92f3fda2fe3bc47f021f59/SamsungPD%23Day8%23lab10/query_clock_pin_tcl.png"> <br>
+
+The obtained result is presented below.
+<img width="600" alt="clock_tcl_output" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d214e4a767053dcbad92f3fda2fe3bc47f021f59/SamsungPD%23Day8%23lab10/clock_tcl_output.png"> <br>
+
+Now an example of unvalid clock is discussed. Here a BADCLK is created on the nand gate output pin (U14 /Y). Below screenshot represents the same.
+<img width="600" alt="BADCLK" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d214e4a767053dcbad92f3fda2fe3bc47f021f59/SamsungPD%23Day8%23lab10/BADCLK.png"> <br>
+
+Below image shows how a 25% duty cycle clock can be created.<br>
+<img width="600" alt="25%25_cycle_clock" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d214e4a767053dcbad92f3fda2fe3bc47f021f59/SamsungPD%23Day8%23lab10/25%25_cycle_clock.png"> <br>
+
+**Clock Network Modeling and Uncertainty**
+
 
 </details>
