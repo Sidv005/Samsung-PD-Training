@@ -1222,5 +1222,50 @@ foreach var $mylist {
 
 9)  Displays all the attributes in a list <br>
   <img width="600" alt="list_attributes" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2b017f268dd36c88423a9575c40362eb362c5c1e/day7/list_attributes.png"> <br>
- 
 </details>
+
+## Day-8-Advanced Constraints
+
+<details>
+ <summary>Clock Terminologies </summary>
+We say that clock is constrained by originally its the clock period which gets constrained this leads limitation of combinational delay.
+
+*Tclk >= Tcq + Tcomb + Tst*
+
+*Tcomb <= Tclk - (Tcq + Tst)*
+
+- A ***Clock Generator*** is an electronic oscillator that produces a clock signal for use in synchronizing a circuit's operation. The signal can range from a simple symmetrical square wave to more complex arrangements. The basic parts that all clock generators share are a resonant circuit and an amplifier. Different types are :-
+  
+1) Oscillators:-They generate continuous periodic signals without an external input. Common types include RC oscillators, LC oscillators, and crystal oscillators.
+2) Phase-Locked Loops (PLLs): A phase-locked loop (also phase lock loop or PLL) is a system that generates an output signal whose phase is related to its input. The two signals will have the same frequency and either no phase difference or a constant phase difference between them.
+3) Delay-Locked Loops (DLLs): A delay-locked loop (DLL) is a digital circuit that provides high-bandwidth data transmission rates between devices. DLL transmissions have no propagation delay, low clock skew between output clock signals and advanced clock domain control.
+4) Ring Oscillators:A time-delay oscillator consists of an inverting amplifier with a delay element between the amplifier output and its input. The amplifier must have a gain greater than 1 at the intended oscillation frequency.
+5) Crystal Oscillators: A crystal oscillator is an electric oscillator type circuit that uses a piezoelectric resonator, a crystal, as its frequency-determining element.
+
+- ***Clock Distribution***
+- When clock is generarted it needed to be distributed over the entire circuit. Clock trees are utilized in the network to achieve minmized skew and obtain optimized timing paths.
+
+- *Clock skew* The difference in the arrival time of a clock signal at two different registers, which can be caused by path length differences between two clock paths, or by using gated or rippled clocks. Clock skew is the most common cause of internal hold violations.
+<img width="600" alt="skew" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0eb811e2240364b5da3bb20230a5bfb5916d2445/SamsungPD%23day8%23lab8/skew.png"><br>
+In the above figure clock skew is represented.
+  -  *Global Clock Skew*: The clock latency difference between two non related flops or the difference between the longest clock path and the shortest clock path in the design.
+  -  *Local Clock Skew* :  The latency difference between two related flops in a design is called as local skew.
+  -  *Positive skew* : The capture clock delay is greater than the launch clock latency. is advantageous for setup timing. Due to the inclusion of skew, the capture clock is delayed by a few ns. Therefore the 
+     timing path requires one clock period and Skew margin to match the setup requirement.
+  -  *Negative Skew*: If the destination register received the edge of the clock after the source register, the clock skew would be lagging. Negative Skew is beneficial for hold time since it delays the fresh 
+     launch. Because of the delay in launching the new data, the prior data will be effectively recorded and will not be overwritten.
+
+- *Clock jitter* : is a characteristic of the clock source and the clock signal environment. It can be defined as “deviation of a clock edge from its ideal location.” Clock jitter is typically caused by clock generator circuitry, noise, power supply variations, interference from nearby circuitry etc.
+
+- *Clock latency* is defined as the amount of time taken by the clock signal in traveling from its source to the sinks. Clock latency comprises of two components - clock source latency and clock network latency.
+  - Source latency is the time taken by the clock signal in traveling from clock source (may be PLL, oscillator or some other source) to the clock definition point.
+  - Network latency is the time taken by the clock signal in traveling from clock definition point to the sinks of the clock.
+
+***Clock Modelling*** - We need to model clock constrains as follows:
+1. period
+2. Source latency
+3. Clock Network latency
+4. Clock skew
+5. Clock Network
+</details>
+
