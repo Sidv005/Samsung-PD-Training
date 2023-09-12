@@ -1269,3 +1269,71 @@ In the above figure clock skew is represented.
 5. Clock Network
 </details>
 
+<details>
+ <summary>Constraining Design using DC_compiler </summary>
+Now, we will discuss how constraints to be modeled. We are considering a verilog design file which is shown in below image.
+
+```ruby
+module lab8_circuit (input rst, input clk , input IN_A , input IN_B , output OUT_Y , output out_clk);
+reg REGA , REGB , REGC ; 
+always @ (posedge clk , posedge rst)
+begin
+	if(rst)
+	begin
+		REGA <= 1'b0;
+		REGB <= 1'b0;
+		REGC <= 1'b0;
+	end
+	else
+	begin
+		REGA <= IN_A | IN_B;
+		REGB <= IN_A ^ IN_B;
+		REGC <= !(REGA & REGB); 
+	end
+end
+assign OUT_Y = ~REGC;
+assign out_clk = clk;
+endmodule
+```
+The circuit to be modeled is below:- <br>
+
+<img width="800" alt="ckt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/071d8ece53c37beb047910f894aa4a573e614377/SamsungPD%23day8%23lab8/ckt.jpeg"> <br>
+
+Below screenshot is a display of linking and compiling via dc_shell.
+<img width="900" alt="link_compile" src="https://github.com/Sidv005/Samsung-PD-Training/blob/59c270a1ebf2d2a576c596367f3378daeb1dc07a/SamsungPD%23day8%23lab8/link_compile.png"> <br>
+
+```ruby
+get_ports
+```
+The above command is used to obtain collection of ports. Further scripting is done using foreach-in_collection to display all ports with its corresponding direction. The below image illustrates the same.<br>
+<img width="900" alt="ports_dir" src="https://github.com/Sidv005/Samsung-PD-Training/blob/071d8ece53c37beb047910f894aa4a573e614377/SamsungPD%23day8%23lab8/ports_dir.png"> <br>
+
+```ruby
+get_cells *
+```
+The above command helps to display the collection of all cells available in design. Further cells are verifired wheather they are hierarchical or not. *is_hierarchical* is an attribute which is used appropritely and is demonstrated in the below image.<br>
+<img width="900" alt="get_cells" src="https://github.com/Sidv005/Samsung-PD-Training/blob/071d8ece53c37beb047910f894aa4a573e614377/SamsungPD%23day8%23lab8/get_cells.png"> <br>
+
+```ruby
+get_attribute [get_cells <cell_name>] ref_name
+```
+The above command helps to print the reference name of the particular cell. Further scripting is done to the collection of cells with their associated reference name. This is illustrated in below image.<br>
+<img width="900" alt="ref_name" src="https://github.com/Sidv005/Samsung-PD-Training/blob/071d8ece53c37beb047910f894aa4a573e614377/SamsungPD%23day8%23lab8/ref_name.png"> <br>
+
+Now, after executing *write -f ddc -out lab_circuit.ddc* command in dc_shell *ddc file is read in the gui of design_vision*. The below image shows the schematic view of the circuit.<br>
+
+<img width="900" alt="schematic_lab8" src="https://github.com/Sidv005/Samsung-PD-Training/blob/071d8ece53c37beb047910f894aa4a573e614377/SamsungPD%23day8%23lab8/schematic_lab8.png"> <br>
+ Here the xor gate is replaced with and & nor gate by the tool during synthesis for optimization.
+
+```ruby
+get_nets *
+all _connected <net name>
+```
+The above commands are used to obtain collection of nets. Same is illustrated in below image.<br>
+<img width="600" alt="all_connected_nets" src="https://github.com/Sidv005/Samsung-PD-Training/blob/071d8ece53c37beb047910f894aa4a573e614377/SamsungPD%23day8%23lab8/all_connected_nets.png"> <br>
+
+The below image shows how the scripting is done to display the driver cells and driven cells associated to a net.<br>
+<img width="900" alt="ref_name" src="https://github.com/Sidv005/Samsung-PD-Training/blob/071d8ece53c37beb047910f894aa4a573e614377/SamsungPD%23day8%23lab8/net_driver%26driven_cell.png"> <br>
+
+
+</details>
