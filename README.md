@@ -1602,8 +1602,8 @@ assign a1 = 1'b0;
 endmodule
 ```
 
-Below screenshot represents the timing report to y1 and y2 output ports.
-<img width="800" alt="report_timings(y1%20y2)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/report_timings(y1%20y2).png"><br>
+Below screenshot represents the timing report to y1 and y2 output ports.<br>
+<img width="400" alt="report_timings(y1%20y2)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/report_timings(y1%20y2).png"><br>
 
 The schematic is presented below.<br>
 <img width="800" alt="schema_opt_check" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/schema_opt_check.png"><br>
@@ -1647,12 +1647,48 @@ After constraining the maximum delay to 60 ps using command *setup_max_delay 0.0
 Further this lohgic cant get optimize The report is below.<br>
 <img width="500" alt="further_cant_optimized(slack%20violate)" src="https://github.com/Sidv005/Samsung-PD Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/further_cant_optimized(slack%20violate).png"><br>
 
-After setting the cell size of U4 to xnor2_4 we get the violated report as follows:
+After setting the cell size of U4 to xnor2_4 we get the violated report as follows:<br>
 <img width="500" alt="size_cell(slack%20violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/size_cell(slack%20violate).png"><br>
 
 After using *compile_ultra* result got better but still violated by 20ps.<br>
 <img width="500" alt="size_cell(slack%20violate%2020ps)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/size_cell(slack%20violate%2020ps).png"><br>
 
+**Lab on Resource Sharing**
+
+The RTL design file for resource sharing is given below as example.
+
+```ruby
+module resource_sharing_mult_check (input [3:0] a , input [3:0] b, input [3:0] c , input [3:0] d, output [7:0] y  , input sel);
+   assign y = sel ? (a*b) : (c*d);
+
+endmodule
+```
+Schematic is shown below.<br>
+<img width="800" alt="schema_resource_sharingpng" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/schema_resource_sharingpng"><br>
+
+Below image shows the no.of ports as 25, no. of cells as 37 and area as 342.83. <br>
+<img width="500" alt="area_run1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/area_run1"><br>
+
+Timing report is below:<br>
+<img width="500" alt="area_run1_(pathuncons)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/area_run1_(pathuncons)"><br>
+
+Area report  after setting max delay of 2.5ns and using *compile_ultra* is below:<br>
+<img width="500" alt="area_run1_(after_cons)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/area_run1_(after_cons)"><br>
+
+After setting max delay of 0.1ns from *sel* to outputs timing report is shown as follows:<br>
+<img width="500" alt="timing_run2_(slack_violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/timing_run2_(slack_violate)"><br>
+
+Schematic is given below:<br>
+<img width="800" alt="schema_run2_(962)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/schema_run2_(962)"><br>
+
+Area report is shown below:<br>
+<img width="500" alt="area_run2_(962)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/area_run2_(962)"><br>
+
+After applying *set_max_area 800* Timing report is shown below:<br>
+<img width="500" alt="timing_run3_(slackmet)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/timing_run3_(slackmet)"><br>
+
+Area report is shown below:<br>
+<img width="500" alt="area_run3_(783)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/area_run3_(783)"><br>
 
 
 
