@@ -1533,5 +1533,55 @@ When we execute report_timing -to OUT_Z -sig 4 , we get the slack violated.<br>
 
 WHen we execute *compile_ultra* the DC tool optimizes the design and slack is met as shown in figure below.<br>
 <img width="600" alt="slack(good)_MYVCLK1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/198e1b0439381fe3af1d6316fdf2c57b3e22f5e2/SamsungPD%23day8%23lab15(P2)/slack(good)_MYVCLK1.png"><br>
+</details>
+
+## Day9- Optimization ## 
+<details>
+ <summary> Overview of Combinational and Sequential Optimization</summary>
+VLSI optimization plays a pivotal role in the development of efficient and high-performing integrated circuits (ICs). It encompasses the enhancement of multiple facets within IC design, including minimizing power consumption, optimizing area utilization, refining timing characteristics, and ensuring manufacturability.
+
+- Cost function based Optimization
+1. Optimization till cost is met
+2. Over optimization of one goal can harm other goals.
+
+- Goals for Synthesis
+
+1. Meet Timing
+2. Meet Area
+3. Meet power
+
+***Combinational logic Optimisation***:  employs various techniques and methodologies to create compact and power-efficient designs while meeting performance requirements in VLSI circuits.
+
+1. constant propagation(Direct propagation)
+2. Boolean Logic Optimization(K-Means ,QUine Mckluskey)
+3. Squeezing Logic (Area and Power Saving)
+
+Below circuit is an example of constant propogation.<br>
+<img width="800" alt="CP" src="https://github.com/Sidv005/Samsung-PD-Training/blob/a8bb097839cae43fd5ace85a8c8e2fc3a745cbaa/%23day9/lab16(p1)/CP.jpeg"><br>
+
+Below circuit is an example of Boolean Logic optimization.
+<img width="800" alt="boole" src="https://github.com/Sidv005/Samsung-PD-Training/blob/a8bb097839cae43fd5ace85a8c8e2fc3a745cbaa/%23day9/lab16(p1)/boole.jpeg"><br>
+
+**Resource Sharing**
+Resource sharing is a fundamental strategy within VLSI design, frequently used to enhance the efficient utilization of constrained resources while upholding or even enhancing the intended functionality.
+
+Below image shows the optimization and explanation.
+<img width="800" alt="RS" src="https://github.com/Sidv005/Samsung-PD-Training/blob/25946880d7c7c0021b444c51bb3ef79a9894ba3f/%23day9/lab16(p1)/RS.jpeg"><br>
+
+**Logic Sharing**
+Logic sharing in VLSI design involves the efficient reuse or sharing of logical components, such as gates or functional blocks, to diminish the overall complexity, area footprint, and power consumption of an integrated circuit (IC). This prevalent approach serves to optimize chip designs while preserving the essential functionality.
+Below image shows the optimization and explanation.<br>
+<img width="800" alt="LS" src="https://github.com/Sidv005/Samsung-PD-Training/blob/25946880d7c7c0021b444c51bb3ef79a9894ba3f/%23day9/lab16(p1)/LS.jpeg"><br>
+
+***Sequential Optimization***
+- Basic Sequential Optimization
+1. Sequential Constant propagation
+2. Retiming
+3. Unused Flop Removal
+4. Clock Gating
+
+- Advanced
+1. State Optimization
+2. Sequential logic cloning
 
 </details>
