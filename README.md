@@ -1817,8 +1817,44 @@ After executing *set compile_seqmap_propagate_constants true*. Schematic is show
  <summary> Labs on Special Optimizations</summary>
 
 ***Boundary Optimization***
-When sub module is having any logic which is connected to another logic present in top module then 
 
+When sub module is having any logic which is connected to another logic present in top module then tool may vanish the boundary between the module and combine the logic circuit within a single top module.
+Benefit is that we an get best optimized logic but a drawback is that if we want to perform any further changes in design it will be very difficult in future.
 
+```ruby
+module check_boundary (input clk , input res , input [3:0] val_in , output reg [3:0] val_out);
+wire en;
+internal_module u_im (.clk(clk) , .res(res) , .cnt_roll(en));
+
+always @ (posedge clk , posedge res)
+begin
+	if(res)
+		val_out <= 4'b0;
+	else if(en)
+		val_out <= val_in;	
+end
+endmodule
+
+module internal_module (input clk , input res , output cnt_roll);
+reg [2:0] cnt;
+
+always @(posedge clk , posedge res)
+begin
+	if(res)
+		cnt <= 3'b0;
+	else
+		cnt <= cnt + 1;
+end
+
+assign cnt_roll = (cnt == 3'b111);
+
+endmodule
+```
+
+Below figure shows the circuit without boundary as we can see *u_im cells* within the logic circuit.<br>
+<img width="900" alt="without_boundary" src="https://github.com/Sidv005/Samsung-PD-Training/blob/79dc237cef7c5ed354cb3c8b689c8806a8d20730/SamsungPD%23day9%23lab18/without_boundary"><br>
+
+After running *set_boundary_optimization u_im false* we can prevent the removal of u_im boundary (submodule) within the top module. We can view the hierarchy. Below schematic shows the same.<br>
+<img width="900" alt="with_boundary" src="https://github.com/Sidv005/Samsung-PD-Training/blob/79dc237cef7c5ed354cb3c8b689c8806a8d20730/SamsungPD%23day9%23lab18/with_boundary"><br>
 
 </details>
