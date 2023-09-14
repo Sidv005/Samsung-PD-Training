@@ -1855,7 +1855,7 @@ Below figure shows the circuit without boundary as we can see *u_im cells* withi
 
 After running *set_boundary_optimization u_im false* we can prevent the removal of u_im boundary (submodule) within the top module. We can view the hierarchy. Below schematic shows the same.<br>
 <img width="900" alt="with_boundary" src="https://github.com/Sidv005/Samsung-PD-Training/blob/79dc237cef7c5ed354cb3c8b689c8806a8d20730/SamsungPD%23day9%23lab18/with_boundary"><br>
-</details>
+
 
 ***Register Retiiming***
 
@@ -1896,9 +1896,9 @@ The schematic before retime is shown below.<br>
 <img width="800" alt="rr" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/schema_retime1"><br>
 
 tcl script is used to apply constraints which is as follows:<br>
-<img width="800" alt="reg_retime_const_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/reg_retime_const_tcl"><br>
+<img width="600" alt="reg_retime_const_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/reg_retime_const_tcl"><br>
 
-After constraing the design timing report is analysed which shows slack violation as shown below.
+After constraing the design timing report is analysed which shows slack violation as shown below.<br>
 <img width="600" alt="report_time(const_tcl)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/report_time(const_tcl)"><br>
 
 We retime it using following command
@@ -1941,6 +1941,84 @@ end
 assign cnt_roll = (cnt == 3'b111);
 endmodule
 ```
+
+The schematic prior to isolate is shown below.<br>
+<img width="600" alt="zoom_in_out_load" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0d717765c73f126bbab7af939fed04a74edef884/SamsungPD%23day9%23lab20/zoom_in_out_load"><br>
+
+Timing report before isolate command is as follows:<br>
+<img width="600" alt="timing(before_iso)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7534197241139f86a34ce81127385f77f08399c0/SamsungPD%23day9%23lab20/timing(before_iso).png"><br>
+
+The command for isolating ports
+
+set_isolate_ports -type buffer [all_outputs]
+
+The Schematic after isolating the ports is in below figure.<br>
+<img width="600" alt="added_buffer" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7534197241139f86a34ce81127385f77f08399c0/SamsungPD%23day9%23lab20/added_buffer"><br>
+
+Timing report after isolate command is as follows:<br>
+<img width="600" alt="after_iso" src="https://github.com/Sidv005/Samsung-PD-Training/blob/04dd72a3ced47298dfb8f2eb56a5da0dff31b82c/SamsungPD%23day9%23lab20/after_iso.png"><br>
+
+***False_paths***
+
+False paths are non-critical paths within a digital circuit that do not need to meet timing constraints. Recognizing and managing them is a vital aspect of VLSI design to optimize timing analysis, resource allocation, and overall design efficiency. The identification and proper handling of false paths are crucial for accurate timing analysis, optimizing resource utilization, meeting timing closure, and ensuring the overall functionality and performance of the integrated circuit.
+
+***Multicycle path***
+
+A multicycle path in VLSI design is a timing path where the clock signal does not adhere to the usual single-cycle constraints. It allows for flexibility in meeting timing requirements and is used for specific design scenarios where standard synchronous timing does not apply or is not necessary.
+
+The RTL design code
+```ruby
+module mcp_check (input clk , input res  , input [7:0] a , input [7:0] b, input en , output reg [15:0] prod);
+reg valid; 
+always @ (posedge clk , posedge res)
+begin
+	if(res)
+		valid <= 1'b0;
+	else 
+		valid <= en;
+end
+
+always @ (posedge clk , posedge res)
+begin
+	if(res)
+		prod <= 16'b0;
+	else if (valid)
+		prod <= a * b;
+end
+endmodule
+```
+Following is a tcl script for applying constraints.<br>
+<img width="500" alt="mcp_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/109a8eff00f7e7b4cb444a6d36dd1ed6fe9b9411/SamsungPD%23day9%23lab21/mcp_tcl.png"><br>
+
+Timing report before optimization is shown below.<br>
+<img width="600" alt="violated1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/109a8eff00f7e7b4cb444a6d36dd1ed6fe9b9411/SamsungPD%23day9%23lab21/violated1"><br>
+
+<img width="600" alt="violated2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/109a8eff00f7e7b4cb444a6d36dd1ed6fe9b9411/SamsungPD%23day9%23lab21/violated2"><br>
+
+Now below command is used to meet slack
+
+*set_multicycle_path -setup 2 -to prod_reg[*]/D -from [all_inputs]*
+
+Timing report is shown in below figure.<br>
+<img width="600" alt="slackmet1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/109a8eff00f7e7b4cb444a6d36dd1ed6fe9b9411/SamsungPD%23day9%23lab21/slackmet1"><br>
+<img width="600" alt="slackmet2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/109a8eff00f7e7b4cb444a6d36dd1ed6fe9b9411/SamsungPD%23day9%23lab21/slackmet2"><br>
+
+When we give *report_timing -delay min* we get the violated report as we have only optimized setup path and not hold path.<br>
+<img width="600" alt="mcp_hold_time1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0836b7d124f7256e92c82204e47634f0308f9b6d/SamsungPD%23day9%23lab21/mcp_hold_time1.png"><br>
+
+Optimizing the hold path is done by the following command
+
+*set_multicycle_path -hold 1 -to prod_reg[]/D -from [all_inputs] -to prod_reg[]/D*
+
+Timing report after optimizing hold path.<br>
+<img width="600" alt="mcp_hold_time2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0836b7d124f7256e92c82204e47634f0308f9b6d/SamsungPD%23day9%23lab21/mcp_hold_time2.png"><br>
+
+But the output slack is not met , because huge load on the output end.<br>
+<img width="600" alt="mcp_hold_time3" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0836b7d124f7256e92c82204e47634f0308f9b6d/SamsungPD%23day9%23lab21/mcp_hold_time3.png"><br>
+
+We can rectify this issue by isolating the port.<br>
+<img width="600" alt="mcp_hold_time4" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0836b7d124f7256e92c82204e47634f0308f9b6d/SamsungPD%23day9%23lab21/mcp_hold_time4.png"><br>
+</details>
 
 
 
