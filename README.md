@@ -1815,7 +1815,7 @@ After executing *set compile_seqmap_propagate_constants true*. Schematic is show
 
 <details>
  <summary> Labs on Special Optimizations</summary>
-
+	
 ***Boundary Optimization***
 
 When sub module is having any logic which is connected to another logic present in top module then tool may vanish the boundary between the module and combine the logic circuit within a single top module.
@@ -1856,8 +1856,7 @@ Below figure shows the circuit without boundary as we can see *u_im cells* withi
 After running *set_boundary_optimization u_im false* we can prevent the removal of u_im boundary (submodule) within the top module. We can view the hierarchy. Below schematic shows the same.<br>
 <img width="900" alt="with_boundary" src="https://github.com/Sidv005/Samsung-PD-Training/blob/79dc237cef7c5ed354cb3c8b689c8806a8d20730/SamsungPD%23day9%23lab18/with_boundary"><br>
 
-
-***Register Retiiming***
+***Register Retiming***
 
 Register retiming is a strategy employed in Very Large Scale Integration (VLSI) design to enhance the efficiency of digital circuits by repositioning the registers within the circuit, all the while preserving its functionality. The primary objective of register retiming is to reduce the critical path delay, which is the lengthiest route in the circuit from an input to an output.<br>
 <img width="700" alt="rr" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/rr.png"><br>
@@ -2018,6 +2017,7 @@ But the output slack is not met , because huge load on the output end.<br>
 
 We can rectify this issue by isolating the port.<br>
 <img width="600" alt="mcp_hold_time4" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0836b7d124f7256e92c82204e47634f0308f9b6d/SamsungPD%23day9%23lab21/mcp_hold_time4.png"><br>
+
 </details>
 
 
