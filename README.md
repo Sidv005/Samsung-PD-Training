@@ -1584,4 +1584,75 @@ Below image shows the optimization and explanation.<br>
 1. State Optimization
 2. Sequential logic cloning
 
+Below image shows the Sequential Constant propagation optimization and explanation.<br>
+<img width="800" alt="seqCP" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/seqCP.jpeg"><br>
 </details>
+
+<details>
+ <summary> Labs on Sequential and Combinational Optimization</summary>
+
+The RTL design file of the opt_check is as follows:
+
+```ruby
+module opt_check (input a , input b , input c , output y1, output y2);
+wire a1;
+assign y1 = a?b:0;
+assign y2 = ~((a1 & b) | c);
+assign a1 = 1'b0;
+endmodule
+```
+
+Below screenshot represents the timing report to y1 and y2 output ports.
+<img width="800" alt="report_timings(y1%20y2)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/report_timings(y1%20y2).png"><br>
+
+The schematic is presented below.<br>
+<img width="800" alt="schema_opt_check" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/schema_opt_check.png"><br>
+
+The RTL design file of the opt_check2 is as follows:
+
+```ruby
+module opt_check2 (input a , input b , output y);
+assign y = a?1:b;
+endmodule
+```
+The schematic is presented below.<br>
+<img width="800" alt="schema_opt_check2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/schema_opt_check2.png"><br>
+
+The RTL design file of the opt_check3 is as follows:
+
+```ruby
+module opt_check3 (input a , input b, input c , output y);
+assign y = a?(c?b:0):0;
+endmodule
+```
+The schematic is presented below.<br>
+<img width="800" alt="schema_opt_check3" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/schema_opt_check3.png"><br>
+
+The RTL design file of the opt_check3 is as follows:
+
+```ruby
+module opt_check4 (input a , input b , input c , output y);
+assign y = a?(b?(a & c ):c):(!c);
+endmodule
+```
+The schematic is presented below.<br>
+<img width="800" alt="schema_opt_check4" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/schema_opt_check4.png"><br>
+
+The report timing after linking and compiling the design in presented below.<br>
+<img width="500" alt="report_timng_80ps" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/report_timng_80ps.png"><br>
+
+After constraining the maximum delay to 60 ps using command *setup_max_delay 0.06 -from [all_inputs] -to [get_ports y]* The report is below.<br>
+<img width="500" alt="report_timng(slack%20violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/report_timng(slack%20violate).png"><br>
+
+Further this lohgic cant get optimize The report is below.<br>
+<img width="500" alt="further_cant_optimized(slack%20violate)" src="https://github.com/Sidv005/Samsung-PD Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/further_cant_optimized(slack%20violate).png"><br>
+
+After setting the cell size of U4 to xnor2_4 we get the violated report as follows:
+<img width="500" alt="size_cell(slack%20violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/size_cell(slack%20violate).png"><br>
+
+After using *compile_ultra* result got better but still violated by 20ps.<br>
+<img width="500" alt="size_cell(slack%20violate%2020ps)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1120f5ccc4a2f0d02ddace7278fdf882911f995c/%23day9/lab16(p1)/size_cell(slack%20violate%2020ps).png"><br>
+
+
+
+
