@@ -1690,5 +1690,130 @@ After applying *set_max_area 800* Timing report is shown below:<br>
 Area report is shown below:<br>
 <img width="500" alt="area_run3_(783)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b093254e988145a940d79e9958c273923b36ce7/SamsungPD%23day9%23lab16(p2)/area_run3_(783)"><br>
 
+**Labs on Sequential Optimizations**
+
+***Example of Tie cells***
+Tie cells, also referred to as tie-high and tie-low cells, play a crucial role in VLSI design by ensuring that particular signals maintain a predefined logic state, irrespective of the input conditions.
+
+The design file for dff_const1.v is below:
+
+```ruby
+ module dff_const1(input clk, input reset, output reg q);
+  always @(posedge clk, posedge reset)
+  begin
+  	if(reset)
+  		q <= 1'b0;
+  	else
+  		q <= 1'b1;
+  end
+endmodule
+```
+Schematic is shown in the below figure having a flop since its not a sequential constant.<br>
+<img width="900" alt="schema(dffconst1)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/16f2d031387302965ed0ec92a2a9ffb3cd4a46f0/SamsungPD%23day9lab17/schema(dffconst1)"><br>
+
+After scripting for cell name and reference name results is shown below.<br>
+<img width="900" alt="foreach(dffconst1)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/16f2d031387302965ed0ec92a2a9ffb3cd4a46f0/SamsungPD%23day9lab17/foreach(dffconst1)"><br>
+
+The design file for dff_const2.v is below:
+```ruby
+module dff_const2(input clk, input reset, output reg q);
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+		q <= 1'b1;
+	else
+		q <= 1'b1;
+end
+endmodule
+```
+Flops are optimized since it has sequential constant as shown below.<br>
+<img width="900" alt="schema(dffconst2)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/16f2d031387302965ed0ec92a2a9ffb3cd4a46f0/SamsungPD%23day9lab17/schema(dffconst2)"><br>
+
+After executing *set compile_seqmap_propagate_constants false* we can prevent from removal of flop. Schematic is shown below.<br>
+<img width="900" alt="schema_seqmap_false(dffconst2)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/16f2d031387302965ed0ec92a2a9ffb3cd4a46f0/SamsungPD%23day9lab17/schema_seqmap_false(dffconst2)"><br>
+
+The design file for dff_const3.v is below:
+
+```ruby
+module dff_const3(input clk, input reset, output reg q);
+reg q1;
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+	begin
+		q <= 1'b1;
+		q1 <= 1'b0;
+	end
+	else
+	begin
+		q1 <= 1'b1;
+		q <= q1;
+	end
+end
+endmodule
+```
+
+Schematic is shown below:<br>
+<img width="900" alt="schema(dffconst3)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/16f2d031387302965ed0ec92a2a9ffb3cd4a46f0/SamsungPD%23day9lab17/schema(dffconst3)"><br>
+
+The design file for dff_const4.v is below:
+
+```ruby
+module dff_const4(input clk, input reset, output reg q);
+reg q1;
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+	begin
+		q <= 1'b1;
+		q1 <= 1'b1;
+	end
+	else
+	begin
+		q1 <= 1'b1;
+		q <= q1;
+	end
+end
+endmodule
+```
+Schematic is shown below:<br>
+<img width="900" alt="schema(dffconst4)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/16f2d031387302965ed0ec92a2a9ffb3cd4a46f0/SamsungPD%23day9lab17/schema(dffconst4)"><br>
 
 
+After executing *set compile_seqmap_propagate_constants true* shows tie cell of logic 1. Schematic is shown below.<br>
+<img width="600" alt="schema_seqmap_true(dffconst4)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/16f2d031387302965ed0ec92a2a9ffb3cd4a46f0/SamsungPD%23day9lab17/schema_seqmap_true(dffconst4)"><br>
+
+The design file for dff_const5.v is below:
+
+```ruby
+module dff_const5(input clk, input reset, output reg q);
+reg q1;
+
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+	begin
+		q <= 1'b0;
+		q1 <= 1'b0;
+	end
+	else
+	begin
+		q1 <= 1'b1;
+		q <= q1;
+	end
+end
+
+endmodule
+```
+Schematic is shown below:<br>
+<img width="900" alt="schema(dffconst5)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/16f2d031387302965ed0ec92a2a9ffb3cd4a46f0/SamsungPD%23day9lab17/schema(dffconst5)"><br>
+
+After executing *set compile_seqmap_propagate_constants true*. Schematic is shown below.<br>
+<img width="900" alt="schema_seqmap_true(dffconst5)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/16f2d031387302965ed0ec92a2a9ffb3cd4a46f0/SamsungPD%23day9lab17/schema_seqmap_true(dffconst5)"><br>
+
+</details>
+
+<details>
+ <summary> Boundary Optimization</summary>
+
+</details>
