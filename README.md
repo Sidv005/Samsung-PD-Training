@@ -1834,11 +1834,7 @@ begin
 		val_out <= val_in;	
 end
 endmodule
-```
 
-Following is the RTL code of Internal module
-
-```ruby
 module internal_module (input clk , input res , output cnt_roll);
 reg [2:0] cnt;
 
@@ -1859,5 +1855,92 @@ Below figure shows the circuit without boundary as we can see *u_im cells* withi
 
 After running *set_boundary_optimization u_im false* we can prevent the removal of u_im boundary (submodule) within the top module. We can view the hierarchy. Below schematic shows the same.<br>
 <img width="900" alt="with_boundary" src="https://github.com/Sidv005/Samsung-PD-Training/blob/79dc237cef7c5ed354cb3c8b689c8806a8d20730/SamsungPD%23day9%23lab18/with_boundary"><br>
-
 </details>
+
+***Register Retiiming***
+
+Register retiming is a strategy employed in Very Large Scale Integration (VLSI) design to enhance the efficiency of digital circuits by repositioning the registers within the circuit, all the while preserving its functionality. The primary objective of register retiming is to reduce the critical path delay, which is the lengthiest route in the circuit from an input to an output.<br>
+<img width="700" alt="rr" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/rr.png"><br>
+
+In case1 combinational logic is too huge so we obtain critcical path delay of 50ns i.e max frequency = 20MHz. But when combinational logic is spilted and 2 more flip flops are added in circuit then we obtain  critcical path delay of 20ns i.e max frequency = 50MHz. 
+
+Let's explore an example involving a 4-bit multiplier tasked with multiplying two 4-bit numbers, with the product data being transferred through a trio of 8-bit registers on its path to the output.
+
+```ruby
+module check_reg_retime (input clk , input [3:0] a, input [3:0] b , output [7:0] c , input reset);
+wire [7:0] mult;
+assign mult = a * b;
+reg [7:0] q1;
+reg [7:0] q2;
+reg [7:0] q3;
+always @ (posedge clk , posedge reset)
+begin
+	if(reset)
+	begin
+		q1 <= 8'b0;
+		q2 <= 8'b0;
+		q3 <= 8'b0;
+	end
+	else
+	begin
+		q1 <= mult;
+		q2 <= q1;
+		q3 <= q2;
+	end
+end
+assign c = q3;
+endmodule
+```
+
+The schematic before retime is shown below.<br>
+<img width="800" alt="rr" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/schema_retime1"><br>
+
+tcl script is used to apply constraints which is as follows:<br>
+<img width="800" alt="reg_retime_const_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/reg_retime_const_tcl"><br>
+
+After constraing the design timing report is analysed which shows slack violation as shown below.
+<img width="600" alt="report_time(const_tcl)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/report_time(const_tcl)"><br>
+
+We retime it using following command
+*compile_ultra -retime*  
+The timing report is given below.<br>
+<img width="600" alt="report_time(after_compile_ultra)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/bd883714c7c6e1c23a743fc91690d9dffd741220/SamsungPD%23day9%23lab19/report_time(after_compile_ultra)"><br>
+
+***Isolating Output ports***
+
+In the field of VLSI (Very Large Scale Integration) design, the term "isolating output ports" commonly denotes the practice of guaranteeing that the output signals from a circuit or module are effectively separated, preventing unwanted interference among themselves or with other system components. This isolation is vital to preserve signal integrity, minimize noise, and avert unintended interactions.
+Let's examine the following scenario: In a given example, there are multiple outputs to be connected after the implementation of a design. This situation can potentially lead to internal delay violations, as the cell delay is influenced by the load capacitance. To prevent internal failures, a solution is to insert a buffer at the output port. Consequently, the buffer takes on the role of driving the external load, effectively decoupling the internal paths from the output paths.<br>
+<img width="600" alt="iso_ckt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9f7fd8a4d30fb247be7d9384c0f92cc36091e65f/SamsungPD%23day9%23lab20/iso_ckt.png"><br>
+
+Design file is mentioned below.
+
+```ruby
+module check_boundary (input clk , input res , input [3:0] val_in , output reg [3:0] val_out);
+wire en;
+internal_module u_im (.clk(clk) , .res(res) , .cnt_roll(en));
+
+always @ (posedge clk , posedge res)
+begin
+	if(res)
+		val_out <= 4'b0;
+	else if(en)
+		val_out <= val_in;	
+end
+endmodule
+
+module internal_module (input clk , input res , output cnt_roll);
+reg [2:0] cnt;
+always @(posedge clk , posedge res)
+begin
+	if(res)
+		cnt <= 3'b0;
+	else
+		cnt <= cnt + 1;
+end
+
+assign cnt_roll = (cnt == 3'b111);
+endmodule
+```
+
+
+
