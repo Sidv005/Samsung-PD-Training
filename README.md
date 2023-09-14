@@ -1814,6 +1814,11 @@ After executing *set compile_seqmap_propagate_constants true*. Schematic is show
 </details>
 
 <details>
- <summary> Boundary Optimization</summary>
+ <summary> Labs on Special Optimizations</summary>
+
+***Boundary Optimization***
+When sub module is having any logic which is connected to another logic present in top module then 
+
+
 
 </details>
