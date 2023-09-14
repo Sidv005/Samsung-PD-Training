@@ -1834,7 +1834,11 @@ begin
 		val_out <= val_in;	
 end
 endmodule
+```
 
+Following is the RTL code of Internal module
+
+```ruby
 module internal_module (input clk , input res , output cnt_roll);
 reg [2:0] cnt;
 
@@ -1847,7 +1851,6 @@ begin
 end
 
 assign cnt_roll = (cnt == 3'b111);
-
 endmodule
 ```
 
