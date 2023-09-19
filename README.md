@@ -2020,7 +2020,7 @@ We can rectify this issue by isolating the port.<br>
 
 </details>
 
-## Day-10-QOR##
+## Day-10-QOR ##
 <details>
  <summary> Report_timing</summary>
 	Quality checks play a pivotal role in the world of Very Large Scale Integration (VLSI) design and manufacturing, serving as essential safeguards to guarantee the reliability and functionality of integrated circuits (ICs). These quality checks span the entirety of the design and manufacturing phases, encompassing a range of stages aimed at detecting and addressing potential issues.
@@ -2199,6 +2199,117 @@ Conclude that for max_delay tool shows worst path according to total delay irres
 
 <details>
  <summary>Lab on Check_timing,design,set max_cap </summary>
+Human error may happen like not constrainging all paths and not loading design properly. Therefore tool must have commands to overcome this.
+
+*check_design* is used to check whether design is linked properly or not.
+
+*check_timing* is used to display all the endpoints which are unconstrained<br>
+<img width="600" alt="check_time1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/check_time1.png"><br>
+
+*report_constraints* used to give the default value of the constraints<br>
+<img width="600" alt="rep_cons1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/rep_cons1.png"><br>
+
+After contraining the paths using.tcl script run *check timing*<br>
+<img width="600" alt="check_timing1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/check_timing1.png"><br>
+From above image observe that all other unconstrained paths are removed only clocks are remaining.<br>
+
+Now run *report_timing*<br>
+<img width="600" alt="rep_timing1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/rep_timing1.png"><br>
+
+Now run *report_constraints*<br>
+<img width="600" alt="rep_cons1.1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/rep_cons1.1.png"><br>
+Observe no negative slack is present above.<br>
+
+Consider an example of 128 : 1 Mux
+
+Following is the design code
+```ruby
+module mux_generate ( input [127:0] in, input [6:0] sel, output reg y);
+integer k;
+always @ (*)
+begin
+for(k = 0; k < 128; k=k+1) begin
+	if(k == sel)
+		y = in[k];
+end
+end
+endmodule
+```
+After reading verilog file we see a latch which is due to usage of always block.<br> 
+<img width="600" alt="mux_gen_read_verilog" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_read_verilog.png"><br>
+
+After running link and compile_ultra we execute *write -f verilog -out mux_generate_128_net.v* to get the netlist as shown below.<br>
+<img width="600" alt="mux_gen_write_netlist" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_write_netlist.png"><br>
+
+From the above image we should see that hierarchical cells of sequential type are not present this is presented in below figure.<br>
+<img width="1000" alt="mux_gen_get_cells" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_get_cells.png"><br>
+
+Run *report_timing* we see caps are negligible.<br>
+<img width="600" alt="mux_gen_rep_time_cap(neg)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_rep_time_cap(neg).png"><br>
+
+Now run *check timing* Observe that y is unconstrained.<br>
+<img width="600" alt="mux_gen_rep_time_cap(neg)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_check_time(y_uncons).png"><br>
+
+Now run *report_timing* Observe that slack is violated.<br>
+<img width="600" alt="mux_gen_rep_time(slack_vio)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_rep_time(slack_vio).png"><br>
+
+We set the max capacitance
+
+set_max_capacitance 0.025 [current_design]
+
+Now run *report_constraints -all_violators*. Observe that slack violated of many paths.<br>
+<img width="600" alt="mux_gen_rep_cons(slack_vio)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_rep_cons(slack_vio).png"><br>
+
+After *compile_ultra* run *report_constraints*. Observe that slack is met.<br>
+<img width="600" alt="mux_gen_rep_cons(met)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_rep_cons(met).png"><br>
+
+Run *report_timing* we see arrival time is 3.43ns.<br>
+<img width="600" alt="mux_gen_rep_time(arr.t)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_rep_time(arr.t).png"><br>
+
+Run *report_timing -net -cap -sig 4*. Observe that all fanout got splited and cap max is 25fF.<br>
+<img width="600" alt="mux_gen_rep_time(cap%3C25fF)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/mux_gen_rep_time(cap%3C25fF).png"><br>
+
+Consider another example of 128 bit enable
+ Design code for en_128.v is given below.
+ ```ruby
+module en_128 (input [127:0] x , output [127:0] y , input en);
+	assign y[127:0] = en ?x[127:0]:128'b0;
+endmodule
+```
+After reading verilog file and linking we get timing report showing 128 fanouts as follows.<br>
+<img width="600" alt="en(fanout_128)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(fanout_128).png"><br>
+
+after setting the max cap as 0.03
+
+Run *report_constraints*<br>
+<img width="600" alt="en(rep_cons_cap_vio)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_cons_cap_vio).png"><br>
+
+Now run *compile_ultra* and observe the timing report showing 17 fanouts.<br>
+<img width="600" alt="en(rep_time_fanout_17)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_time_fanout_17).png"><br>
+
+Now see the schematic in Design_vison by writing out ddc. <br>
+<img width="600" alt="en(rep_time_fanout_17)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(schema).png"><br>
+
+Now run *report_timing -from en -nets -cap -sig 4 -trans*<br>
+<img width="900" alt="en(schema)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_time_trans_bad).png"><br>
+
+Before compile ultra *report_constraints*<br>
+<img width="600" alt="en(rep_cons_trans_vio)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_cons_trans_vio).png"><br>
+
+Now run *report_constraints -all_violators*<br>
+<img width="600" alt="en(rep_cons_violators)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_cons_violators).png"><br>
+
+Now run *set_max_transition 0.150 [current_design]* and run compile_ultra. Observe constraints showning no transition violation.<br>
+<img width="600" alt="en(rep_cons_violators_noviolation)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_cons_violators_noviolation).png"><br>
+
+Timing report is obtained showing transition < 150ps.<br>
+<img width="600" alt="en(rep_time_tran%3C150ps)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_time_tran%3C150ps).png"><br>
+
+Now run *report_timing -nosplit -sig 4 -inp -trans -cap -from en -to y[116]*.<br>
+<img width="600" alt="en(rep_time_y116)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_time_y116).png"><br>
+
+After comparing the above timing report with below it is concluded that data arrival time is reduced. Hence overall delay is improved.<br>
+<img width="600" alt="en(rep_time_a.t%3D0.4425_compare)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_time_a.t%3D0.4425_compare).png"><br>
 
 
 </details>
