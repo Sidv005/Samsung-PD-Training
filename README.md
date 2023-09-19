@@ -2131,3 +2131,74 @@ This command results to the worst slack , In this example it is -1.2 ns and -1.1
 
 </details>
 
+<details>
+ <summary>Lab on Report timing </summary>
+The example used is lab8_circuit_modified.v having the following design code.
+
+```ruby
+module lab8_circuit (input rst, input clk , input IN_A , input IN_B , output OUT_Y , output out_clk , output reg out_div_clk);
+reg REGA , REGB , REGC ; 
+
+always @ (posedge clk , posedge rst)
+begin
+   if(rst)
+   begin
+   	REGA <= 1'b0;
+   	REGB <= 1'b0;
+   	REGC <= 1'b0;
+   	out_div_clk <= 1'b0;
+   end
+   else
+   begin
+   	REGA <= IN_A | IN_B;
+   	REGB <= IN_A ^ IN_B;
+   	REGC <= !(REGA & REGB);
+   	out_div_clk <= ~out_div_clk; 
+   end
+end
+
+assign OUT_Y = ~REGC;
+
+assign out_clk = clk;
+
+endmodule
+```
+Following tcl script is used to apply the constraints.<br>
+<img width="600" alt="lab8_cons_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c17cfcc834bfadb028b7b3755b36c10ad7a95b52/SamsungPD%23day10/lab1/lab8_cons_tcl.png"><br>
+
+Now for doing setup check following command is run.
+- report_timing -sig 4 -cap -nets -trans -nosplit -inp <br>
+<img width="600" alt="lab8_rep_time1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c17cfcc834bfadb028b7b3755b36c10ad7a95b52/SamsungPD%23day10/lab1/lab8_rep_time1.png"><br>
+
+ Now we use *report_timing -sig 4 -cap -nets -trans -nosplit -inp -from IN_A > t1.rpt*
+ <img width="600" alt="t1_rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c17cfcc834bfadb028b7b3755b36c10ad7a95b52/SamsungPD%23day10/lab1/t1_rpt.png"><br>
+
+ Now we use *report_timing -sig 4 -cap -nets -trans -nosplit -inp -rise_from IN_A > t2.rpt*
+ <img width="600" alt="t2(rise)_rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c17cfcc834bfadb028b7b3755b36c10ad7a95b52/SamsungPD%23day10/lab1/t2(rise)_rpt.png"><br>
+
+Comparing t1.rp and t2.rpt observe rise to fall and fall to rise delay mismatch in nor and inv gates.
+ <img width="600" alt="comp_t1_t2_rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c17cfcc834bfadb028b7b3755b36c10ad7a95b52/SamsungPD%23day10/lab1/comp_t1_t2_rpt.png"><br>
+
+Now we use *report_timing -sig 4 -cap -nets -trans -nosplit -inp -rise_from IN_A -to REGA_reg/D > t3.rpt*
+Comparing t1.rp and t3.rpt observe rise to fall and fall to rise delay mismatch in U14 and U12 cells.
+ <img width="600" alt="comp_t1_t3_rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c17cfcc834bfadb028b7b3755b36c10ad7a95b52/SamsungPD%23day10/lab1/comp_t1_t3_rpt.png"><br>
+
+Now we use *report_timing -delay min -from IN_A*. It is reporting U15 in REGA to REGB
+Observe hold check in below screenshot<br>
+<img width="600" alt="min_delay(from%20A)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c17cfcc834bfadb028b7b3755b36c10ad7a95b52/SamsungPD%23day10/lab1/min_delay(from%20A).png"><br>
+
+Now we use *report_timing -thr U15/Y*
+Observe delay of 50ps in U15.<br>
+<img width="600" alt="through_U15(50ps)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c17cfcc834bfadb028b7b3755b36c10ad7a95b52/SamsungPD%23day10/lab1/through_U15(50ps).png"><br>
+
+Now we run *report_timing -thr U15/Y -delay min*<br>
+<img width="600" alt="through_U15(70ps)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/c17cfcc834bfadb028b7b3755b36c10ad7a95b52/SamsungPD%23day10/lab1/through_U15(70ps).png"><br>
+
+Conclude that for max_delay tool shows worst path according to total delay irrespective of cell contribution.
+</details>
+
+<details>
+ <summary>Lab on Check_timing,design,set max_cap </summary>
+
+
+</details>
