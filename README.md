@@ -2310,6 +2310,46 @@ Now run *report_timing -nosplit -sig 4 -inp -trans -cap -from en -to y[116]*.<br
 
 After comparing the above timing report with below it is concluded that data arrival time is reduced. Hence overall delay is improved.<br>
 <img width="600" alt="en(rep_time_a.t%3D0.4425_compare)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/29bbf554c5a2da7665bc2b35db0fdca2417f8cc5/SamsungPD%23day10/lab2/en(rep_time_a.t%3D0.4425_compare).png"><br>
+</details>
 
+## Day 11: SOC ##
+<details>
+ <summary>Summary on SOC </summary>
+The Qualcomm Snapdragon 660 is a mobile system-on-chip (SoC) designed for smartphones and other mobile devices. It was announced in 2017 and is part of Qualcomm's Snapdragon 600 series, which is positioned as a mid-range chipset with a good balance of performance and power efficiency. Let's take a closer look at its architecture:
 
+- ***CPU (Central Processing Unit)***:
+
+The Snapdragon 660 features an octa-core CPU, which means it has eight individual processing cores.
+It uses a combination of ARM Cortex-A73 and Cortex-A53 cores arranged in a big.LITTLE configuration. This means there are four high-performance Cortex-A73 cores and four power-efficient Cortex-A53 cores.
+The Cortex-A73 cores are used for demanding tasks and provide higher performance, while the Cortex-A53 cores handle less intensive tasks to save power.
+The CPU cores are clocked at various frequencies to balance performance and power efficiency, with the Cortex-A73 cores typically running at higher clock speeds than the Cortex-A53 cores.
+
+- ***GPU (Graphics Processing Unit)***:
+
+The Snapdragon 660 incorporates the Adreno 512 GPU, which is designed to provide good graphics performance for gaming and multimedia applications.
+The Adreno 512 supports various graphics technologies and APIs, enabling smooth gaming experiences and high-quality graphics rendering.
+
+- ***Hexagon DSP (Digital Signal Processor)***:
+
+The Hexagon DSP is a specialized processor designed for handling tasks related to audio, video, and other digital signal processing tasks efficiently.
+It helps improve the performance and power efficiency of tasks such as voice recognition, image processing, and audio enhancements.
+
+- ***ISP (Image Signal Processor)***:
+
+The Snapdragon 660 includes an advanced Image Signal Processor (ISP) for processing images and videos from the device's camera.
+It supports features like high-quality image capture, video recording, and advanced image post-processing.
+
+- ***Connectivity***:
+
+The SoC features an integrated X12 LTE modem, providing fast download and upload speeds over 4G LTE networks.
+It also includes support for various wireless connectivity options, including Wi-Fi, Bluetooth, and NFC.
+
+- ***Manufacturing Process***:
+
+The Snapdragon 660 is manufactured using a 14nm FinFET process technology, which helps to strike a balance between performance and power efficiency.
+
+- ***Security***:
+
+Qualcomm's Secure Processing Unit (SPU) provides hardware-based security features, including support for fingerprint recognition and encryption.
+Overall, the Snapdragon 660 is a mid-range SoC with a capable CPU-GPU combination, efficient power management, and support for various multimedia and connectivity features. It's suitable for mid-range smartphones and offers a good balance of performance and battery life. Keep in mind that this information is accurate as of my last knowledge update in September 2021, and there may have been newer iterations or advancements in Qualcomm's chipsets since then.
 </details>
