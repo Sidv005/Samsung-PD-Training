@@ -2020,5 +2020,114 @@ We can rectify this issue by isolating the port.<br>
 
 </details>
 
+## Day-10-QOR##
+<details>
+ <summary> Report_timing</summary>
+	Quality checks play a pivotal role in the world of Very Large Scale Integration (VLSI) design and manufacturing, serving as essential safeguards to guarantee the reliability and functionality of integrated circuits (ICs). These quality checks span the entirety of the design and manufacturing phases, encompassing a range of stages aimed at detecting and addressing potential issues.
 
+In VLSI, the process of ensuring quality is an ongoing and iterative one, maintaining a persistent presence from start to finish. This steadfast commitment to quality is driven by the overarching goals of ensuring reliability, optimizing performance, and enhancing the manufacturability of integrated circuits. To execute these checks efficiently, the industry leverages advanced simulation and verification tools, which not only automate but also streamline the entire quality assurance process.
+
+Rising Edge Propagation Delay (tpdr) is the duration required for the output signal to shift from a low (0) to a high (1) level following a corresponding transition in the input signal.
+
+Falling Edge Propagation Delay (tpdf) signifies the elapsed time for the output signal to shift from a high (1) to a low (0) level following a commensurate transition in the input signal.<br>
+<img width="600" alt="fig1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/90ed46d77a3e3126388d76cc77630401a1e8e7bb/SamsungPD%23day10/lab1/fig1.png"><br>
+
+Inverter gate :
+
+A rise -> Y fall (0.5 ns)
+
+A fall -> Y rise (0.4 ns)
+
+AND gate :
+
+A rise -> Y rise (0.7 ns)
+
+A fall -> Y fall (0.65 ns)
+
+B rise -> Y rise (0.65 ns)
+
+B fall -> Y fall (0.6 ns)
+
+Now the different timing paths along with delays are as follows
+
+1. DFFA(Clk -> Q r) -> INV(A r) -> INV(Y f) -> AND(A f) -> AND(Y f) -> DFFC(f)
+
+0.5 + 0.5 + 0.65 = 1.65ns
+
+2. DFFA(Clk -> Q f) -> INV(A f) -> INV(Y r) -> AND(A r) -> AND(Y r) -> DFFC(f)
+
+0.4 + 0.4 + 0.7 = 1.5ns
+
+3. DFFA(Clk -> Q r) -> AND(B r) -> AND(Y r) -> DFFC(r)
+
+0.5 + 0.65 = 1.15 ns
+
+4. DFFA(Clk -> Q f) -> AND(B f) -> AND(Y f) -> DFFC(f)
+
+0.4 + 0.6 = 1.0 ns
+
+The critical path refers to the longest path through the digital circuit that determines the maximum time it takes for a signal to propagate from the input to the output. It plays a crucial role in determining the overall performance and speed of the integrated circuit (IC).
+
+Following commands with their corresponding results are shown below.
+
+- report_timing -from DFFA/CLK -to DFFC/D -delay max
+
+we obtain the first path
+
+- report_timing -from DFFA/CLK -to DFFC/D -delay min
+
+we obtain the second path
+
+- report_timing -delay max -from DFFB/D -to DFFC/D
+
+we obtain the third path
+
+- report_timing -delay min -to DFFC/D
+
+we obtain fourth path
+
+- report_timing -delay max -rise_to DFFC/D
+
+we obtain the second path
+
+- report_timing -delay max -fall_to DFFC/D
+
+we obtain the first path
+
+Let us consider the clock period as 5 ns, setup time is 0.5 ns and hold time is 0.4 ns.
+
+DFFA(Clk -> Q r) -> INV(A r) -> INV(Y f) -> AND(A f) -> AND(Y f) -> DFFC(f)
+
+0.5 + 0.5 + 0.65 = 1.65ns
+
+This time is called as arrival time
+
+Required time = Clock period - setup time -uncertainty
+
+5 - 0.5 - 0 = 4.5ns
+
+setup slack = Required - Arrival = (4.5 - 1.65 = 2.85 ns)
+
+Hold Time of DFFC = 0.1ns
+
+DFFB(Clk -> Q f) -> AND(A f) -> AND(Y f) -> DFFC(f)
+
+0.4 + 0.6 = 1.0 ns
+
+Required time = hold time + uncertainity = 0.1 + 0 = 0.1 ns
+
+Hold slack = Arrival - Required = (1 - 0.1 = 0.9 ns)
+
+Let us consider another example<br>
+<img width="600" alt="fig2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/f8d29770848051bd10af62f1bf1299b5faaa0c1e/SamsungPD%23day10/lab1/fig2.png"><br>
+
+- report_timing -max_paths 2
+
+This command results to the two worst slack paths one from each endpoint. In this case the path with slacks -1.2 ns and -1.0 ns will be shown.
+
+- report_timing -max_paths 2 -nworst 2
+
+This command results to the worst slack , In this example it is -1.2 ns and -1.1 ns
+
+</details>
 
