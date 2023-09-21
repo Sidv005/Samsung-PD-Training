@@ -2354,7 +2354,7 @@ Qualcomm's Secure Processing Unit (SPU) provides hardware-based security feature
 Overall, the Snapdragon 660 is a mid-range SoC with a capable CPU-GPU combination, efficient power management, and support for various multimedia and connectivity features. It's suitable for mid-range smartphones and offers a good balance of performance and battery life. Keep in mind that this information is accurate as of my last knowledge update in September 2021, and there may have been newer iterations or advancements in Qualcomm's chipsets since then.
 </details>
 
-## Day 12- Overview on BabySoc##
+## Day 12- Overview on BabySoc ##
 
 <details>
  <summary>LABS on Half Adder</summary>
@@ -2367,7 +2367,7 @@ simulated waveform:-<br>
 </details>
 
 <details>
- <summary>LABS on Baby SOC modelling</summary>
+ <summary>LABS on BabySOC modelling</summary>
 Initially we model rvmyth following is the command:-
 	
 ```ruby
