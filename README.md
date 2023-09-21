@@ -2369,11 +2369,13 @@ simulated waveform:-<br>
 <details>
  <summary>LABS on Baby SOC modelling</summary>
 Initially we model rvmyth following is the command:-
+	
 ```ruby
 iverilog mythcore_test.v tb_mythcore_test.v 
 ./a.out
 gtkwave tb_mythcore_test.vcd
 ```
+
 Simulated waveform is shown below.<br>
 <img width="600" alt="wave_myth" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/wave_myth.png"><br>
 
@@ -2413,7 +2415,7 @@ gtkwave test1.vcd
 Simulated waveform is shown below.<br>
 <img width="600" alt="wave_rvmyth_pll" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/wave_rvmyth_pll.png"><br>
 
-Now we model the interface PLL with rvmyth following is the command:-
+Now we model the interface of all the modules following is the command:-
 ```ruby
 iverilog vsdbabysoc.v testbench.v avsdpll.v avsddac.v mythcore_test.v
 ./a.out
