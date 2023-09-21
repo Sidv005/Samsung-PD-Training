@@ -2352,5 +2352,76 @@ The Snapdragon 660 is manufactured using a 14nm FinFET process technology, which
 
 Qualcomm's Secure Processing Unit (SPU) provides hardware-based security features, including support for fingerprint recognition and encryption.
 Overall, the Snapdragon 660 is a mid-range SoC with a capable CPU-GPU combination, efficient power management, and support for various multimedia and connectivity features. It's suitable for mid-range smartphones and offers a good balance of performance and battery life. Keep in mind that this information is accurate as of my last knowledge update in September 2021, and there may have been newer iterations or advancements in Qualcomm's chipsets since then.
+</details>
 
+## Day 12- Overview on BabySoc##
+
+<details>
+ <summary>LABS on Half Adder</summary>
+To develop a half adder and simulate it. Design code is given below followed by the testbench.<br>
+<img width="600" alt="ha_code" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/ha_code.png"><br>
+Testbench is as follows.<br>
+<img width="600" alt="tb_ha" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/tb_ha.png"><br>
+simulated waveform:-<br>
+<img width="600" alt="ha_wave" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/ha_wave.png"><br>
+</details>
+
+<details>
+ <summary>LABS on Baby SOC modelling</summary>
+Initially we model rvmyth following is the command:-
+```ruby
+iverilog mythcore_test.v tb_mythcore_test.v 
+./a.out
+gtkwave tb_mythcore_test.vcd
+```
+Simulated waveform is shown below.<br>
+<img width="600" alt="wave_myth" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/wave_myth.png"><br>
+
+Now we model DAC following is the command:-
+```ruby
+iverilog avsddac.v avsddac_tb_test.v
+./a.out
+gtkwave avsddac_tb_test.vcd
+```
+Simulated waveform is shown below.<br>
+<img width="600" alt="wave_dac" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/wave_dac.png"><br>
+
+Now we model PLL following is the command:-
+```ruby
+iverilog avsd_pll_1v8.v pll_tb.v
+./a.out
+gtkwave test.vcd
+```
+Simulated waveform is shown below.<br>
+<img width="600" alt="wave_pll" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/wave_pll.png"><br>
+
+Now we model the interface DAC with rvmyth following is the command:-
+```ruby
+iverilog rvmyth_avsddac.v rvmyth_avsddac_TB.v
+./a.out
+gtkwave rvmyth_avsddac.vcd
+```
+Simulated waveform is shown below.<br>
+<img width="600" alt="wave_rvmyth_dac" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/wave_rvmyth_dac.png"><br>
+
+Now we model the interface PLL with rvmyth following is the command:-
+```ruby
+iverilog rvmyth_pll.v rvmyth_pll_tb.v
+./a.out
+gtkwave test1.vcd
+```
+Simulated waveform is shown below.<br>
+<img width="600" alt="wave_rvmyth_pll" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/wave_rvmyth_pll.png"><br>
+
+Now we model the interface PLL with rvmyth following is the command:-
+```ruby
+iverilog vsdbabysoc.v testbench.v avsdpll.v avsddac.v mythcore_test.v
+./a.out
+gtkwave dump.vcd
+```
+Simulated waveform is shown below.<br>
+<img width="600" alt="wave_vsdbabysoc" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/wave_vsdbabysoc.png"><br>
+
+
+ 
 </details>
