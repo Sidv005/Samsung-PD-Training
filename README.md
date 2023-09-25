@@ -2423,7 +2423,87 @@ gtkwave dump.vcd
 ```
 Simulated waveform is shown below.<br>
 <img width="600" alt="wave_vsdbabysoc" src="https://github.com/Sidv005/Samsung-PD-Training/blob/af2ae66cf4766e165ce2e8c0c83b0251d217f84b/SamsungPD%23day12/wave_vsdbabysoc.png"><br>
+</details>
 
+## Day 13- Demonstration of Post synthesis ##
 
- 
+<details>
+ <summary>LABS ON SYNTHESIS OF HALF ADDER</summary>
+Here post synthesis is done in dc_shell. Following commands are used to perform synthesis.
+
+```ruby
+set target_library <path_of_target_library>
+set link library { * <path_of_target_library> }
+read_verilog ha.v
+link
+compile_ultra
+```
+Schematic view of half adder is shown below.
+<img width="600" alt="ha_schema" src="https://github.com/Sidv005/Samsung-PD-Training/blob/45ac2ac38a7179b2ceb5cc87695ec359fa3b898e/SamsungPD%23day13/ha_schema.png"><br>
+
+Command used to write netlist is:-
+- write -f verilog ha_net.v
+
+Netlist code is as follows:<br>
+<img width="600" alt="ha_netlist" src="https://github.com/Sidv005/Samsung-PD-Training/blob/45ac2ac38a7179b2ceb5cc87695ec359fa3b898e/SamsungPD%23day13/ha_netlist.png"><br>
+
+Commands used for simulation
+```ruby
+iverilog <netlist_file_name> <testbench>
+./a.out
+gtkwave <vcd_file_name>
+```
+Simulated waveform is shown below.
+<img width="600" alt="post_ha_wave" src="https://github.com/Sidv005/Samsung-PD-Training/blob/45ac2ac38a7179b2ceb5cc87695ec359fa3b898e/SamsungPD%23day13/post_ha_wave.png"><br>
+</details>
+
+<details>
+ <summary>LABS ON BabySOC Post Simulation</summary>
+BabySOC comprises of 3 IP's which are as follows:
+
+1. RVMYTH
+2. DAC
+3. PLL
+
+Out of these only ***RVMYTH*** is synthesizable
+
+Commands for synthesizing
+
+```ruby
+set target_library <path_of_target_library>
+set link library { * <path_of_target_library> }
+read_verilog mythcore_test.v
+link
+compile_ultra
+write -f verilog -output rvmyth_core_test_net.v
+```
+
+Current design is changed to core.
+```ruby
+current_design core
+write -f verilog -out rvmyth_net.v
+```
+
+```ruby
+iverilog -DFUNCTIONAL -DUNIT_DELAY=#1 rvmyth_net.v tb_mythcore_test.v primitives.v sky130_fd_sc_hd.v
+./a.out
+gtkwave tb_mythcore_test.vcd
+```
+Above commands are used to generate the simulated waveform.
+Simulated waveform after the synthesis is shown below.<br>
+<img width="600" alt="post_syn(mythcore)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/45ac2ac38a7179b2ceb5cc87695ec359fa3b898e/SamsungPD%23day13/post_syn(mythcore).png"><br>
+
+We can observe from the above waveform that the sum of first n natural numbers upto 1000 and then it again decrements in the same manner since the MSB bit of a temporary register becomes high.
+
+***BabySOC Post Synthesis***
+
+Now BabySOC is synthesized using the mythcore_test netlist, PLL and DAC. Commands are as follows:
+
+```ruby
+iverilog -DFUNCTIONAL -DUNIT_DELAY=#1 rvmyth_net.v testbench.v primitives.v sky130_fd_sc_hd.v avsddac.v avsdpll.v vsdbabysoc.v
+./a.out
+gtkwave dump.vcd
+```
+Simulated waveform after the gate level synthesis is shown below.<br>
+<img width="600" alt="post_syn(vsdbabysoc)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/45ac2ac38a7179b2ceb5cc87695ec359fa3b898e/SamsungPD%23day13/post_syn(vsdbabysoc).png"><br>
 </details>
