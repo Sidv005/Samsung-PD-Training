@@ -2507,3 +2507,127 @@ gtkwave dump.vcd
 Simulated waveform after the gate level synthesis is shown below.<br>
 <img width="600" alt="post_syn(vsdbabysoc)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/45ac2ac38a7179b2ceb5cc87695ec359fa3b898e/SamsungPD%23day13/post_syn(vsdbabysoc).png"><br>
 </details>
+
+## Day-14- Timing Analysis of VSDBabySoC comprising of RISC-V core, PLL and DAC ## 
+
+<details>
+ <summary>Basics of PVT Corners </summary>
+In VLSI design and semiconductor manufacturing, the term "PVT corners" refers to specific combinations of Process, Voltage, and Temperature conditions used for testing and characterizing integrated circuits. These corners are essential for ensuring that a semiconductor device or integrated circuit functions correctly under a range of operating conditions.
+
+1. **Process Corner**: The process corner represents variations in the manufacturing process. Semiconductor fabrication processes are subject to small variations due to factors like equipment tolerances, material properties, and environmental conditions. The process corner typically includes the following variations:
+
+- Fast Process Corner: This corner represents a scenario where the manufacturing process results in faster transistors with better performance characteristics. It is typically associated with optimistic process parameters.
+- Slow Process Corner: This corner represents a scenario where the manufacturing process results in slower transistors with potentially worse performance characteristics. It is typically associated with pessimistic process parameters.
+- Nominal Process Corner: This corner represents the expected or average manufacturing process conditions.
+
+2. **Voltage Corner**: The voltage corner refers to variations in the supply voltage provided to the integrated circuit. Integrated circuits need to function correctly across a range of supply voltages, as voltage levels can fluctuate due to factors such as power supply noise or voltage drop across the chip.
+
+- Low Voltage Corner: This corner represents a scenario where the supply voltage is at the lower end of the specified range.
+- High Voltage Corner: This corner represents a scenario where the supply voltage is at the higher end of the specified range.
+- Nominal Voltage Corner: This corner represents the typical or expected supply voltage.
+
+3. **Temperature Corner**: Temperature can significantly impact the performance of integrated circuits. The temperature corner accounts for variations in temperature conditions.
+
+- Hot Temperature Corner: This corner represents a scenario where the chip is operating at a higher temperature, which can affect the speed and power consumption of the device.
+- Cold Temperature Corner: This corner represents a scenario where the chip is operating at a lower temperature.
+- Nominal Temperature Corner: This corner represents the expected or typical operating temperature.
+
+By characterizing an integrated circuit's behavior at different combinations of these corners (e.g., fast process, low voltage, hot temperature), designers can ensure that the circuit will work reliably under a wide range of conditions. This testing and characterization process helps identify potential issues and allows for necessary design adjustments, ensuring that the final product meets performance and reliability requirements.
+
+- PVT corners are crucial for designing robust and reliable integrated circuits, especially for applications where variations in operating conditions are expected, such as consumer electronics, automotive, and industrial applications.
+</details>
+
+<details>
+ <summary>LABS ON TIMING ANALYSIS of BabySoC for different PVT corners  </summary>
+
+Firstly we got the .lib files by cloning https://github.com/Geetima2021/vsdpcvrd.git then .lib is converted to .db file using lc_shell and remove the errors if present.
+Following commands are used.
+```ruby
+read_lib <library_name>
+write_lib <library_name> -f db -o <name_of_the_db_file>
+```
+A constraint file is scripted which is as follows:
+```ruby
+ set_units -time ns
+create_clock -name MYCLK -per 2 [get_pins {pll/CLK}];
+
+set_clock_latency -source 1 [get_clocks MYCLK]
+set_clock_uncertainty -setup 0.5 [get_clocks MYCLK]; 
+set_clock_uncertainty -hold 0.4 [get_clocks MYCLK]; 
+
+set_input_delay -max 1 -clock \[get_clocks MYCLK] [all_inputs];
+set_input_delay -min 0.5 -clock \[get_clocks MYCLK] [all_inputs];
+set_output_delay -max 1 -clock \[get_clocks MYCLK] [all_outputs];
+set_output_delay -min 0.5 -clock \[get_clocks MYCLK] [all_outputs];
+
+set_input_transition -max 0.2 \[all_inputs];
+set_input_transition -min 0.1 \[all_inputs];
+
+set_max_area  800;
+
+set_load -max 0.2 \[all_outputs];
+set_load -min 0.1 \[all_outputs];
+```
+A tcl script is designed to run set of commands for synthesis of VSDbabySoC which are follows:
+```ruby
+set target_library { <sky130_PVT_corner> , avsddac.db , avsdpll.db}
+set link_library {* sky130_PVT_corner> , avsddac.db , avsdpll.db}
+read_verilog vsdbabysoc.v
+link
+source <constraints_file_name>
+compile
+report_qor
+```
+Now screenshots of outputs showing the WNS, TNS for setup and hold analysis at different PVT corners are represented below:
+1. sky130_fd_sc_hd__ff_100c_1v65<br>
+<img width="600" alt="sky130_fd_sc_hd__ff_100c_1v65(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ff_100c_1v65(violate).png"><br>
+
+2. sky130_fd_sc_hd__ff_100c_1v95<br>
+<img width="600" alt="sky130_fd_sc_hd__ff_100c_1v95(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ff_100c_1v95(violate).png"><br>
+
+3. sky130_fd_sc_hd__ff_n40C_1v56<br>
+<img width="600" alt="sky130_fd_sc_hd__ff_n40c_1v56(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ff_n40c_1v56(violate).png"><br>
+
+4. sky130_fd_sc_hd__ff_n40C_1v65<br>
+<img width="600" alt="sky130_fd_sc_hd__ff_100c_1v65(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ff_100c_1v65(violate).png"><br>
+
+5. sky130_fd_sc_hd__ff_n40C_1v76<br>
+<img width="600" alt="sky130_fd_sc_hd__ff_100c_1v76(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ff_40c_1v76(violate).png"><br>
+
+6. sky130_fd_sc_hd__ss_100C_1v40<br>
+<img width="600" alt="sky130_fd_sc_hd_ss_100c_1v40(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd_ss_100c_1v40(violate).png">
+
+7.  sky130_fd_sc_hd__ss_100C_1v60<br>
+<img width="600" alt="sky130_fd_sc_hd__ss_100c_1v60(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ss_100c_1v60(violate).png"><br>
+
+8.  sky130_fd_sc_hd__ss_n40C_1v28<br>
+<img width="600" alt="sky130_fd_sc_hd__ss_n40c_1v28(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ss_n40c_1v28(violate).png"><br>
+
+9.  sky130_fd_sc_hd__ss_n40C_1v35<br>
+<img width="600" alt="sky130_fd_sc_hd__ss_n40c_1v35(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ss_n40c_1v35(violate).png"><br>
+
+10.  sky130_fd_sc_hd__ss_n40C_1v40<br>
+<img width="600" alt="sky130_fd_sc_hd__ss_n40c_1v40(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ss_n40c_1v40(violate).png"><br>
+
+11.  sky130_fd_sc_hd__ss_n40C_1v44<br>
+<img width="600" alt="sky130_fd_sc_hd__ss_n40c_1v44(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd_ss_n40c_1v44(violate).png"><br>
+
+12.  sky130_fd_sc_hd__ss_n40C_1v76<br>
+<img width="600" alt="sky130_fd_sc_hd_ss_n40c_1v76(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd_ss_n40c_1v76(violate).png"><br>
+
+13.  sky130_fd_sc_hd__tt_25C_1v80<br>
+<img width="600" alt="sky130_fd_sc_hd__ff_n40c_1v56(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/50ec50344e163ccee14f99156172151e73c8cfcc/SamsungPD%23day15/sky130_fd_sc_hd__ff_n40c_1v56(violate).png"><br>
+
+- Table and Graph for Setup<br>
+ <img width="600" alt="setup_table" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9dcd7fa79215cafc0395461860bfce10c2cfed8c/SamsungPD%23day15/setup_table.png"><br>
+ <img width="600" alt="wns_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9dcd7fa79215cafc0395461860bfce10c2cfed8c/SamsungPD%23day15/wns_setup.PNG"><br>
+ <img width="600" alt="tns_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9dcd7fa79215cafc0395461860bfce10c2cfed8c/SamsungPD%23day15/tns_setup.PNG"><br>
+
+ -Table and Graph for Hold<br>
+ <img width="600" alt="hold_table" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9dcd7fa79215cafc0395461860bfce10c2cfed8c/SamsungPD%23day15/hold_table.PNG"><br>
+ <img width="600" alt="whs_hold" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9dcd7fa79215cafc0395461860bfce10c2cfed8c/SamsungPD%23day15/whs_hold.PNG"><br>
+ <img width="600" alt="ths_hold" src="https://github.com/Sidv005/Samsung-PD-Training/blob/9dcd7fa79215cafc0395461860bfce10c2cfed8c/SamsungPD%23day15/ths_hold.PNG"><br>
+
+ *Conclusion*:-
+ Hold violations significantly occurs in faster cells and setup violations significantly occurs in slower cells.
+</details>
