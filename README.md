@@ -2651,5 +2651,68 @@ Now screenshots of outputs showing the WNS, TNS for setup and hold analysis at d
  5.*EDA Tools* - EDA, or Electronic Design Automation, tools are software applications used by engineers and designers to design, analyze, and simulate electronic circuits and systems. These tools are essential for the development of integrated circuits (ICs), printed circuit boards (PCBs), and other electronic hardware. EDA tools help streamline the design process, improve design quality, and reduce time-to-market. 
 	
  6.*PDK* -  PDK stands for "Process Design Kit." A Process Design Kit is a collection of files, libraries, data, and tools provided by semiconductor foundries or manufacturers to assist integrated circuit (IC) designers in developing chips that are compatible with a specific semiconductor manufacturing process. 
-	
+</details>
+
+<details>
+ <summary>Overview on RTL to GDSII </summary>
+
+ Below image shows the RTL to GDS II flow.<br>
+<img width="600" alt="rtlgds" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5f141861a60562264f2686011b0c8476b6af483c/SamsungPD_training/day1-openlane/rtlgds.PNG"><br>
+
+1. *Synthesis* - Synthesis is the pivotal phase in VLSI design where a high-level hardware description of a digital circuit, usually expressed in a hardware description language like VHDL or Verilog, is converted into a netlist that represents the logical and physical components constituting the actual integrated circuit. This transformation is essential for building the IC.
+
+At the heart of this process are standard cells, which serve as the fundamental building blocks. These cells are meticulously designed with a regular layout and come with various representations, including electrical, HDL, and SPICE models. Additionally, standard cells offer abstract and detailed layout views. They hold a central role in the assembly of the final integrated circuit layout.
+
+2. *Floor planning* - Floor planning in chip design is the initial stage of the physical design process where the layout and arrangement of different functional blocks and components on an integrated circuit (IC) are determined. This process involves defining the physical boundaries, locations, and rough sizes of various elements to optimize the chip's performance, power consumption, and manufacturability. Here are key aspects of floor planning in chip design:
+
+- Block Placement: The primary objective of floor planning is to determine where each functional block or module of the IC will be placed on the silicon die. Careful placement is essential to minimize wire lengths, reduce signal delays, and achieve efficient power distribution.
+
+- Signal Flow: Floor planning considers the flow of signals between blocks. Critical paths and signal paths with specific timing requirements are analyzed to ensure that the layout minimizes signal delays and meets performance goals.
+
+- Power Distribution: The distribution of power and ground connections is a critical consideration in floor planning. Efficient power grid design is necessary to ensure that each block receives a stable and adequate power supply, minimizing voltage drops and power dissipation.
+
+- Heat Dissipation: Effective floor planning takes into account thermal considerations. Placing power-hungry blocks near each other can lead to localized heating, which can affect chip reliability and performance. Floor planning should include provisions for heat dissipation, such as the placement of thermal vias and heat sinks.
+
+- I/O Placement: The placement of input and output pads or pins is an essential part of floor planning. Ensuring that these connections are appropriately positioned and organized helps in achieving efficient I/O operation and ease of PCB integration.
+
+- Hierarchical Organization: In complex IC designs, floor planning is often done hierarchically, with larger blocks representing major functions and smaller blocks representing subfunctions. This hierarchical organization helps manage complexity and simplifies the design process.
+
+- Design Constraints: Various design constraints, such as area limitations, manufacturing rules, and design rules set by the foundry, must be considered during floor planning to ensure that the chip design remains manufacturable.
+
+- Iterative Process: Floor planning is often an iterative process that may require adjustments and refinements to meet design objectives. Designers may use floor planning tools and simulations to assess and optimize the placement of blocks.
+
+- Area Optimization: One of the key goals of floor planning is to optimize the use of available silicon area. Efficient use of space is crucial for minimizing manufacturing costs and maximizing chip performance.
+
+- Documentation: The outcome of the floor planning process is typically documented in a floor plan diagram or document that provides a visual representation of the chip's physical layout and placement of functional blocks.
+
+3. *Placement* - Placement constitutes a pivotal phase in the physical design of integrated circuits (ICs). This critical step entails the strategic positioning of each logical cell, particularly standard cells, within the chip's silicon area. Proficient placement profoundly influences key factors, including performance, power efficiency, and the effective utilization of chip space. The primary goal of placement is to organize standard cells in a manner that minimizes the cumulative length of connecting wires (known as wirelength), optimizes the utilization of the chip's area, and satisfies a range of design constraints, encompassing timing, power requirements, and manufacturability.
+
+4. *CTS* - CTS, or Clock Tree Synthesis, is a pivotal phase in the physical design of integrated circuits (ICs). This process is dedicated to creating and refining the network responsible for distributing clock signals within the chip. The primary aim of CTS is to ensure the efficient and dependable delivery of clock signals to all flip-flops and sequential elements, thus minimizing variations in signal arrival times (known as clock skew) and adhering to specified timing requirements. In essence, CTS plays a vital role in VLSI design, significantly impacting overall performance, power efficiency, and the robustness of integrated circuits. It leverages advanced algorithms and tools to automate and enhance the CTS procedure, especially for intricate and high-performance ICs.
+
+5. *Routing* - Routing is a foundational process in VLSI (Very Large Scale Integration) design, and it constitutes a vital stage in the physical design of integrated circuits (ICs). This essential step revolves around establishing the physical pathways, typically metal traces or wires, that connect different components and logic elements on the chip. The primary objective is to ensure the efficient and constraint-compliant routing of data signals, control signals, and power throughout the IC. Routing's significance lies in its profound impact on the IC's performance, power efficiency, and overall operational capabilities.
+
+6. *Sign off* - "Sign-off" is the last phase in the design process just before sending an integrated circuit (IC) design for manufacturing. During sign-off, a thorough series of assessments, examinations, and validations takes place to confirm that the IC design complies with all required criteria, constraints, and specifications. This step is crucial because overlooking design errors or issues at this stage can lead to expensive and time-consuming complications either during manufacturing or after the ICs are in use.
+
+7. *Physical verification* - Physical verification in VLSI (Very Large Scale Integration) refers to the process of systematically inspecting and validating the physical layout of an integrated circuit (IC) design to ensure that it adheres to design rules, manufacturing constraints, and industry standards. The goal of physical verification is to identify and rectify any potential design errors or violations that could lead to issues during fabrication, assembly, or operation of the IC. Here are key aspects of physical verification in VLSI:
+
+- Design Rule Checking (DRC): DRC is a fundamental component of physical verification. It involves the examination of the IC layout to ensure that it complies with specific manufacturing rules and guidelines set by the semiconductor foundry. These rules encompass aspects like minimum feature sizes, spacing between components, metal layer stackup, and more.
+
+- LVS (Layout versus Schematic) Verification: LVS verification compares the physical layout of the IC with its logical representation (schematic) to confirm that there are no inconsistencies or mismatches between the two. It ensures that the connections and components on the layout correspond correctly to the intended circuit functionality.
+
+- Electrical Rule Checking (ERC): ERC focuses on checking electrical connectivity and functionality. It identifies issues such as floating nodes, unconnected pins, and electrical shorts or opens that can impact circuit performance or reliability.
+
+- Antenna Rule Check: Antenna effect verification is essential for preventing charge buildup in MOS (Metal-Oxide-Semiconductor) devices during the fabrication process. It ensures that sufficient charge-neutralization mechanisms are in place to protect against damage.
+
+- Differential Stress Analysis: This analysis assesses the physical stress distribution in the IC to identify potential areas of mechanical stress that could impact the device's long-term reliability.
+
+- Parasitic Extraction: Parasitic extraction involves extracting parasitic elements, such as capacitances and resistances, from the IC layout. These parasitic elements can affect signal timing and power consumption and must be accurately accounted for in circuit simulations.
+
+- Manufacturability Checks: Physical verification also encompasses manufacturability checks to ensure that the design can be successfully fabricated with the selected process technology. It considers aspects like lithography, mask generation, and process compatibility.
+
+- Compliance with Industry Standards: IC designers often need to ensure that their designs comply with industry standards, such as those related to electromagnetic interference (EMI) and electrostatic discharge (ESD) protection.
+
+- Iterative Process: Physical verification is an iterative process, and multiple iterations may be necessary to resolve design issues and achieve a clean and error-free layout.
+
+- Documentation and Reporting: The results of physical verification are typically documented, and reports are generated to provide feedback to the design team. Any identified issues or violations must be addressed before the design can proceed to the manufacturing phase.
+
 </details>
