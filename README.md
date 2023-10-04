@@ -2787,3 +2787,5 @@ Tool: Magic
 The GDSII file generated in the previous step is used by a semiconductor foundry for manufacturing. Testing and quality assurance are carried out during and after manufacturing.
 
 The OpenLane ASIC flow is highly configurable, allowing users to customize various aspects of the design process to meet their specific requirements. It is designed to support both educational and research purposes, as well as practical ASIC design projects. 
+
+</details>
