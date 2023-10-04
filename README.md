@@ -2631,3 +2631,18 @@ Now screenshots of outputs showing the WNS, TNS for setup and hold analysis at d
  *Conclusion*:-
  Hold violations significantly occurs in faster cells and setup violations significantly occurs in slower cells.
 </details>
+
+## Day-15- Inception of EDA and PDK ## 
+
+<details>
+ <summary>Introduction </summary>
+	1.*Die* - A "die" refers to a small, individual rectangular or square section of a silicon wafer. Each die contains a single integrated circuit (IC) or microchip. These dies are created through a series of complex processes, including photolithography, etching, and doping, on a single silicon wafer. After the manufacturing process is complete, the wafer is diced or cut along its edges to separate the individual dies. Each die can then be packaged as a discrete electronic component.
+	2.*Core* - A "core" typically refers to a central processing unit (CPU) or a specialized processing unit within an integrated circuit (IC) or chip.
+	3.*Macro* - A "macro" typically refers to a pre-designed and pre-verified functional block or module that can be integrated into a larger chip or system. Macros are used to simplify the chip design process, reduce development time, and ensure the reliability and performance of complex systems.<br>
+	Below screenshot represents the structure of chip.<br>
+	 <img width="600" alt="die" src="https://github.com/Sidv005/Samsung-PD-Training/blob/64b70d255620d6421e8e4a16056212b1c3de6d11/SamsungPD_training/day1-openlane/die.PNG"><br>
+	4.*RISC V* - The RISC-V architecture is an open-standard instruction set architecture (ISA) based on the principles of Reduced Instruction Set Computing (RISC). It is designed to be a simple and modular architecture that can be used for a wide range of applications, from embedded systems to high-performance computing. 
+	5.*EDA Tools* - EDA, or Electronic Design Automation, tools are software applications used by engineers and designers to design, analyze, and simulate electronic circuits and systems. These tools are essential for the development of integrated circuits (ICs), printed circuit boards (PCBs), and other electronic hardware. EDA tools help streamline the design process, improve design quality, and reduce time-to-market. 
+	6.*PDK* -  PDK stands for "Process Design Kit." A Process Design Kit is a collection of files, libraries, data, and tools provided by semiconductor foundries or manufacturers to assist integrated circuit (IC) designers in developing chips that are compatible with a specific semiconductor manufacturing process. 
+	
+</details>
