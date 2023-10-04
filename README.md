@@ -2827,3 +2827,15 @@ no. of flops = 1613.<br>
 The Flop ratio can be calculated by dividing no. of flops with no. of cells which equals to 0.10842.
 
 </details>
+
+## Day16 - Good Floorplan vs Bad Floorplan and Introduction to Library cells
+<details>
+ <summary>Chip Floorplanning Considerations </summary>
+ 
+1. *Utilization Factor* - The utilization factor in floorplanning measures how efficiently the available chip area is occupied by functional blocks or logic elements in an integrated circuit design. Designers aim to maximize this factor while considering various constraints and trade-offs to achieve a well-balanced and high-quality chip layout. It is ratio of area occupied by the netlist and Total core area.
+Practically 50% - 60% is core utilization. 
+
+2. *Aspect Ratio* - The aspect ratio in floor planning defines the physical shape of an integrated circuit layout by specifying the ratio of Height of core and width of core. It is a critical parameter that influences chip design and is considered alongside various design requirements and constraints to achieve optimal results.
+- If Aspect Ratio is 1 that signifies square chip other than 1 signifies rectangular chip.
+
+3. *Preplaced cells* - Preplaced cells refer to a set of specific functional blocks or standard cells that are manually or automatically placed at predetermined locations within the chip layout. These cells are typically strategically positioned before the automated placement and routing processes are executed for the rest of the design.
