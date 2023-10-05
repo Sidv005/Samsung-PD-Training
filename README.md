@@ -2907,11 +2907,16 @@ Below screenshot shows the Pin Placement view.<br>
 <details>
  <summary>Final placement optimization </summary>
 
-- Consider 4 circuits containing FF1 - 1 - 2 - FF2 cells with different Data in and out pins. These are initially palced in the following manner as shown in figure.<br> 
-<img width="600" alt="ini_place" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8bfdc1f95926ab565a2000317be796b778cb987d/SamsungPD_training/day2_openlane/ini_place.PNG"><br>
+- Consider 4 circuits of different colors like orang, yellow, blue, green containing FF1 - 1 - 2 - FF2 cells with different Data in and out pins.
+- Different inputs pins are Din1, Din2, Din3, Din4.
+- Different output pins are Dout1, Dout2, Dout3, Dout4.
+- These are initially placed in the following manner as shown in figure.<br> 
+<img width="700" alt="ini_place" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8bfdc1f95926ab565a2000317be796b778cb987d/SamsungPD_training/day2_openlane/ini_place.PNG"><br>
 
-- But here it requires repeators to avoid signal integrity issues whle propogating the data through the path. Hence Buffers are used in between the paths to mitigate the issues. Below figure shows the optimized placement.<br>
-<img width="600" alt="final_place" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8841b8b03e9e0e49635d432c8ffa36e086c33d00/SamsungPD_training/day2_openlane/final_place.PNG"><br>
+- But here it requires repeators to avoid signal integrity issues whle propogating the data through the path.
+- Hence Buffers are used in between the paths to mitigate the issues.
+- Below figure shows the optimized placement.<br>
+<img width="700" alt="final_place" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8841b8b03e9e0e49635d432c8ffa36e086c33d00/SamsungPD_training/day2_openlane/final_place.PNG"><br>
 </details>
 
 <details>
