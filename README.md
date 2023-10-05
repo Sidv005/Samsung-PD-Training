@@ -2839,3 +2839,22 @@ Practically 50% - 60% is core utilization.
 - If Aspect Ratio is 1 that signifies square chip other than 1 signifies rectangular chip.
 
 3. *Preplaced cells* - Preplaced cells refer to a set of specific functional blocks or standard cells that are manually or automatically placed at predetermined locations within the chip layout. These cells are typically strategically positioned before the automated placement and routing processes are executed for the rest of the design.
+
+4. *Decoupling Capacitors* - Decoupling capacitors are an integral part of chip design, providing a critical role in maintaining electrical stability and performance. Their proper selection, placement, and configuration are essential for achieving reliable and noise-free operation in integrated circuits. In complex chips, multiple decoupling capacitors of varying capacitance values are often used in parallel. This combination helps filter noise across a broader frequency spectrum.
+
+5. *Tap cells* - Tap cells are a fundamental component of IC design, especially in CMOS technology, as they serve to prevent latch-up by isolating transistor regions and providing a safe path for unwanted substrate currents to flow. Their proper placement and configuration are critical to ensure the reliable and stable operation of integrated circuits.
+
+6. *Power planning* - Power planning is a critical aspect of the ASIC (Application-Specific Integrated Circuit) design flow, focused on managing and distributing power throughout the chip to ensure reliable and efficient operation. Proper power planning is essential for controlling power consumption, minimizing voltage drops, and preventing potential issues such as overheating and electromigration.
+    - Installing Decap to every element is not feasible so a Power supply is needed. Ground Bounce and Voltage droop may occur due to signal integrity issues.
+
+7. *Ground bounce* -  Ground bounce is a transient voltage increase in the ground signal within an integrated circuit, primarily caused by the inductance and resistance of ground connections. It can lead to signal integrity issues and incorrect readings in digital circuits. Proper chip design techniques, including decoupling capacitors and careful power distribution network design, are essential to mitigate and control ground bounce.
+
+8. *Voltage droop* - voltage droop is a temporary reduction in supply voltage that can occur due to rapid changes in current demand or parasitic elements in the power distribution network. It can have detrimental effects on chip operation and performance, so designers employ various techniques to mitigate and prevent voltage droop and ensure reliable and stable operation.
+
+9. *Pin Placement* - Pin placement, also known as I/O (Input/Output) placement, is a critical step in the physical design process of creating integrated circuits (ICs). It involves determining the locations and assignments of input and output pins on the chip's package or footprint. Proper pin placement is crucial for ensuring signal integrity, ease of manufacturing, and compatibility with external interfaces. Designers use various software tools and simulations to aid in pin placement and signal routing.
+    - It is a crucial step in the physical design process and requires careful consideration of signal integrity, I/O requirements, external interfaces, power distribution, thermal management, manufacturability, and compliance with standards. Proper pin placement is essential for the successful operation and performance of the integrated circuit.
+</details>
+ 
+
+
+
