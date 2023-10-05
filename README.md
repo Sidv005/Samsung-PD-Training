@@ -2853,8 +2853,80 @@ Practically 50% - 60% is core utilization.
 
 9. *Pin Placement* - Pin placement, also known as I/O (Input/Output) placement, is a critical step in the physical design process of creating integrated circuits (ICs). It involves determining the locations and assignments of input and output pins on the chip's package or footprint. Proper pin placement is crucial for ensuring signal integrity, ease of manufacturing, and compatibility with external interfaces. Designers use various software tools and simulations to aid in pin placement and signal routing.
     - It is a crucial step in the physical design process and requires careful consideration of signal integrity, I/O requirements, external interfaces, power distribution, thermal management, manufacturability, and compliance with standards. Proper pin placement is essential for the successful operation and performance of the integrated circuit.
+
+Below screenshot shows the Pin Placement view.<br>
+<img width="600" alt="pins" src="https://github.com/Sidv005/Samsung-PD-Training/blob/2d060ce5ce81b4cb85aa324fff33b40b47b55841/SamsungPD_training/day2_openlane/pins.PNG"><br>
+
+- These pins are placed in random order.
+- Clock pins are larger because they need to send the signals to all flip flops.
 </details>
- 
 
+<details>
+ <summary>Labs on Floorplan using Openlane </summary>
+1. Below image shows the readme file prensent in openlane configuration. Here variables or switches need to be observed for every step.<br> 
+<img width="600" alt="readme" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4df9a2a4524c203e635bfd9a264ed4ccaee39fbf/SamsungPD_training/day2_openlane/readme.png"><br>
+	
+2. Below image shows the floorplan.tcl file which is prensent in openlane configuration. Here default values are set like FP_IO_MODE, VMETAL, HMETAL etc..<br> 
+<img width="600" alt="fp_tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4df9a2a4524c203e635bfd9a264ed4ccaee39fbf/SamsungPD_training/day2_openlane/fp_tcl.png"><br>
 
+3. Following screenshot displays the **run_floorplan**. Here observe that .def file is created after succesfull floorplan. <br>
+<img width="600" alt="run_fp" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4df9a2a4524c203e635bfd9a264ed4ccaee39fbf/SamsungPD_training/day2_openlane/run_fp.png"><br>
 
+4. Following screenshot displays the config.tcl generated after floorplan. Here observe following parameters after succesfull floorplan.
+   - HMETAL = 4
+   - VMETAL = 3
+   - CORE UTILIZATION = 35
+   - ASPECT RATIO = 1 <br>
+<img width="600" alt="fp_config_hmetal" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4df9a2a4524c203e635bfd9a264ed4ccaee39fbf/SamsungPD_training/day2_openlane/fp_config_hmetal.png"><br>
+
+5. Following screenshot displays the .def file generated where Die area needs to be observed which can be converted to micro meters.<br> 
+<img width="600" alt="fp_picorv_def(area)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4df9a2a4524c203e635bfd9a264ed4ccaee39fbf/SamsungPD_training/day2_openlane/fp_picorv_def(area).png"><br>
+
+6. Actual Layout of Floorplan can viewd using Magic Tool. Below image shows the layout obtained after floorplan.<br>
+<img width="600" alt="fp_layout" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4df9a2a4524c203e635bfd9a264ed4ccaee39fbf/SamsungPD_training/day2_openlane/fp_layout.png"><br>
+
+7. Below image shows the tkcon 2.3 Main Window where metal layer can be observed. Other cells like DECAP and TAP cells can also be observed.<br>
+<img width="600" alt="fp_layout_tckon" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4df9a2a4524c203e635bfd9a264ed4ccaee39fbf/SamsungPD_training/day2_openlane/fp_layout_tckon.png"><br>
+
+</details>
+
+<details>
+ <summary>Netlist Binding and intial place design </summary>
+
+1. **Netlist binding** is the process of associating or "binding" logical cells from a high-level or gate-level representation (the logical netlist) of the design to physical locations on the chip. It essentially maps the functional blocks or gates of the design to specific locations on the chip's layout.
+- Libraries have different flavors of cells of varying Height and width. According to applications netlist is binded with those particular cells.
+-  Netlist binding takes into account timing constraints, ensuring that cells are placed to meet required signal propagation delays and clock requirements.
+- An effective netlist binding strategy considers the routing requirements, aiming to minimize wirelengths and congestion while allowing for efficient interconnections between cells.
+
+2. **Initial placement** is the process of positioning the logical cells or blocks on the chip's floorplan, considering their netlist bindings. It sets the initial positions of cells, providing a starting point for subsequent optimization steps like detailed placement and routing.
+- Initial placement considers timing constraints and may optimize cell positions to meet critical timing requirements.
+- Initial placement is often an iterative process that may require feedback from subsequent steps in the design flow. Designers may refine the placement based on feedback from routing and timing analysis.
+- Automated placement tools are commonly used to perform initial placement based on design constraints and objectives.
+</details>
+
+<details>
+ <summary>Final placement optimization </summary>
+
+- Consider 4 circuits containing FF1 - 1 - 2 - FF2 cells with different Data in and out pins. These are initially palced in the following manner as shown in figure.<br> 
+<img width="600" alt="ini_place" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8bfdc1f95926ab565a2000317be796b778cb987d/SamsungPD_training/day2_openlane/ini_place.PNG"><br>
+
+- But here it requires repeators to avoid signal integrity issues whle propogating the data through the path. Hence Buffers are used in between the paths to mitigate the issues. Below figure shows the optimized placement.<br>
+<img width="600" alt="final_place" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8841b8b03e9e0e49635d432c8ffa36e086c33d00/SamsungPD_training/day2_openlane/final_place.PNG"><br>
+</details>
+
+<details>
+ <summary> Labs on Placement </summary>
+	
+- Below screenshot shows the execution of **run_placement** and displays the successfull placement of picorv32a design.<br>
+<img width="600" alt="run_place" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8841b8b03e9e0e49635d432c8ffa36e086c33d00/SamsungPD_training/day2_openlane/run_place.png"><br>
+
+From above figure we can see that picorv32a.placement.def file is generated.
+
+- Actual layout after placment process is seen in below figure.<br>
+<img width="600" alt="place_layout" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8841b8b03e9e0e49635d432c8ffa36e086c33d00/SamsungPD_training/day2_openlane/place_layout.png"><br>
+
+- In Placement step all standard cells are placed after zooming in we can observe those standard cells placed in rows.
+  
+- Below figure shows the layout view after zooming in to display the standard cells.<br>
+<img width="600" alt="place_layout2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8841b8b03e9e0e49635d432c8ffa36e086c33d00/SamsungPD_training/day2_openlane/place_layout2.png"><br>
+</details>
