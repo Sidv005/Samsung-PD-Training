@@ -2907,7 +2907,7 @@ Below screenshot shows the Pin Placement view.<br>
 <details>
  <summary>Final placement optimization </summary>
 
-- Consider 4 circuits of different colors like orang, yellow, blue, green containing FF1 - 1 - 2 - FF2 cells with different Data in and out pins.
+- Consider 4 circuits of different colors like orange, yellow, blue, green containing FF1 - 1 - 2 - FF2 cells with different Data in and out pins.
 - Different inputs pins are Din1, Din2, Din3, Din4.
 - Different output pins are Dout1, Dout2, Dout3, Dout4.
 - These are initially placed in the following manner as shown in figure.<br> 
