@@ -3034,19 +3034,42 @@ The manufacturing process involves several key steps:
 This comprehensive process forms the foundation of semiconductor device manufacturing, allowing for the creation of integrated circuits with intricate electronic functionalities.
 
 ***CMOS Inverter layout in Magic***
-When we select nmos and pmos box in Magic and run *what* command in tckon window we obtain below image.<br>
+
+- When we select nmos and pmos box in Magic and run *what* command in tckon window we obtain below image.<br>
 <img width="600" alt="layout_tckon(n%2Cp)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_tckon(n%2Cp).png"><br>
 
-The connection of Y to both the drain terminals of the PMOS and NMOS transistors is depicted as illustrated in the figure.<br>
+- The connection of Y to both the drain terminals of the PMOS and NMOS transistors is depicted as illustrated in the figure.<br>
 <img width="600" alt="layout_Y_con" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_Y_con.png"><br>
-The connections of the PMOS source and NMOS source are established as follows:<br>
+- The connections of the PMOS source and NMOS source are established as follows:<br>
 <img width="600" alt="layout_NMOS_source" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_NMOS_source.png"><br>
 <img width="600" alt="layout_PMOS_source" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_PMOS_source.png"><br>
 
-When we delete some layers we get drc errors same is illustrated in below image.<br>
+- When we delete some layers we get drc errors same is illustrated in below image.<br>
 <img width="600" alt="layout_Drc" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_Drc.png"><br>
 
-Below image is obtained after removing Drc Errors.<br>
+- Below image is obtained after removing Drc Errors.<br>
 <img width="600" alt="layout_inv" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_inv.png"><br>
+</details>
 
+<details>
+ <summary>Labs on DRC</summary>
+	
+- Initially, it is necessary to duplicate the 'open_pdks.git' repository from RTimothyEdwards. Now all the magic files is with us. We will look for mtal3.mag. So metal3.mag file now with us.
+
+- *cif see VIA2* command is runned in tckon window to obtain metal 3 contacts.
+- When we see the layout of metal3.mag in Magic it is the same as shown below.<br>
+<img width="600" alt="layout_metal3" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3d749d7d212dcf9f2c67be43a5160b9c3384e187/SamsungPD_training/day3_openlane/layout_metal3.png"><br>
+
+- Now width and height of the box is shown in below image which determine distance between the metal contact and metal layer boundary. <br>
+<img width="600" alt="layout_metal3_tckon" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3d749d7d212dcf9f2c67be43a5160b9c3384e187/SamsungPD_training/day3_openlane/layout_metal3_tckon.png"><br>
+
+- Now poly.mag is loaded in Magic Following image shows the tckon window.<br>
+<img width="600" alt="layout_poly_tckon" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3d749d7d212dcf9f2c67be43a5160b9c3384e187/SamsungPD_training/day3_openlane/layout_poly_tckon.png"><br>
+
+- Below image of tckon window shows the width box in poly.<br>
+<img width="600" alt="layout_poly_tckon_box" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3d749d7d212dcf9f2c67be43a5160b9c3384e187/SamsungPD_training/day3_openlane/layout_poly_tckon_box.png"><br>
+
+- Now sky130A.tech file is edited by adding ***allpolynonres*** in poly.9. After editting we load the tech file and check drc using *drc check* in tckon window. This is shown in below image.<br> 
+<img width="600" alt="tech_edit1_layout" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3d749d7d212dcf9f2c67be43a5160b9c3384e187/SamsungPD_training/day3_openlane/tech_edit1_layout.png"><br>
+- Here we can obsevre that no drc error is occuring. Hence we succesfully fixed poly.9 error. 
 </details>
