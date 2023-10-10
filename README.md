@@ -2956,12 +2956,16 @@ Here you can observe that pins are place in uneven order.
 
 <details>
  <summary>Spice Simulation lab for CMOS Inverter</summary>
+	
  1. The initial step involves generating a SPICE Deck file that encompasses essential details, such as the netlist's connectivity information, specified input sources, and designated points for observing outputs. In the creation of this SPICE Deck, the process entails defining the interconnections among components, specifying component values, as well as recognizing and labeling nodes accordingly.
+	
  2. A CMOS inverter is a digital logic gate that takes an input signal and produces an output signal that is the logical complement (opposite) of the input. In other words, when the input is high (1), the output is low (0), and when the input is low (0), the output is high (1).
-3. A CMOS inverter is constructed using complementary pairs of both NMOS (n-channel metal-oxide-semiconductor) and PMOS (p-channel metal-oxide-semiconductor) transistors. When one transistor is on (conducting), the other is off (non-conducting), allowing for low-power consumption and high noise immunity.
-4.  A node is identified when a component is positioned between two nodes.
+  
+ 3. A CMOS inverter is constructed using complementary pairs of both NMOS (n-channel metal-oxide-semiconductor) and PMOS (p-channel metal-oxide-semiconductor) transistors. When one transistor is on (conducting), the other is off (non-conducting), allowing for low-power consumption and high noise immunity.
+ 
+ 4. A node is identified when a component is positioned between two nodes.
 
-The SPICE deck for CMOS inverter is as follows.
+- The SPICE deck for CMOS inverter is as follows.
 
 ```ruby
 M1 out in vdd vdd pmos W=0.375u L=0.25u
