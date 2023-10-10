@@ -2935,3 +2935,118 @@ From above figure we can see that picorv32a.placement.def file is generated.
 - Below figure shows the layout view after zooming in to display the standard cells.<br>
 <img width="600" alt="place_layout2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8841b8b03e9e0e49635d432c8ffa36e086c33d00/SamsungPD_training/day2_openlane/place_layout2.png"><br>
 </details>
+
+## Day-17 Standard Cell Characterizations ##
+
+<details>
+ <summary>IO placer revised </summary>
+ You can adjust the alignment of the Input/Output (I/O) pins by modifying the value of the FP_IO_MODE parameter. By default, this parameter is set to 1, but you can change it using the following command:
+
+ ```ruby
+set ::env(FP_IO_MODE) 2
+```
+After changing the mode following image is obtained.<br>
+<img width="600" alt="fp_pin_uneven2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/fp_pin_uneven2.png"><br>
+
+Below image is the zoomed version of above image.<br>
+<img width="600" alt="fp_pin_uneven_zoom" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/fp_pin_uneven_zoom.png"><br>
+
+Here you can observe that pins are place in uneven order.
+</details>
+
+<details>
+ <summary>Spice Simulation lab for CMOS Inverter</summary>
+ 1. The initial step involves generating a SPICE Deck file that encompasses essential details, such as the netlist's connectivity information, specified input sources, and designated points for observing outputs. In the creation of this SPICE Deck, the process entails defining the interconnections among components, specifying component values, as well as recognizing and labeling nodes accordingly.
+ 2. A CMOS inverter is a digital logic gate that takes an input signal and produces an output signal that is the logical complement (opposite) of the input. In other words, when the input is high (1), the output is low (0), and when the input is low (0), the output is high (1).
+3. A CMOS inverter is constructed using complementary pairs of both NMOS (n-channel metal-oxide-semiconductor) and PMOS (p-channel metal-oxide-semiconductor) transistors. When one transistor is on (conducting), the other is off (non-conducting), allowing for low-power consumption and high noise immunity.
+4.  A node is identified when a component is positioned between two nodes.
+
+The SPICE deck for CMOS inverter is as follows.
+
+```ruby
+M1 out in vdd vdd pmos W=0.375u L=0.25u
+M2 out in 0 0 nmos W=0.375u W=0.25u
+cload out 0 10f
+Vdd vdd 0 2.5
+Vin in 0 2.5
+** Simulation Commands**
+.op
+.dc Vin 0 2.5 0.05
+** .include tsmc_025um_model.mod **
+.LIB "tsmc_025um_model.mod" CMOS_MODELS
+.end
+```
+
+1. Component M1 represents a PMOS transistor with its drain connected to the OUT node, its gate linked to the IN node, and its substrate and source connected to VDD. M1 also features a specified width-to-length (W/L) ratio.
+2. Component M2 represents an NMOS transistor with its drain linked to the OUT node, its gate connected to the IN node, and its substrate and source tied to the ground (0V). M2 also includes a defined W/L ratio.
+3. The load capacitance, with a value of 10fF, is connected between the OUT node and ground. Likewise, the supply voltages, set at 2.5V, are connected between the ground and their respective nodes.
+4. The Simulation command signifies the incremental variation of the gate voltage, ranging from 0V to 2.5V, in steps of 0.05V. This procedure is executed to observe and record the output characteristics concerning changes in the input voltage. The model file should be structured as follows, providing a comprehensive description of both NMOS and PMOS transistors, including their respective dimensions (length and width).
+
+The layout of the CMOS inverter is as follows:<br>
+<img width="600" alt="layout_inv" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_inv.png"><br>
+
+Below image shows that poly is connected to PMOS and NMOS.<br>
+<img width="600" alt="layout_inv" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_tckon(n%2Cp).png"><br>
+
+Following commands are runned in tckon Main window.
+```ruby
+extract all
+ext2spice cthresh 0 rthresh 0
+ext2spice
+```
+The spice netlist generated as shown below.<br>
+<img width="600" alt="spice_gen" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/spice_gen.png"><br>
+</details>
+
+<details>
+ <summary>16 Mask CMOS Fabricaion</summary>
+
+The manufacturing process involves several key steps:
+
+1.Substrate Preparation: Commences with a silicon wafer as the initial material, which undergoes rigorous cleaning and pre-processing to prepare it for further stages.
+
+2.Gate Oxide Formation (Mask 1): A thin layer of silicon dioxide (SiO2) is either grown or deposited onto the silicon wafer. This layer functions as the gate dielectric.
+
+3.Polysilicon Gate Formation (Mask 2): Polysilicon is deposited and precisely patterned to create gate electrodes for both NMOS and PMOS transistors.
+
+4.N-Well and P-Well Formation (Mask 3): The creation of regions for NMOS and PMOS transistors involves the use of n-type and p-type ion implantation processes.
+
+5.Source and Drain Formation (Masks 4 and 5): Ion implantation, followed by annealing processes, is employed to define the source and drain regions of the transistors.
+
+6.Gate Spacer and Silicidation (Masks 6 and 7): Insulating spacers are introduced around the gate structures, and metal silicide is formed on the source and drain regions to reduce contact resistance.
+
+7.Interlayer Dielectric (ILD) Deposition (Mask 8): A layer of insulating material, typically silicon dioxide, is deposited and planarized to create a level surface for metal interconnections.
+
+8.Contact and Via Formation (Masks 9 and 10): Etching processes create contact holes through the ILD, facilitating connections between metal interconnects and the underlying transistor nodes.
+
+9.Metal Layer 1 (Mask 11): The formation of metal lines and interconnects allows for connections between different parts of the circuit.
+
+10.Intermetal Dielectric (IMD) Deposition (Mask 12): Another insulating layer is deposited to provide separation between metal layers and isolation.
+
+11.Metal Layer 2 (Mask 13): Additional layers of metal interconnects may be added as required.
+
+13.Passivation Layer (Mask 14): A protective layer is deposited to shield the underlying layers and offer electrical insulation.
+
+14.Pad Opening (Mask 15): Openings are created in the passivation layer to enable wire bonding or solder bump connections.
+
+15.Testing and Packaging (Mask 16): Chips undergo rigorous testing for functionality and performance, followed by packaging to prepare them for their final use.
+
+This comprehensive process forms the foundation of semiconductor device manufacturing, allowing for the creation of integrated circuits with intricate electronic functionalities.
+
+***CMOS Inverter layout in Magic***
+When we select nmos and pmos box in Magic and run *what* command in tckon window we obtain below image.<br>
+<img width="600" alt="layout_tckon(n%2Cp)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_tckon(n%2Cp).png"><br>
+
+The connection of Y to both the drain terminals of the PMOS and NMOS transistors is depicted as illustrated in the figure.<br>
+<img width="600" alt="layout_Y_con" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_Y_con.png"><br>
+The connections of the PMOS source and NMOS source are established as follows:<br>
+<img width="600" alt="layout_NMOS_source" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_NMOS_source.png"><br>
+<img width="600" alt="layout_PMOS_source" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_PMOS_source.png"><br>
+
+When we delete some layers we get drc errors same is illustrated in below image.<br>
+<img width="600" alt="layout_Drc" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_Drc.png"><br>
+
+Below image is obtained after removing Drc Errors.<br>
+<img width="600" alt="layout_inv" src="https://github.com/Sidv005/Samsung-PD-Training/blob/befa507f9dfa9062514315167655ed907184f0bf/SamsungPD_training/day3_openlane/layout_inv.png"><br>
+
+</details>
