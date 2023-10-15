@@ -3077,3 +3077,264 @@ This comprehensive process forms the foundation of semiconductor device manufact
 <img width="600" alt="tech_edit1_layout" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3d749d7d212dcf9f2c67be43a5160b9c3384e187/SamsungPD_training/day3_openlane/tech_edit1_layout.png"><br>
 - Here we can obsevre that no drc error is occuring. Hence we succesfully fixed poly.9 error. 
 </details>
+
+
+## Day-18 Pre timing Analysis and Importance of good clock tree ##
+
+<details>
+ <summary>Steps to convert Grid into track info</summary>
+	
+ - Library Exchange Format (LEF) is a standard format used in the field of Very Large Scale Integration (VLSI) design. It is primarily used to describe the physical properties and characteristics of standard cells, macros, and other elements in a semiconductor library. 
+- LEF files provide crucial information that is essential for the physical design and manufacturing processes of integrated circuits. LEF files are typically used in conjunction with Design Exchange Format (DEF), which describes the logical design of the circuit.
+- LEF files describe the characteristics of individual cells or components within a semiconductor library.
+- Here we are converting .mag files of inverter to .lef .
+
+The track info detail is as follows:<br>
+<img width="600" alt="tracks_info" src="https://github.com/Sidv005/Samsung-PD-Training/blob/782a7481f9e71a461b90bd38d4e5c4224b2a80e6/SamsungPD_training/day4_final/tracks_info.png"><br>
+- Now grid is set as hsown in below figure.<br>
+<img width="600" alt="tckon_grid" src="https://github.com/Sidv005/Samsung-PD-Training/blob/782a7481f9e71a461b90bd38d4e5c4224b2a80e6/SamsungPD_training/day4_final/tckon_grid.png"><br>
+
+1. Rule 1 : Input and output port should lie on the intersection of horizontal and vertical track
+
+2. Rule 2 : The width of a standard cell should be odd multiple of the horizontal track pitch<br>
+<img width="600" alt="grid_check" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0894a12dbc3fcd72cd41a580a9cba75abfff0717/SamsungPD_training/day4_final/grid_check.PNG"><br>
+
+- Here we can observe that the width equals to 3 times the horizontal track pitch.
+</details>
+
+<details>
+ <summary>Steps to convert magic layout to lef</summary>
+
+- Save the layout with your name For e.g. sky130_siddhant
+
+Then use ***lef_write*** command this creates a .lef file
+
+Following image shows the inclusion of the sky130_siddhant.lef file in src.<br>
+<img width="600" alt="src_content" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0894a12dbc3fcd72cd41a580a9cba75abfff0717/SamsungPD_training/day4_final/src_content.png"><br>
+
+The contents of .lef file shown in below image.<br>
+<img width="600" alt="siddhant.lef" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0894a12dbc3fcd72cd41a580a9cba75abfff0717/SamsungPD_training/day4_final/siddhant.lef.png"><br>
+
+</details>
+
+<details>
+ <summary>Introduction to timing libs and steps to include lef cell</summary>
+
+```ruby
+cd ~/Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign
+cp sky130_siddhant.lef ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src
+cd ~/Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign/libs
+cp sky130_fd_sc_hd__* ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src
+cd ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/
+vim config.tcl
+```
+Below screenshot displays the modified config.tcl file.<br>
+<img width="600" alt="config" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8b203812883cf396508a7b9c7b3c8d05e47c5eb5/SamsungPD_training/day4_final/config.PNG"><br>
+
+Following image demonstrates how the .lef file is added before synthesizing.<br>
+<img width="600" alt="siddhant.lef_added" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8b203812883cf396508a7b9c7b3c8d05e47c5eb5/SamsungPD_training/day4_final/siddhant.lef_added.png"><br>
+
+Following image demonstrates how the custom cell is merged into the design during synthesis.<br>
+<img width="600" alt="siddhantinv_mergerd" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8b203812883cf396508a7b9c7b3c8d05e47c5eb5/SamsungPD_training/day4_final/siddhantinv_mergerd.png"><br>
+
+- We can observe that the cell of our name is getting used.
+</details>
+
+<details>
+ <summary>Introduction to Delay Table</summary>
+
+- Clock gating is a power-saving technique in digital circuit design. It involves using control logic to disable the clock signal to specific circuit blocks when they are not in use. This reduces dynamic power consumption, heat generation, and can extend battery life in low-power devices. The example of clock gating can be seen in the below image.<br>
+<img width="600" alt="pic1_gating" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/pic1_gating.PNG"><br>
+
+- For each level of buffering, we should have an identical buffer being used, and each node should be driving the same node.
+
+- Keep in mind that the load at the output will be varying, and since the load of one buffer is varying, the input transition of the following buffer will also vary.<br>
+<img width="600" alt="pic2_gating" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/pic2_gating.PNG"><br>
+
+The example of delay table is as follows:<br>
+<img width="600" alt="pic3" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/pic3.PNG"><br>
+
+- Each type of cell will be having its own individual delay table, as the internal pmos and nmos width/length ratio gets varied, the resistance changes, then RC constant gets varied as well, meaning the delay of each cell gets varied.
+- The values of delay which are not available in the table are extrapolated based on the given data.
+- If the Starting delay is 40 ps with C load as 50 pF the value will be between x9 and x10. As shown in the figure<br>
+
+<img width="600" alt="pic4_gating" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/pic4_gating.PNG"><br>
+The observations of the delay table are as shown in the figure<br>
+<img width="600" alt="pic5" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/pic5.PNG"><br>
+</details>
+
+<details>
+ <summary>Steps to configure synthesis settings to fix slack and include vsdinv</summary>
+	
+The various configuration of Synth are as follows
+
+1. SYNTH_STRATEGY: control the area and timing
+2. SYNTH_SIZING: control in cell sizing instead of buffering
+3. SYNTH_BUFFERING: control if we want to buffer high fanout net
+4. SYNTH_DRIVING_CELL: ensure more drive strength cell to drive input
+
+In openlane
+```ruby
+echo $::env(SYNTH_STRATEGY)
+set ::env(SYNTH_STRATEGY) "DELAY 0"
+echo $::env(SYNTH_STRATEGY)
+echo $::env(SYNTH_BUFFERING)
+echo $::env(SYNTH_SIZING)
+set ::env(SYNTH_SIZING) 1
+echo $::env(SYNTH_SIZING)
+echo $::env(SYNTH_DRIVING_CELL)
+```
+- With SYNTH_STRATEGY of Delay 0, the tool will focus more on optimizing/minimizing the delay, index can be 0 to 3 where 3 is the most optimized for timing (sacrificing more area).
+- SYNTH_SIZING of 1 will enable cell sizing where cell will be upsize or downsized as needed to meet timing.<br>
+<img width="600" alt="SET_STRATEGY1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/SET_STRATEGY1.png"><br>
+
+After modifying the configuration when we give run_synthesis<br>
+<img width="600" alt="slack%3D-10(reduced)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/slack%3D-10(reduced).png"><br>
+When we give run_floorplan we get a error of macro placement so we need to comment the lines from flooplan.tcl. Then when we run_floorplan it works<br>
+<img width="600" alt="run_floorplan" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/run_floorplan.png"><br>
+
+Then we need to give run_placement<br>
+<img width="600" alt="run_placement" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/run_placement.png"><br>
+
+<img width="600" alt="place_layout" src="https://github.com/Sidv005/Samsung-PD-Training/blob/02ddba812831bd12ca3271a69608cf8c5ec1085f/SamsungPD_training/day4_final/place_layout.png"><br>
+</details>
+
+<details>
+ <summary>Setup Time analsysis and flop setup time</summary>
+	
+*Setup Time (Ts) < Clock Period (T) - Combinational Delay (o)*
+
+In this condition, Ts represents the minimum required time for the data to be stable before the clock edge arrives. The clock period T is the time between consecutive clock edges, and "o" is the combinational delay, which is the time taken by the logic between the data input and the flip-flop's clock input to process the data.
+
+- This inequality ensures that there is sufficient time for the data to settle before the clock edge, preventing metastability or incorrect data capture in the flip-flop or latch.<br>
+<img width="600" alt="pic_setup" src="https://github.com/Sidv005/Samsung-PD-Training/blob/48dc18c3c1d6a4345ce30928ae694884a256e207/SamsungPD_training/day4_final/pic_setup.PNG"><br>
+<img width="600" alt="pic_setup2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/48dc18c3c1d6a4345ce30928ae694884a256e207/SamsungPD_training/day4_final/pic_setup2.PNG"><br>
+
+**Clock Jitter and Uncertainity**
+- Clock jitter, found in electronics and digital systems, denotes the deviation from the expected, regular timing of a clock signal.
+- This irregularity can stem from multiple factors and is of significant concern in situations demanding precise timing, including high-speed digital communication, signal processing, and high-performance computing.
+
+Consider the below example<br>
+<img width="600" alt="jitter1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/48dc18c3c1d6a4345ce30928ae694884a256e207/SamsungPD_training/day4_final/jitter1.PNG"><br>
+
+- In this context, we anticipate the clock signal to arrive precisely at the clock pin at either 0 seconds or at Ts. However, in practical situations, achieving exact timing can be challenging due to inherent variations in clock source generation. As a result, we need to adjust our understanding of combinational delay to accommodate the inherent uncertainty introduced by clock jitter.
+- This means that the combinational delay becomes more critical and should consider the impact of clock jitter on timing requirements.<br>
+
+<img width="600" alt="jitter2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/48dc18c3c1d6a4345ce30928ae694884a256e207/SamsungPD_training/day4_final/jitter2.PNG"><br>
+</details>
+
+<details>
+ <summary>Steps to configure OpenSTA</summary>
+- Firstly we have to write a pre_sta.conf file<br>
+<img width="600" alt="pre_sta_conf" src="https://github.com/Sidv005/Samsung-PD-Training/blob/65a532a682167581f10bdfb2c7c311cb7c2f8446/SamsungPD_training/day4_final/pre_sta_conf.tcl.PNG"><br>
+- Then we need to run sta pre_sta.conf<br>
+<img width="600" alt="pre_sta_conf" src="https://github.com/Sidv005/Samsung-PD-Training/blob/65a532a682167581f10bdfb2c7c311cb7c2f8446/SamsungPD_training/day4_final/pre_sta.png"><br>
+
+</details>
+
+<details>
+ <summary>Clock Tree Synthesis TritconCTS and signal integrity</summary>
+	
+In STA use the below command
+```ruby
+write_verilog ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/crct2/results/synthesis/picorv32a.synthesis.v
+```
+- Now we need to use the below commands in openlane<br>
+```ruby
+run_floorplan
+run_placement
+run_cts
+```
+.def file is generated in cts which is shown below.<br>
+<img width="600" alt="(after_cts_def)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/65a532a682167581f10bdfb2c7c311cb7c2f8446/SamsungPD_training/day4_final/(after_cts_def).png"><br>
+
+*Verifying the CTS design*
+
+- Use the below commands in openlane
+```ruby
+echo $::env(LIB_TYPICAL)
+echo $::env(CURRENT_DEF)
+echo $::env(CTS_MAX_CAP)
+echo $::env(CTS_CLK_BUFFER_LIST)
+echo $::env(CTS_ROOT_BUFFER)
+```
+
+<img width="600" alt="(after_cts_def)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/65a532a682167581f10bdfb2c7c311cb7c2f8446/SamsungPD_training/day4_final/(after_cts_verify).png"><br>
+
+</details>
+
+<details>
+ <summary>Timing Analysis with real clocks</summary>
+
+Executing these commands in OpenLANE:
+```ruby
+openroad                                                                                                       
+read_lef designs/picorv32a/runs/13-01_14-09/tmp/merged.lef
+read_def designs/picorv32a/runs/13-01_14-09/results/cts/picorv32a.cts.def
+write_db pico_cts.db
+read_db pico_cts.db
+read_verilog designs/picorv32a/runs/crct2/results/synthesis/picorv32a.synthesis_cts.v
+read_liberty -max $::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib
+read_liberty -min $::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib
+set_propagated_clock [all_clocks]
+read_sdc designs/picorv32a/src/my_base.sdc
+report_checks -path_delay min_max -format full_clock_expanded -digits 4
+```
+These are the outputs of the above commands shown in below figure.<br>
+<img width="600" alt="(openroad_commands)2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/65a532a682167581f10bdfb2c7c311cb7c2f8446/SamsungPD_training/day4_final/(openroad_commands)2.png"><br>
+
+From the below image we can observe that min slack is met.<br> 
+<img width="600" alt="(openroad_min_slack)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/65a532a682167581f10bdfb2c7c311cb7c2f8446/SamsungPD_training/day4_final/(openroad_min_slack).png"><br>
+Max is violating<br>
+<img width="600" alt="(openroad_max_slack)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/65a532a682167581f10bdfb2c7c311cb7c2f8446/SamsungPD_training/day4_final/(openroad_max_slack).png"><br>
+
+***Steps to execute STA with right timing library***
+
+In order to meet the max slack we follow the below commands:-
+```ruby
+exit        (Exit openroad)
+openroad
+read_db pico_cts.db
+read_verilog /openLANE_flow/designs/picorv32a/runs/13-01_14-09/results/synthesis/picorv32a.synthesis_cts.v
+read_liberty $::env(LIB_SYNTH_COMPLETE)
+link_design picorv32a
+read_sdc designs/picorv32a/src/my_base.sdc
+set_propagated_clock [all_clocks]
+report_checks -path_delay min_max -fields {slew trans net cap input pin} -format full_clock_expanded
+echo $::env(CTS_CLK_BUFFER_LIST)
+```
+Following the verification of checks in the report, we observe that both the minimum and maximum requirements have been satisfied.<br>
+<img width="600" alt="slack_met1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/299e9f62c6ad297ccc575256fe1916b6c40f6c77/SamsungPD_training/day4_final/slack_met1.PNG"><br>
+<img width="600" alt="slack_met2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/299e9f62c6ad297ccc575256fe1916b6c40f6c77/SamsungPD_training/day4_final/slackmet2.PNG"><br>
+
+*Steps to observe impact of bigger CTS buffers on setup and hold timing*
+
+Initially, we need to execute these commands in OpenLANE. In this process, we are converting the current DEF (Design Exchange Format) file to a placement-specific DEF file.
+```ruby
+exit 
+echo $::env(CTS_CLK_BUFFER_LIST)
+set ::env(CTS_CLK_BUFFER_LIST) [lreplace $::env(CTS_CLK_BUFFER_LIST) 0 0]
+echo $::env(CURRENT_DEF)
+set ::env(CURRENT_DEF) /openLANE_flow/designs/picorv32a/runs/13-01_14-09/results/placement/picorv32a.placement.def
+run_cts
+```
+The output of the above commands is shown below.<br>
+<img width="600" alt="commands1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d3a9c83fc1937f943217921722ab4623f4ef7e89/SamsungPD_training/day4_final/commands1.PNG"><br>
+
+In OpenLANE, these commands must be executed to assess the effect of large buffers. In this case, we are solely focused on timing analysis by loading the DEF, LEF, and cts.v files.<br>
+```ruby
+openroad
+read_lef /openLANE_flow/designs/picorv32a/runs/13-01_14-09/tmp/merged.lef
+read_def /openLANE_flow/designs/picorv32a/runs/13-01_14-09/results/cts/picorv32a.cts.def
+write_db pico_cts1.db
+read_db pico_cts1.db
+read_verilog /openLANE_flow/designs/picorv32a/runs/13-01_14-09/results/synthesis/picorv32a.synthesis_cts.v
+read_liberty $::env(LIB_SYNTH_COMPLETE)
+link_design picorv32a
+read_sdc designs/picorv32a/src/my_base.sdc
+set_propagated_clock [all_clocks]
+report_checks -path_delay min_max -fields {slew trans net cap input pin} -format full_clock_expanded
+```
+We can observe that max slack got improved from 5.10 to 5.18.<br>
+<img width="600" alt="commands1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d3a9c83fc1937f943217921722ab4623f4ef7e89/SamsungPD_training/day4_final/slackmet3.PNG"><br>
+</details>
