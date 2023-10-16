@@ -3338,3 +3338,109 @@ report_checks -path_delay min_max -fields {slew trans net cap input pin} -format
 We can observe that max slack got improved from 5.10 to 5.18.<br>
 <img width="600" alt="commands1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/d3a9c83fc1937f943217921722ab4623f4ef7e89/SamsungPD_training/day4_final/slackmet3.PNG"><br>
 </details>
+
+## Day-19 Final Step RTL to GDSII ##
+<details>
+ <summary>Introduction to maze Routing use Lee's Algorithm</summary>
+
+***Routing***
+
+Routing in the context of VLSI (Very Large Scale Integration) pertains to the intricate task of establishing connections among different elements within an integrated circuit, including transistors, logic gates, and various electronic components. This is achieved by creating an intricate network of interconnected wires or metal layers. The quality and efficiency of routing are of paramount importance as they directly impact the performance and functionality of VLSI chips. VLSI routing primarily consists of two main categories: global routing and detailed routing.
+
+***Maze Routing Lee's Algorithm***
+
+The Lee algorithm, which is sometimes referred to as the Lee-Moore algorithm, is a widely employed pathfinding or maze routing technique within the realm of computer science, notably in the domains of VLSI design and printed circuit board (PCB) design. Its primary function is to determine the most efficient route between two points on a grid or maze while accounting for obstacles or obstructed areas. This algorithm operates on a breadth-first search (BFS) principle and is frequently utilized during the intricate routing phases in VLSI design.
+
+<img width="800" alt="pic1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7d341dd1400516ddbd940e228b96f016f0c1eda5/day19/pic1.PNG"><br>
+
+The procedural steps in Lee Algorithm is as follows. 
+
+*Initialization :*
+
+To prepare for the pathfinding process, begin by establishing a grid or maze where each cell has two potential states: it can either be unoccupied (open) or obstructed. Designate one of these cells as the starting point, denoting it as the source cell, and choose another cell as the destination point, which will serve as the target cell. Next, create a queue data structure to keep track of the cells that need to be examined during the exploration.
+
+*Breadth-First Search :*
+
+Commence by taking the source cell and placing it into the queue.
+Assign a step count of 0 to the source cell.
+Initiate a loop that will continue as long as there are cells in the queue.
+For each cell within the queue:
+
+- Examine the adjacent cells in all four directions (up, down, left, and right). Ensure that these neighboring cells are unobstructed and haven't been visited yet.
+- If a neighboring cell is unvisited, mark it as visited, enqueue it, and set its step count as the current cell's step count incremented by one.
+- Continue this process until the destination cell is reached or until there are no more cells to explore.
+
+*Backtracking :*
+
+Upon reaching the destination cell, the algorithm can backtrack its steps from the destination back to the source. This is achieved by inspecting neighboring cells and selecting the one with a shorter distance value at each stage, effectively retracing the shortest path from the destination to the source.
+
+*Path Construction:*
+
+- Following the backtracking process, the algorithm reconstructs the path from the source to the destination, ultimately determining the shortest route.
+
+- The Lee algorithm holds particular significance in the context of detailed routing for VLSI design. This is because it excels in identifying the shortest path, all while considering the grid's layout and potential obstacles. It offers an efficient means to navigate around hindrances, steer clear of congestion, and establish connections between different elements on an integrated circuit.
+
+<img width="600" alt="pic2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7d341dd1400516ddbd940e228b96f016f0c1eda5/day19/pic2.PNG"><br>
+
+<img width="800" alt="pic3" src="https://github.com/Sidv005/Samsung-PD-Training/blob/7d341dd1400516ddbd940e228b96f016f0c1eda5/day19/pic3.PNG"><br>
+
+The Lee algorithm boasts a notable advantage in that it assures the discovery of the shortest path. Nevertheless, it should be noted that its memory requirements can be substantial, and it may become computationally demanding when dealing with sizable grids or mazes. To mitigate these constraints, a variety of adaptations and enhancements have been developed. These include the bidirectional Lee algorithm, the A* algorithm, and hierarchical iterations tailored for PCB routing, all of which aim to optimize and refine the original Lee algorithm.
+</details>
+
+<details>
+ <summary>Design Rule Checks</summary>
+
+- Design Rule Checks (DRC) play a pivotal role in the integrated circuit (IC) design and manufacturing workflow, particularly in the realm of Very Large Scale Integration (VLSI) design.
+
+- DRC encompasses a series of directives and assessments employed to verify that the IC's layout complies with both manufacturing and design standards. These standards are indispensable in ensuring the successful manufacturing of the IC and its subsequent performance in alignment with the intended specifications.
+
+Some of the Design Rule checks are illustrated in the below figure.<br>
+<img width="600" alt="pic4" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8628a922c6bd7c820ab305342bfe1355a0010711/day19/pic4.PNG"><br>
+- A signal short, classified as a DRC violation, occurs when two wires that shouldn't be connected inadvertently make contact on the same layer. Such an occurrence can potentially result in functional failures, necessitating prompt attention.
+
+- To resolve this issue, a straightforward solution involves relocating one of the wires to a separate metal layer. It's essential to bear in mind that this adjustment must adhere to any new DRC rules that have been introduced.
+  
+<img width="600" alt="pic5" src="https://github.com/Sidv005/Samsung-PD-Training/blob/8628a922c6bd7c820ab305342bfe1355a0010711/day19/pic5.PNG"><br>
+
+- Conducting parasitic extraction involves the retrieval of resistance and capacitance values associated with the wires, which will subsequently be applied in downstream procedures.
+  </details>
+
+  <details>
+ <summary>Labs</summary>
+
+To run OpenLANE following commands are executed.
+```ruby
+cd work/tools/openlane_working_dir/openlane
+make mount
+pwd
+ls -ltr
+./flow.tcl -interactive
+package require openlane 0.9
+prep -design picorv32a -tag 13-01_14-09
+```
+In OpenLANE
+```ruby
+echo $::env(CURRENT_DEF)    (Ensure current_def is on the CTS stage)
+gen_pdn                     (To generate power distribution network)
+```
+
+Below images illustrates the occurence of errors when above commands are runned.<br>
+<img width="600" alt="route_pic7" src="https://github.com/Sidv005/Samsung-PD-Training/blob/799df10e787d03f566a7e068394ae1f66348237e/day19/route_pic7.PNG"><br>
+<img width="600" alt="route_pic8" src="https://github.com/Sidv005/Samsung-PD-Training/blob/799df10e787d03f566a7e068394ae1f66348237e/day19/route_pic8.PNG"><br>
+
+***Fundamentals of global and detail routing and configure TritonRoute***
+
+```ruby
+echo $::env(CURRENT_DEF)            (Ensure the def file of pdn has been created)
+echo $::env(ROUTING_STRATEGY)
+set ::env(CURRENT_DEF) <path_of_cts.def>
+run_routing
+```
+
+Executing the "run_routing" command yields the following result:<br>
+<img width="600" alt="route_pic9" src="https://github.com/Sidv005/Samsung-PD-Training/blob/799df10e787d03f566a7e068394ae1f66348237e/day19/route_pic9.PNG"><br>
+
+Below screenshot shows the results folder.<br>
+<img width="600" alt="route_pic10" src="https://github.com/Sidv005/Samsung-PD-Training/blob/799df10e787d03f566a7e068394ae1f66348237e/day19/route_pic10.PNG"><br>
+
+</details>
