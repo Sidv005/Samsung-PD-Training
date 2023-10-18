@@ -3580,3 +3580,72 @@ Here observe that slack is getting increased.<br>
 Here we can observe that slack is getting increased when core utilization is increased from 40% to 50%.
 </details>
 
+## Day-21 Placement and CTS labs ##
+<details>
+ <summary>Theory</summary>
+</details>
+
+<details>
+ <summary>Labs</summary>
+	
+**Observing for 40% of utilization**
+
+Generated vsdbabysoc.sdc after synthesis is shown below.<br>
+<img width="600" alt="1.vsdbabysoc.sdc" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/1.vsdbabysoc.sdc.png"><br>
+
+Script in top.tcl
+
+1. create_placement is used to create placement for the design. floorplan option is selected to make the design planning styled as placement.
+2. Pin Placement is done by sourcing pns.tcl to sync with the current technology file regarding power grid creation.<br>
+<img width="600" alt="pic1_create_placement" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic1_create_placement.png"><br>
+
+<img width="600" alt="pic2_create_placement" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic2_create_placement.png"><br>
+
+*Reports that were generated from the run*
+
+```ruby
+gvim check_design.pre_pin_placement
+```
+As shown in below figure there are 3 warnings in total for pre-placement while checking the design.
+<img width="600" alt="pic3_pre_placement_warnings" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic3_pre_placement_warnings.png"><br>
+
+```ruby
+gvim report_port_placement.rpt
+```
+Below image shows the report_port_placement.<br>
+<img width="600" alt="pic4_report_port_placement.rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic4_report_port_placement.rpt.png"><br>
+
+```ruby
+gvim icc2_output.txt
+```
+Below image shows the icc2_output<br>
+<img width="600" alt="pic5_icc2_output_txt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic5_icc2_output_txt.png"><br>
+<img width="600" alt="pic6_icc2_output.txt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic6_icc2_output.txt.png"><br>
+
+```ruby
+gvim vsdbabysoc.post_estimated_timing.rpt
+```
+Below image shows the report of vsdbabysoc.post_estimated_timing <br>
+<img width="600" alt="pic7_post_estimated_timing.rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic7_post_estimated_timing.rpt.png"><br>
+
+```ruby
+gvim vsdbabysoc.post_estimated_timing.qor
+```
+Below image shows the qor report of vsdbabysoc.post_estimated_timing<br>
+<img width="600" alt="pic8_post_estimated_timing.qor" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic8_post_estimated_timing.qor.png"><br>
+<img width="600" alt="pic9_post_estimated_timing.qor2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic9_post_estimated_timing.qor2.png"><br>
+
+```ruby
+gvim vsdbabysoc.post_estimated_timing.qor.sum
+```
+
+Below image shows the summary on qor report of vsdbabysoc.post_estimated_timing <br>
+<img width="600" alt="pic10_post_estimated_timing.qor.sum" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic10_post_estimated_timing.qor.sum.png"><br>
+
+CTS schematic design Analysis:-
+<img width="600" alt="pic11_pll_schematic" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic11_pll_schematic.png"><br>
+
+
+
+
+ </details>
