@@ -3616,8 +3616,8 @@ Here we can observe that slack is getting increased when core utilization is inc
 ## Day-21 Placement and CTS labs ##
 <details>
  <summary>Theory</summary>
-	
-	1. Placement in IC design refers to the vital process of determining the physical locations of electronic components within an integrated circuit (IC). This step is of paramount importance in the overall IC design process, as it significantly impacts the final performance, power consumption, and manufacturability of the chip. The primary objective of placement is to allocate a physical position for each logic gate, flip-flop, or other components on the chip, with the goal of minimizing wirelength, reducing congestion, and optimizing factors like signal delay and power consumption.
+
+1. Placement in IC design refers to the vital process of determining the physical locations of electronic components within an integrated circuit (IC). This step is of paramount importance in the overall IC design process, as it significantly impacts the final performance, power consumption, and manufacturability of the chip. The primary objective of placement is to allocate a physical position for each logic gate, flip-flop, or other components on the chip, with the goal of minimizing wirelength, reducing congestion, and optimizing factors like signal delay and power consumption.
 
 2. Routing in VLSI design involves the task of interconnecting various components, such as logic gates and flip-flops, placed on an integrated circuit (IC) with the necessary wires or interconnects. The primary goal of routing is to establish an efficient and reliable network of connections between these components on the chip. This network must meet timing constraints, minimize wirelength, and alleviate congestion issues.
 
