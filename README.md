@@ -3448,6 +3448,39 @@ Below screenshot shows the results folder.<br>
 ## Day-20 Floorplanning and power planning labs ##
 <details>
  <summary>Theory</summary>
+	The physical design flow in VLSI (Very Large Scale Integration) is a series of steps that transform a high-level hardware description of a digital circuit into a physical layout that can be fabricated as an integrated circuit (IC) on a semiconductor wafer. This flow involves several stages and a range of tools and methodologies. Here is an overview of the typical steps in the physical design flow:
+
+1. Design Specification: This is the initial step where you gather requirements and specifications for the digital circuit. It includes understanding the functionality, power consumption, performance, area constraints, and other design goals.
+
+2. RTL Design: Register Transfer Level (RTL) design involves creating a high-level representation of the digital circuit in a hardware description language (HDL) like VHDL or Verilog. The RTL description typically consists of flip-flops, registers, and the interconnections between them.
+
+3. Logic Synthesis: This step involves converting the RTL description into a gate-level representation. Logic synthesis tools map the RTL to a library of standard cells, optimizing for area, power, and speed while meeting the design constraints.
+
+4. Floor Planning: In this phase, you decide on the placement of different functional blocks and macros on the chip. It involves defining the size and location of each block to optimize for area, power, and signal routing.
+
+5. Power Planning: Power distribution networks are designed to ensure that all parts of the chip receive a stable and adequate power supply. This includes the design of power grids and voltage regulation circuits.
+
+6. Placement: The placement stage determines the physical locations of each standard cell on the chip. Tools aim to minimize wirelength, optimize for timing, and meet other design constraints.
+
+7. Clock Tree Synthesis (CTS): CTS is the process of designing a clock distribution network to ensure that clock signals reach all the flip-flops and latches with minimal skew and low power consumption.
+
+8. Routing: The routing step involves creating the physical wires (metal layers) that connect the gates, ensuring that all connections meet design requirements and constraints. Global and detailed routing are usually performed.
+
+9. Design for Manufacturing (DFM): DFM considerations address manufacturability issues like lithography, etching, and other process-related aspects to ensure the chip can be manufactured with high yield.
+
+10. Design Verification: Extensive verification is carried out at each stage of the physical design flow to ensure that the final layout adheres to the original design specifications and that it is free from logical and physical errors.
+
+11. Physical Verification: This involves checking the design against manufacturing rules, including design rule checking (DRC) and layout vs. schematic (LVS) checks.
+
+12. Extraction: Parasitic capacitances and resistances are extracted from the layout and included in the simulation models to accurately predict circuit behavior.
+
+13. Sign-off: This is the final review and approval stage before tape-out, where the design is deemed ready for fabrication.
+
+14. Tape-out: Once the design is thoroughly reviewed, validated, and optimized, it is sent for semiconductor fabrication. A set of files representing the design layout is created and submitted to the foundry.
+
+15. Post-Tapeout Tasks: After fabrication, there may be additional tasks such as package design, testing, and assembly before the final IC is ready for use.
+
+The physical design flow in VLSI is a complex and iterative process that requires careful planning and the use of various EDA (Electronic Design Automation) tools. Success in physical design depends on meeting the design goals and constraints while optimizing for power, area, and performance.
 </details>
 
 <details>
@@ -3470,13 +3503,13 @@ gvim avsdpll.lib &
 *vsdbabysoc.tcl*
 - Modifying the contents to my path, remove -lib in read_lib commands, and replace MYCLK to clk since the clock used in the design is {clk}
 - All of the commands have been inserted in gvim and the tool will run it once at a time.<br>
-<img width="600" alt="1.vsdbabysoc.tcl" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/1.vsdbabysoc.tcl.png"><br>
+<img width="800" alt="1.vsdbabysoc.tcl" src=" https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/1.vsdbabysoc.tcl.png"><br>
 
  *avsdpll.lib*
  
 - Remove the unwanted pins<br>
   
-<img width="600" alt="3.avsdpll.lib" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/3.avsdpll.lib.png"><br>
+<img width="800" alt="3.avsdpll.lib" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/3.avsdpll.lib.png"><br>
 
 ```ruby
 dc_shell
@@ -3485,19 +3518,19 @@ source vsdbabysoc.tcl
 ***Reports***
 
 Report timing image is shown below.<br>
-<img width="600" alt="pic3_timing" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic3_timing.png"><br>
+<img width="800" alt="pic3_timing" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic3_timing.png"><br>
 
 Report area image is shown below.<br>
-<img width="600" alt="pic4_area" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic4_area.png"><br>
+<img width="800" alt="pic4_area" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic4_area.png"><br>
 
 Report power image is shown below.<br>
-<img width="600" alt="pic5_power" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic5_power.png"><br>
+<img width="800" alt="pic5_power" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic5_power.png"><br>
 
 ***Output schematic***<br>
-<img width="600" alt="sche_pic1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/sche_pic1.png"><br>
+<img width="800" alt="sche_pic1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/sche_pic1.png"><br>
 
 *RVMYTH core*<br>
-<img width="600" alt="sche_pic2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/sche_pic2.png"><br>
+<img width="800" alt="sche_pic2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/sche_pic2.png"><br>
 
 ***Performing physical design***
 
@@ -3512,22 +3545,22 @@ gvim pns_example.tcl
 *Modifying files*
 
 1. top.tcl<br>
-<img width="600" alt="3.top.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/3.top.tcl.png"><br>
+<img width="800" alt="3.top.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/3.top.tcl.png"><br>
 
 2. icc2_common_setup.tcl<br>
-<img width="600" alt="4.icc2_common.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/4.icc2_common.tcl.png"><br>
+<img width="800" alt="4.icc2_common.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/4.icc2_common.tcl.png"><br>
 
 3. icc2_dp_setup.tcl<br>
-<img width="600" alt="5.icc2_dp.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/5.icc2_dp.tcl.png"><br>
+<img width="800" alt="5.icc2_dp.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/5.icc2_dp.tcl.png"><br>
 
 4. init_design.read_parasitic_tech_example.tcl<br>
-<img width="600" alt="6.init_example.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/6.init_example.tcl.png"><br>
+<img width="800" alt="6.init_example.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/6.init_example.tcl.png"><br>
  
 5. init_design.mcmm_example.auto_expanded.tcl<br>
-<img width="600" alt="7.init_expanded.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/7.init_expanded.tcl.png"><br>
+<img width="800" alt="7.init_expanded.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/7.init_expanded.tcl.png"><br>
 
 6. pns_example.tcl<br>
-<img width="600" alt="8.pns_ex.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/8.pns_ex.tcl.png"><br>
+<img width="800" alt="8.pns_ex.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/8.pns_ex.tcl.png"><br>
 
 **Observing for 40% of utilization**
 
@@ -3537,12 +3570,12 @@ gvim pns_example.tcl
 source top.tcl
 ```
 
-<img width="600" alt="pic7_floorplan_plac" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic7_floorplan_plac.png"><br>
+<img width="800" alt="pic7_floorplan_plac" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic7_floorplan_plac.png"><br>
 
-<img width="600" alt="pic8_chip" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic8_chip.png"><br>
+<img width="800" alt="pic8_chip" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic8_chip.png"><br>
 
 Below screenshot displays the timing report showing slack = -5.31. <br>
-<img width="600" alt="pic9_40%25_before_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic9_40%25_before_propagated.png"><br>
+<img width="800" alt="pic9_40%25_before_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic9_40%25_before_propagated.png"><br>
 
 In icc2_shell
 
@@ -3551,7 +3584,7 @@ set_propagated_clock [all_clocks]             (Converting clock object from idea
 report_timing
 ```
 
-<img width="600" alt="pic10_40%25_after_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic10_40%25_after_propagated.png"><br>
+<img width="800" alt="pic10_40%25_after_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic10_40%25_after_propagated.png"><br>
 
 *violators.rpt*
 
@@ -3559,13 +3592,13 @@ report_timing
 gvim violators.rpt	     (Reviewing violations report within the design)
 ```
 
-<img width="600" alt="pic13_40-50%25violators" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic13_40-50%25violators.png"><br>
+<img width="800" alt="pic13_40-50%25violators" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic13_40-50%25violators.png"><br>
 
 **Observing for 50% of utilization**
 
 *Slacks*
 
-<img width="600" alt="pic11_50%25_before_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic11_50%25_before_propagated.png"><br>
+<img width="800" alt="pic11_50%25_before_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic11_50%25_before_propagated.png"><br>
 
 In icc2_shell
 
@@ -3575,7 +3608,7 @@ report_timing
 ```
 
 Here observe that slack is getting increased.<br>
-<img width="600" alt="pic12_50%25_after_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic12_50%25_after_propagated.png"><br>
+<img width="800" alt="pic12_50%25_after_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/5867dee56a51d6d04d937d6db09f9af1480ebff6/day20/pic12_50%25_after_propagated.png"><br>
 
 Here we can observe that slack is getting increased when core utilization is increased from 40% to 50%.
 </details>
@@ -3583,6 +3616,12 @@ Here we can observe that slack is getting increased when core utilization is inc
 ## Day-21 Placement and CTS labs ##
 <details>
  <summary>Theory</summary>
+	
+	1. Placement in IC design refers to the vital process of determining the physical locations of electronic components within an integrated circuit (IC). This step is of paramount importance in the overall IC design process, as it significantly impacts the final performance, power consumption, and manufacturability of the chip. The primary objective of placement is to allocate a physical position for each logic gate, flip-flop, or other components on the chip, with the goal of minimizing wirelength, reducing congestion, and optimizing factors like signal delay and power consumption.
+
+2. Routing in VLSI design involves the task of interconnecting various components, such as logic gates and flip-flops, placed on an integrated circuit (IC) with the necessary wires or interconnects. The primary goal of routing is to establish an efficient and reliable network of connections between these components on the chip. This network must meet timing constraints, minimize wirelength, and alleviate congestion issues.
+
+3. Clock Tree Synthesis (CTS) is a critical phase in the design of digital integrated circuits, particularly those featuring synchronous logic, such as microprocessors and application-specific integrated circuits (ASICs). The primary purpose of CTS is to create a well-organized and optimized distribution network for clock signals, ensuring that all sequential elements, such as flip-flops, receive clock signals with minimal skew, low latency, and low power consumption.
 </details>
 
 <details>
@@ -3591,15 +3630,15 @@ Here we can observe that slack is getting increased when core utilization is inc
 **Observing for 40% of utilization**
 
 Generated vsdbabysoc.sdc after synthesis is shown below.<br>
-<img width="600" alt="1.vsdbabysoc.sdc" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/1.vsdbabysoc.sdc.png"><br>
+<img width="800" alt="1.vsdbabysoc.sdc" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/1.vsdbabysoc.sdc.png"><br>
 
 Script in top.tcl
 
 1. create_placement is used to create placement for the design. floorplan option is selected to make the design planning styled as placement.
 2. Pin Placement is done by sourcing pns.tcl to sync with the current technology file regarding power grid creation.<br>
-<img width="600" alt="pic1_create_placement" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic1_create_placement.png"><br>
+<img width="800" alt="pic1_create_placement" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic1_create_placement.png"><br>
 
-<img width="600" alt="pic2_create_placement" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic2_create_placement.png"><br>
+<img width="800" alt="pic2_create_placement" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic2_create_placement.png"><br>
 
 *Reports that were generated from the run*
 
@@ -3607,45 +3646,50 @@ Script in top.tcl
 gvim check_design.pre_pin_placement
 ```
 As shown in below figure there are 3 warnings in total for pre-placement while checking the design.
-<img width="600" alt="pic3_pre_placement_warnings" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic3_pre_placement_warnings.png"><br>
+<img width="800" alt="pic3_pre_placement_warnings" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic3_pre_placement_warnings.png"><br>
 
 ```ruby
 gvim report_port_placement.rpt
 ```
 Below image shows the report_port_placement.<br>
-<img width="600" alt="pic4_report_port_placement.rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic4_report_port_placement.rpt.png"><br>
+<img width="800" alt="pic4_report_port_placement.rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic4_report_port_placement.rpt.png"><br>
 
 ```ruby
 gvim icc2_output.txt
 ```
 Below image shows the icc2_output<br>
-<img width="600" alt="pic5_icc2_output_txt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic5_icc2_output_txt.png"><br>
-<img width="600" alt="pic6_icc2_output.txt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic6_icc2_output.txt.png"><br>
+<img width="800" alt="pic5_icc2_output_txt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic5_icc2_output_txt.png"><br>
+<img width="800" alt="pic6_icc2_output.txt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic6_icc2_output.txt.png"><br>
 
 ```ruby
 gvim vsdbabysoc.post_estimated_timing.rpt
 ```
 Below image shows the report of vsdbabysoc.post_estimated_timing <br>
-<img width="600" alt="pic7_post_estimated_timing.rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic7_post_estimated_timing.rpt.png"><br>
+<img width="800" alt="pic7_post_estimated_timing.rpt" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic7_post_estimated_timing.rpt.png"><br>
+
+From abve image we can see that slack is met at 0.47.
 
 ```ruby
 gvim vsdbabysoc.post_estimated_timing.qor
 ```
 Below image shows the qor report of vsdbabysoc.post_estimated_timing<br>
-<img width="600" alt="pic8_post_estimated_timing.qor" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic8_post_estimated_timing.qor.png"><br>
-<img width="600" alt="pic9_post_estimated_timing.qor2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic9_post_estimated_timing.qor2.png"><br>
+<img width="800" alt="pic8_post_estimated_timing.qor" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic8_post_estimated_timing.qor.png"><br>
+<img width="800" alt="pic9_post_estimated_timing.qor2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic9_post_estimated_timing.qor2.png"><br>
+
+From above image we can observe that Post estimated timing qor shows there is no violating path reported with 61 nets having violations, 58 max trans violations, and 61 max cap violations.
 
 ```ruby
 gvim vsdbabysoc.post_estimated_timing.qor.sum
 ```
 
 Below image shows the summary on qor report of vsdbabysoc.post_estimated_timing <br>
-<img width="600" alt="pic10_post_estimated_timing.qor.sum" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic10_post_estimated_timing.qor.sum.png"><br>
+<img width="800" alt="pic10_post_estimated_timing.qor.sum" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic10_post_estimated_timing.qor.sum.png"><br>
 
-CTS schematic design Analysis:-
-<img width="600" alt="pic11_pll_schematic" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic11_pll_schematic.png"><br>
+CTS schematic design Analysis:-<br>
+<img width="800" alt="pic11_pll_schematic" src="https://github.com/Sidv005/Samsung-PD-Training/blob/6db24cbdb313b2f3ac3d6caa1cd2cbb4ea0af24f/day21/pic11_pll_schematic.png"><br>
 
-
+Fanout<br>
+<img width="800" alt="pic12_chip_schematic" src="https://github.com/Sidv005/Samsung-PD-Training/blob/ca6217afe177fc0d689c543602a5391919fd13d1/day21/pic12_chip_schematic.png"><br>
 
 
  </details>
