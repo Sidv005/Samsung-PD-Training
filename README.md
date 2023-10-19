@@ -3690,6 +3690,101 @@ CTS schematic design Analysis:-<br>
 
 Fanout<br>
 <img width="800" alt="pic12_chip_schematic" src="https://github.com/Sidv005/Samsung-PD-Training/blob/ca6217afe177fc0d689c543602a5391919fd13d1/day21/pic12_chip_schematic.png"><br>
-
-
  </details>
+
+## Day-22 CTS Analysis ##
+
+<details>
+ <summary>Theory</summary>
+	
+**What is CTS?**
+
+- Clock Tree Synthesis
+- A technique for distributing the clock equally among all sequential parts of VLSI design
+- It will balancing the delays to all clock input pins when the clock is distributed equally
+- The goal of CTS is to minimize skew and insertion delay.
+
+**H-tree algorithm**
+
+- Find out all the flops present
+- Find out the center of all the flops
+- Trace clock port ot the center point
+- Divide the core into two parts, trace both the parts and reach to each center
+- From the center, again, divide the area into two and again trace till center at both the end
+- Repeat this algo till the time we reach the flop clock pin
+
+**Various CTS checks**
+
+1.  Skew check
+2.  Pulse width check
+3.  Duty cycle check
+4.  Latency check
+5.  Power check
+6.  Crosstalk Quality check
+7.  Delta Delay Quality check
+8.  Glitch Quality check
+
+
+</details>
+
+<details>
+ <summary>LABS</summary>
+
+**CTS Lab analysis**
+*Using 40% of utilization*
+
+- ***After CTS, we do synthesis***
+- Before we synthesize the clock trees, use below command to verify that the clock trees are properly defined
+
+```ruby
+check_clock_tree                        (Checking the issues that can lead to bad QoR)
+```
+This is used to check for common problems that might impact CTS. Verifies the given clock tree in current design to display possible issues with netlist, timing performance, etc. One warning which states that there are some clock cells that does not have LEQ cells for resizing is shown in below image.<br>
+<img width="800" alt="1.check_clock_tree" src="https://github.com/Sidv005/Samsung-PD-Training/blob/a743713ffa13028e27e51df27b2f3be15f4de07c/day22/1.check_clock_tree.png"><br>
+
+```ruby
+check_legality                          (Checking the legality of the current placement and report out the violation statistics)
+```
+This command checks the legality of the curreent_placement and yields to report of violation statistics as shown in below image.<br>
+<img width="800" alt="2.check_legality" src="https://github.com/Sidv005/Samsung-PD-Training/blob/a743713ffa13028e27e51df27b2f3be15f4de07c/day22/2.check_legality.png"><br>
+
+- In top.tcl as we can view that *clock_opt* is present, this is used to to perform clock tree synthesis and it optimizes the clock trees.<br>
+<img width="800" alt="6.clock_opt_top.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b82ec75551edffd3b46f13399e06d17b72d8a3a/day22/6.clock_opt_top.tcl.png"><br>
+
+Reports:-
+
+```ruby
+report_clock_timing -type summary
+```
+
+<img width="800" alt="3.report_timing_summ" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b82ec75551edffd3b46f13399e06d17b72d8a3a/day22/3.report_timing_summ.png"><br>
+
+```ruby
+report_clock_timing -type skew
+```
+
+<img width="800" alt="4.report_timing_skew" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b82ec75551edffd3b46f13399e06d17b72d8a3a/day22/4.report_timing_skew.png"><br>
+
+```ruby
+report_clock_timing -type latency
+```
+
+<img width="800" alt="5.report_timing_latency" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b82ec75551edffd3b46f13399e06d17b72d8a3a/day22/5.report_timing_latency.png"><br>
+
+```ruby
+report_clock_timing -type transition
+```
+
+<img width="800" alt="7.transition" src="https://github.com/Sidv005/Samsung-PD-Training/blob/97ec83e6cdc547bf6f3683ff5c3bcb240e0aa524/day22/7.transition.png"><br>
+
+```ruby
+report_clock_settings
+```
+Above command gives all the clock settings, configurtaions, spacing rules, route rules, max load cap on buffers and inverters. Below screenshot shows the same.<br>
+
+<img width="800" alt="8.settings" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4a53507ffe3f49719ddf567b68cb66cfd482a516/day22/8.settings.png"><br>
+<img width="800" alt="9.settings2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4a53507ffe3f49719ddf567b68cb66cfd482a516/day22/9.settings2.png"><br>
+<img width="800" alt="10.settings3" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4a53507ffe3f49719ddf567b68cb66cfd482a516/day22/10.settings3.png"><br>
+<img width="800" alt="11.settings4" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4a53507ffe3f49719ddf567b68cb66cfd482a516/day22/11.settings4.png"><br>
+
+</details>
