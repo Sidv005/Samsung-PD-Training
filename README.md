@@ -3731,6 +3731,7 @@ Fanout<br>
  <summary>LABS</summary>
 
 **CTS Lab analysis**
+
 *Using 40% of utilization*
 
 - ***After CTS, we do synthesis***
@@ -3778,13 +3779,10 @@ report_clock_timing -type transition
 <img width="800" alt="7.transition" src="https://github.com/Sidv005/Samsung-PD-Training/blob/97ec83e6cdc547bf6f3683ff5c3bcb240e0aa524/day22/7.transition.png"><br>
 
 ```ruby
-report_clock_settings
+report_clock_tree_options
 ```
-Above command gives all the clock settings, configurtaions, spacing rules, route rules, max load cap on buffers and inverters. Below screenshot shows the same.<br>
+Above command gives the Reports existing target skew/latency constraints, fanout-based ndr, etcfor clock trees. Below screenshot shows that no clock skew and latency is present since we have not set any constraints yet.<br>
 
-<img width="800" alt="8.settings" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4a53507ffe3f49719ddf567b68cb66cfd482a516/day22/8.settings.png"><br>
-<img width="800" alt="9.settings2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4a53507ffe3f49719ddf567b68cb66cfd482a516/day22/9.settings2.png"><br>
-<img width="800" alt="10.settings3" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4a53507ffe3f49719ddf567b68cb66cfd482a516/day22/10.settings3.png"><br>
-<img width="800" alt="11.settings4" src="https://github.com/Sidv005/Samsung-PD-Training/blob/4a53507ffe3f49719ddf567b68cb66cfd482a516/day22/11.settings4.png"><br>
+<img width="800" alt="12.options" src="https://github.com/Sidv005/Samsung-PD-Training/blob/41aba70f2ce13a495f4ade13a5b3a7e21007bea5/day22/12.options.png"><br>
 
 </details>
