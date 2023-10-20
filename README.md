@@ -3818,7 +3818,7 @@ Types of clock gating
 2. OR gate
 3. Universal AND gate
 
-Routing
+**Routing**
 
 What is routing?
 
