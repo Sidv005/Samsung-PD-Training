@@ -3784,5 +3784,87 @@ report_clock_tree_options
 Above command gives the Reports existing target skew/latency constraints, fanout-based ndr, etcfor clock trees. Below screenshot shows that no clock skew and latency is present since we have not set any constraints yet.<br>
 
 <img width="800" alt="12.options" src="https://github.com/Sidv005/Samsung-PD-Training/blob/41aba70f2ce13a495f4ade13a5b3a7e21007bea5/day22/12.options.png"><br>
-
 </details>
+
+## Day-23 Clock gating technique And Routing ##
+
+<details>
+ <summary>Theory</summary>
+
+**Advanced H-Tree for million flop clock end-points randomly placed**
+
+- When CTS is performed, power consumption also needs to be taken care of, especially when designing a large number of clocks where the design might induce a larger power, as well as a larger power usage
+
+- A digital circuit with a lot of clocks would be so huge with many buffers etc when designing its clock tree
+
+- In order to fix that, the whole chip is sectioned into smaller versions where each section will have its own clock tree, and managed to get a complete routed tree
+
+- Therefore, Clock Gating (CG) technique is introduced
+
+**Introduction to Clock Gating technique**
+
+What is Clock Gating (CG)?
+
+It is used to reduce the clock power consumption by cutting off the idle clock cycles
+
+
+Where/when clock gating is applied?
+
+It is being inserted in synthesis stage and being optimized in the implementation stage (Physical Design stage)
+
+Types of clock gating
+
+1. AND gate
+2. OR gate
+3. Universal AND gate
+
+Routing
+
+What is routing?
+
+The process of making physical connections between signal pins using metal layers
+
+Types of routing
+
+1. P/G routing
+2. Clock routing
+3. Signal routing: Global & Detailed routing
+
+Basic flow of routing
+
+- Basically, *route_opt* command is used during routing stage
+
+ </details>
+
+<details>
+ <summary>LABS</summary>
+	
+***Routing***
+
+*Script in routing stage*
+
+- P/G routing<br>
+
+```ruby
+gvim pns_example.tcl
+```
+
+<img width="800" alt="2.pnsexample.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/731e7f7c66413fb2b012a776e01ed35571f61606/day23/2.pnsexample.tcl.png"><br>
+
+
+- Clock and signal routing
+
+1. *place_opt* is used to place and optimize the current design
+
+2. *clock_opt* is used to synthesize and route the clocks, and then further optimize the design based on the propagated clock latencies
+
+3. *route_auto* is used to run global routing, trace assignment, and detailed routing at once/automatically
+
+```ruby
+gvim top.tcl
+```
+
+<img width="800" alt="1.top.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/731e7f7c66413fb2b012a776e01ed35571f61606/day23/1.top.tcl.png"><br>
+
+
+ </details>
