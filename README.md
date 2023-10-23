@@ -3841,6 +3841,34 @@ Basic flow of routing
 	
 ***Routing***
 
+- We need to add 3 lines between place_opt and clock_opt , to insert the clock buffers in the design
+
+```ruby
+set_lib_cell_purpose -include cts {sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_*}
+synthesize_clock_tree
+set_propagated_clock \[all_clocks]
+```
+
+<img width="800" alt="1.top.tcl(new)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/1.top.tcl(new).png"><br>
+
+Before this we need to change the input voltage to 1.80V
+
+<img width="800" alt="2.mcmm" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/2.mcmm.png"><br>
+
+- Then when we source this file we can see buffers in the design
+- Following image shows the schematic.<br>
+  <img width="800" alt="gui_buffer" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/gui_buffer.png"><br>
+
+Here we can see that buffers are added.
+- We can see that slack is reduced.
+
+Before:-<br>
+ <img width="800" alt="pic10_40%25_after_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day20/pic10_40%25_after_propagated.png"><br>
+
+After :-<br>
+<img width="800" alt="4.slack_after_buf" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/4.slack_after_buf.png"><br>
+
+
 *Script in routing stage*
 
 - P/G routing<br>
