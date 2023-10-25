@@ -3734,7 +3734,7 @@ Fanout<br>
 
 *Using 40% of utilization*
 
-- ***After CTS, we do synthesis***
+***After CTS, we do synthesize the clock trees***
 - Before we synthesize the clock trees, use below command to verify that the clock trees are properly defined
 
 ```ruby
