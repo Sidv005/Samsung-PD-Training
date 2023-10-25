@@ -3,3 +3,5 @@
   size_cell core1/U77 sky130_fd_sc_hd__fah_2
   size_cell core1/U617 sky130_fd_sc_hd__xor2_4
   size_cell core1/U337 sky130_fd_sc_hd__fa_2
+insert_buffer core1/CPU_src1_value_a3_reg[27]/D sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_12
+   344  report_timing -from core1/CPU_Xreg_value_a4_reg[8][27] -to core1/CPU_src1_value_a3_reg[27] -delay min
