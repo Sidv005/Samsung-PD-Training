@@ -3948,8 +3948,191 @@ Before:-<br>
 After :-<br>
 <img width="800" alt="4.slack_after_buf" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/4.slack_after_buf.png"><br>
 
+The clock buffers and ICG inserted in the circuit are as follows:
+```ruby
 
+Buffer/Inverter reference list for clock tree synthesis:
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_12
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_16
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_4
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_6
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_8
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__bufbuf_16
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__bufbuf_8
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkbuf_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkbuf_16
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkbuf_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkbuf_4
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkbuf_8
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkdlybuf4s15_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkdlybuf4s15_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkdlybuf4s18_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkdlybuf4s18_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkdlybuf4s25_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkdlybuf4s25_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkdlybuf4s50_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkdlybuf4s50_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__dlygate4sd1_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__dlygate4sd2_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__dlygate4sd3_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__dlymetal6s2s_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__dlymetal6s4s_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__dlymetal6s6s_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__probe_p_8
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__probec_p_8
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkbufkapwr_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkbufkapwr_16
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkbufkapwr_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkbufkapwr_4
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkbufkapwr_8
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__bufinv_16
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__bufinv_8
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkinv_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkinv_16
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkinv_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkinv_4
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkinv_8
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkinvlp_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__clkinvlp_4
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__inv_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__inv_12
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__inv_16
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__inv_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__inv_4
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__inv_6
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__inv_8
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkinvkapwr_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkinvkapwr_16
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkinvkapwr_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkinvkapwr_4
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__lpflow_clkinvkapwr_8
 
-
-
+ICG reference list:
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__dlclkp_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__dlclkp_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__dlclkp_4
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__sdlclkp_1
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__sdlclkp_2
+   sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__sdlclkp_4
+```
  </details>
+
+## Day-24 ECO##
+<details>
+ <summary>LABS</summary>
+- After performing CTS (with clock buffers) we can see that the slack is improved but it is not met.
+As we can see in below images the slack is not metfor setup and hold.<br>
+<img width="800" alt="1.setup(violate)_report_timing" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/1.setup(violate)_report_timing.png"><br>
+<img width="800" alt="2.setup(violate)_report_timing2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/2.setup(violate)_report_timing2.png"><br>
+<img width="800" alt="3.hold(violate)_report_timing" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/3.hold(violate)_report_timing.png"><br>
+
+- From above images we can observe that the slacks have significantly improved compared with the previous case without buffers.
+- To meet the slack we upsize/downsize the cell as per the requirement.
+
+The schematic of critical path fro setup violation is as follows:-
+<img width="800" alt="4.gui_setup%26hold(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/4.gui_setup%26hold(violate).png"><br>
+
+Now we will try to fix the violation by changing the drive strength of the cell.
+
+- Upsizing the cell will increase the drive strength of the cell which helps in reducing the delay.
+- Upsizing the cell using the command *size_cell*
+
+```ruby
+  size_cell core1/U86 sky130_fd_sc_hd__fa_2
+  size_cell core1/U77 sky130_fd_sc_hd__fah_2
+  size_cell core1/U617 sky130_fd_sc_hd__xor2_4
+  size_cell core1/U337 sky130_fd_sc_hd__fa_2
+```
+- Now we can observe setup slack is met as shown in below figure.<br>
+<img width="800" alt="8.setup_slack_met" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/8.setup_slack_met.png"><br>
+
+- But the hold slack is not met. It is violating by a small margin of 6.7ps.
+
+To meet the hold slack we will insert buffer in the critical path to increase the path delay.
+
+```ruby
+insert_buffer core1/CPU_src1_value_a3_reg[27]/D sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_12
+ report_timing -from core1/CPU_Xreg_value_a4_reg[8][27] -to core1/CPU_src1_value_a3_reg[27] -delay min
+```
+From the above command we can say that buffer of drive strength 12 (sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_12) is inserted over "D" pin of core1/CPU_src1_value_a3_reg[27]. Later we can notice the min delay of the critical path (core1/CPU_Xreg_value_a4_reg[8][27] -->  core1/CPU_src1_value_a3_reg[27]).
+
+<img width="800" alt="9.hold_met" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/9.hold_met.png"><br>
+
+- Now hold violations are fixed by a margin of 0.19ns as we can view in above figure.
+
+*Comparing results before and after ECO*
+- Now quality of report is checked and comapared. Below image is showing qor before ECO.
+BEFORE:-
+
+<img width="800" alt="5.report_qor_violations" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/5.report_qor_violations.png"><br>
+<img width="800" alt="6.report_qor_violations2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/6.report_qor_violations2.png"><br>
+
+AFTER:-
+<img width="800" alt="10.report_qor_slack_met" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/10.report_qor_slack_met.png"><br>
+<img width="800" alt="11.report_qor_slack_met2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/11.report_qor_slack_met2.png"><br>
+
+- After comparison we can observe that Cell area is incresed from 700854.13 microns to 700890.42 microns.
+- We can view that max trans and max Cap are still violating by 4 and 1 repectively.
+- Below command shows the total violations present in the design.
+
+```ruby
+report_constraints -max_transition -all_violators
+```
+
+- Fixing the trans violations is done by upsizing the cell in order to reduce the transition time.
+- The cell which is driving a particular net having high transition time is needed to get higher drive strength. We can identify that specific driving cell by using below command.
+
+```ruby
+report_timing -through core1/HFSNET_4
+```
+where core1/HFSNET_4 is a net name.
+
+- Below commands are also used to remove the max cap violations as well.\
+
+```ruby
+size_cell core1/gre_mt_inst_2848 sky130_fd_sc_hd__clkbuf_2
+size_cell core1/HFSINV_1403_5 sky130_fd_sc_hd__inv_4
+size_cell core1/ctmTdsLR_1_2523 sky130_fd_sc_hd__clkinv_4
+size_cell core1/HFSINV_264_47 sky130_fd_sc_hd__clkinv_4
+```
+- Now we can say that above commands are applied to remove max trans and max cap violations. 
+- Command used for displaying max cap violation status is given below.
+
+```ruby
+report_constraints -max_capacitance -all_violators
+```
+Below image shows the trans violation status.<br>
+<img width="800" alt="14.no_trans_violations" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/14.no_trans_violations.png"><br>
+Below image shows the cap violation status.<br>
+<img width="800" alt="15.no_cap_violations" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/15.no_cap_violations.png"><br>
+
+- Both max trans and max cap are nox fixed.
+
+**Impact of DECAP cells**
+We added Decap cells to observe the impact on power. Above commands are added in top.tcl file.
+```ruby
+set FILLER_CELLS [get_object_name [sort_collection -descending [get_lib_cells sky130_fd_sc_hd__fill* sky130_fd_sc_hd__decap*] area]]
+```
+Image of top.tcl is shown below.<br>
+<img width="800" alt="16.top.tcl_decaps" src="https://github.com/Sidv005/Samsung-PD-Training/blob/266646611844e56ef4347b5ee740860bda3a783e/day24/16.top.tcl_decaps.png"><br>
+
+- Now power report is compared.
+
+BEFORE:-<br>
+<img width="800" alt="7.report_power_violate" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/7.report_power_violate.png"><br>
+
+AFTER:-<br>
+<img width="800" alt="2.report_power_dcap_fixed_violations" src="https://github.com/Sidv005/Samsung-PD-Training/blob/266646611844e56ef4347b5ee740860bda3a783e/day24/2.report_power_dcap_fixed_violations.png"><br>
+
+From the above images we can conclude that power is getting increased from 4.31e+06 nW to 4.34e+06 nW since high drive strength, buffers and Decap cells are utilized in the design. 
+
+Schematic of DECAP cell is shown below.<br>
+<img width="800" alt="gui_dcap" src="https://github.com/Sidv005/Samsung-PD-Training/blob/ab56eca941f802a306363ae5c3f15ca09a5b07f6/day24/gui_dcap.png"><br>
+
+
+
+
+
+</details>
