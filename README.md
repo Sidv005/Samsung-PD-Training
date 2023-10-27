@@ -4067,6 +4067,7 @@ From the above command we can say that buffer of drive strength 12 (sky130_fd_sc
 ***Comparing results before and after ECO***
 
 - Now quality of report is checked and comapared. Below image is showing qor before ECO.
+
 BEFORE:-<br>
 <img width="800" alt="5.report_qor_violations" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/5.report_qor_violations.png"><br>
 <img width="800" alt="6.report_qor_violations2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/6.report_qor_violations2.png"><br>
