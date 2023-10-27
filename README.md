@@ -3846,21 +3846,45 @@ Basic flow of routing
 ```ruby
 set_lib_cell_purpose -include cts {sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_*}
 synthesize_clock_tree
-set_propagated_clock \[all_clocks]
+set_propagated_clock [all_clocks]
 ```
-
 <img width="800" alt="1.top.tcl(new)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/1.top.tcl(new).png"><br>
+
+***set_lib_cell_purpose -include cts {sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_*}*** command specifies that the library cells in the tech_lib library(sky130_fd_sc_hd__tt_025C_1v80) whose names start with "buf" should be used for clock tree synthesis.
+
+***synthesize_clock_tree*** This command synthesizes clock trees and updates the design database with the compiled clock trees. The compilation of the clock tree is skew driven. Optionally, this command can optimize compiled clock tree for slack metric.
+
+- The command will work on clocks in active scenarios. It will have clocks balanced if either setup or hold analysis is active. It will fix the transition violations on clock pins if max_transition analysis is active, and fix the capacitance violation on clock nets if max_capacitance analysis is active. At the end of this command it will invoke mark_clock_trees to mark clock synthesized attributes on clock objects.
+
+- Before running the synthesize_clock_trees command, the set_lib_cell_purpose command can be applied to select buffers or inverters which used during clock tree synthesis.
+
+***set_propagated_clock [all_clocks]*** This command specifies that delays be propagated through the clock network to determine latency at register clock pins, including the delay resulting from parasitic capacitance and resistance. If propagated clocking is not specified, the tool uses ideal clocking by default.
+
+- Ideal clocking means clock networks have a specified latency (from the set_clock_latency command), or zero latency by default. Latency is the amount of time a clock signal takes to be propagated from the ideal waveform origin point to the clock pin of the sequential device.
+
+- Propagated clock latency is used for after final clock tree generation and layout. Ideal clock latency specifies a prelayout estimate of the clock tree delay.
+
+- If you apply the set_propagated_clock command to pins or ports, it affects all register clock pins in the transitive fanout of the specified pins or ports.
 
 Before this we need to change the input voltage to 1.80V
 
 <img width="800" alt="2.mcmm" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/2.mcmm.png"><br>
 
+
+
+    Then when we source this file we can see buffers in the design
+
+    The schematic is as follows
+
 - Then when we source this file we can see buffers in the design
 - Following image shows the schematic.<br>
   <img width="800" alt="gui_buffer" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/gui_buffer.png"><br>
 
+- Below image shows some buffers which are inserted.<br>
+ <img width="800" alt="1.gui_buffer" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1191fe8a3d3f072986333f5cd5a3a5a588edb5cb/day23/1.gui_buffer.png"><br>
 Here we can see that buffers are added.
-- We can see that slack is reduced.
+
+- We can see that slack is reduced from -5.91 ns to -0.15 ns.
 
 Before:-<br>
  <img width="800" alt="pic10_40%25_after_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day20/pic10_40%25_after_propagated.png"><br>
