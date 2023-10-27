@@ -3769,6 +3769,30 @@ report_clock_timing -type summary
 - It shows the Summary report, which shows the worst instances of transition time, latency and skew over the clock networks or subnetworks of interest.<br>
 <img width="800" alt="3.report_timing_summ" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b82ec75551edffd3b46f13399e06d17b72d8a3a/day22/3.report_timing_summ.png"><br>
 
+- The above report displays the two worst setup and two worst hold skews in the clock network of CLK, taking uncertainty into account.
+
+- This is a summary report which shows the worst instances of transition time, latency and skew over the clock network. It gives the maximum setup launch latency which is the worst setup latency of a clock pin in this case it is for the pin *core1/CPU_br_tgt_pc_a3_reg[1]/CLK*. Similarly it gives minimum setup capture latency, minimum hold launch latency, maximum active transition , minimum active transition , maximum and minimum hold skew.
+
+- In the report we can see that the design is working on func1 mode this is operated in single mode single corner.
+
+```ruby
+    r         Rising transition
+
+    f         Falling transition
+
+    p         Propagated clock to this pin
+
+    i         Clock inversion to this pin
+
+    -         Launching transition
+
+    +         Capturing transition
+
+    e         Exception on this pin
+```
+- rp-+ -> rising transition of propagated clock in the clock pin from launch to capture.
+
+The symbol representation is as follows
 ```ruby
 report_clock_timing -type skew
 ```
