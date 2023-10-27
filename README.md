@@ -4019,9 +4019,11 @@ ICG reference list:
 ```
  </details>
 
-## Day-24 ECO##
+## Day-24 ECO ##
+
 <details>
  <summary>LABS</summary>
+	
 - After performing CTS (with clock buffers) we can see that the slack is improved but it is not met.
 As we can see in below images the slack is not metfor setup and hold.<br>
 <img width="800" alt="1.setup(violate)_report_timing" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/1.setup(violate)_report_timing.png"><br>
@@ -4031,7 +4033,7 @@ As we can see in below images the slack is not metfor setup and hold.<br>
 - From above images we can observe that the slacks have significantly improved compared with the previous case without buffers.
 - To meet the slack we upsize/downsize the cell as per the requirement.
 
-The schematic of critical path fro setup violation is as follows:-
+The schematic of critical path fro setup violation is as follows:-<br>
 <img width="800" alt="4.gui_setup%26hold(violate)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/4.gui_setup%26hold(violate).png"><br>
 
 Now we will try to fix the violation by changing the drive strength of the cell.
@@ -4062,14 +4064,14 @@ From the above command we can say that buffer of drive strength 12 (sky130_fd_sc
 
 - Now hold violations are fixed by a margin of 0.19ns as we can view in above figure.
 
-*Comparing results before and after ECO*
-- Now quality of report is checked and comapared. Below image is showing qor before ECO.
-BEFORE:-
+***Comparing results before and after ECO***
 
+- Now quality of report is checked and comapared. Below image is showing qor before ECO.
+BEFORE:-<br>
 <img width="800" alt="5.report_qor_violations" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/5.report_qor_violations.png"><br>
 <img width="800" alt="6.report_qor_violations2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/6.report_qor_violations2.png"><br>
 
-AFTER:-
+AFTER:-<br>
 <img width="800" alt="10.report_qor_slack_met" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/10.report_qor_slack_met.png"><br>
 <img width="800" alt="11.report_qor_slack_met2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/dec2794113140a2ddf511b622515587b4b09e94f/day24/11.report_qor_slack_met2.png"><br>
 
@@ -4089,7 +4091,7 @@ report_timing -through core1/HFSNET_4
 ```
 where core1/HFSNET_4 is a net name.
 
-- Below commands are also used to remove the max cap violations as well.\
+- Below commands are also used to remove the max cap violations as well.
 
 ```ruby
 size_cell core1/gre_mt_inst_2848 sky130_fd_sc_hd__clkbuf_2
@@ -4112,6 +4114,7 @@ Below image shows the cap violation status.<br>
 
 **Impact of DECAP cells**
 We added Decap cells to observe the impact on power. Above commands are added in top.tcl file.
+
 ```ruby
 set FILLER_CELLS [get_object_name [sort_collection -descending [get_lib_cells sky130_fd_sc_hd__fill* sky130_fd_sc_hd__decap*] area]]
 ```
@@ -4130,9 +4133,6 @@ From the above images we can conclude that power is getting increased from 4.31e
 
 Schematic of DECAP cell is shown below.<br>
 <img width="800" alt="gui_dcap" src="https://github.com/Sidv005/Samsung-PD-Training/blob/ab56eca941f802a306363ae5c3f15ca09a5b07f6/day24/gui_dcap.png"><br>
-
-
-
 
 
 </details>
