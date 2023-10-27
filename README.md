@@ -3734,22 +3734,31 @@ Fanout<br>
 
 *Using 40% of utilization*
 
-***After CTS, we do synthesize the clock trees***
+***Synthesizing the clock trees***
 - Before we synthesize the clock trees, use below command to verify that the clock trees are properly defined
 
 ```ruby
 check_clock_tree                        (Checking the issues that can lead to bad QoR)
 ```
-This is used to check for common problems that might impact CTS. Verifies the given clock tree in current design to display possible issues with netlist, timing performance, etc. One warning which states that there are some clock cells that does not have LEQ cells for resizing is shown in below image.<br>
+- Checks the clock trees of current design for possible problems with netlist, timing constraints, clock constraints, routing constraints, or other tool configurations that can adversely impact clock tree synthesis.
+- This is used to check for common problems that might impact CTS. Verifies the given clock tree in current design to display possible issues with netlist, timing performance, etc. One warning which states that there are some clock cells that does not have LEQ cells for resizing is shown in below image.<br>
 <img width="800" alt="1.check_clock_tree" src="https://github.com/Sidv005/Samsung-PD-Training/blob/a743713ffa13028e27e51df27b2f3be15f4de07c/day22/1.check_clock_tree.png"><br>
 
 ```ruby
 check_legality                          (Checking the legality of the current placement and report out the violation statistics)
 ```
-This command checks the legality of the curreent_placement and yields to report of violation statistics as shown in below image.<br>
+- This command checks the legality of the current_placement and yields to report of violation statistics as shown in below image.
+- Checks basic rules such as overlap, cell_on_site, and legal_orient, and AL rules such as spacing_rule, and chipfinishing rules such as tap_coverage, continuity, etc.<br>
 <img width="800" alt="2.check_legality" src="https://github.com/Sidv005/Samsung-PD-Training/blob/a743713ffa13028e27e51df27b2f3be15f4de07c/day22/2.check_legality.png"><br>
 
-- In top.tcl as we can view that *clock_opt* is present, this is used to to perform clock tree synthesis and it optimizes the clock trees.<br>
+- In top.tcl as we can view that *clock_opt* is present, this is used to to perform clock tree synthesis and it optimizes the clock trees.
+- The default behavior of this command is as follows:
+
+1. Synthesizes and optimizes the clock trees.
+
+2. Completes the detail routing of the clock trees.
+
+3. Further optimizes the design for timing,electrical DRC violations, area, power, and routability, based on actual propagated clock latencies, and legalizes the design placement.<br>
 <img width="800" alt="6.clock_opt_top.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b82ec75551edffd3b46f13399e06d17b72d8a3a/day22/6.clock_opt_top.tcl.png"><br>
 
 Reports:-
@@ -3757,31 +3766,31 @@ Reports:-
 ```ruby
 report_clock_timing -type summary
 ```
-
+- It shows the Summary report, which shows the worst instances of transition time, latency and skew over the clock networks or subnetworks of interest.<br>
 <img width="800" alt="3.report_timing_summ" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b82ec75551edffd3b46f13399e06d17b72d8a3a/day22/3.report_timing_summ.png"><br>
 
 ```ruby
 report_clock_timing -type skew
 ```
-
+- It shows the Skew report.<br>
 <img width="800" alt="4.report_timing_skew" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b82ec75551edffd3b46f13399e06d17b72d8a3a/day22/4.report_timing_skew.png"><br>
 
 ```ruby
 report_clock_timing -type latency
 ```
-
+- It shows the  Latency report.
 <img width="800" alt="5.report_timing_latency" src="https://github.com/Sidv005/Samsung-PD-Training/blob/0b82ec75551edffd3b46f13399e06d17b72d8a3a/day22/5.report_timing_latency.png"><br>
 
 ```ruby
 report_clock_timing -type transition
 ```
-
+- It shows the Transition time report.<br>
 <img width="800" alt="7.transition" src="https://github.com/Sidv005/Samsung-PD-Training/blob/97ec83e6cdc547bf6f3683ff5c3bcb240e0aa524/day22/7.transition.png"><br>
 
 ```ruby
 report_clock_tree_options
 ```
-Above command gives the Reports existing target skew/latency constraints, fanout-based ndr, etcfor clock trees. Below screenshot shows that no clock skew and latency is present since we have not set any constraints yet.<br>
+Above command gives the Reports existing target skew/latency constraints, fanout-based ndr, etc. for clock trees. Below screenshot shows that no clock skew and latency is present since we have not set any constraints yet.<br>
 
 <img width="800" alt="12.options" src="https://github.com/Sidv005/Samsung-PD-Training/blob/41aba70f2ce13a495f4ade13a5b3a7e21007bea5/day22/12.options.png"><br>
 </details>
@@ -3838,64 +3847,14 @@ Basic flow of routing
 
 <details>
  <summary>LABS</summary>
-	
-***Routing***
+ 
+***Script in routing stage***
 
-- We need to add 3 lines between place_opt and clock_opt , to insert the clock buffers in the design
+Thre types of routing are P/G routing, Clock Routing and signal routing.
 
-```ruby
-set_lib_cell_purpose -include cts {sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_*}
-synthesize_clock_tree
-set_propagated_clock [all_clocks]
-```
-<img width="800" alt="1.top.tcl(new)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/1.top.tcl(new).png"><br>
+1. **P/G routing**<br>
 
-***set_lib_cell_purpose -include cts {sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_*}*** command specifies that the library cells in the tech_lib library(sky130_fd_sc_hd__tt_025C_1v80) whose names start with "buf" should be used for clock tree synthesis.
-
-***synthesize_clock_tree*** This command synthesizes clock trees and updates the design database with the compiled clock trees. The compilation of the clock tree is skew driven. Optionally, this command can optimize compiled clock tree for slack metric.
-
-- The command will work on clocks in active scenarios. It will have clocks balanced if either setup or hold analysis is active. It will fix the transition violations on clock pins if max_transition analysis is active, and fix the capacitance violation on clock nets if max_capacitance analysis is active. At the end of this command it will invoke mark_clock_trees to mark clock synthesized attributes on clock objects.
-
-- Before running the synthesize_clock_trees command, the set_lib_cell_purpose command can be applied to select buffers or inverters which used during clock tree synthesis.
-
-***set_propagated_clock [all_clocks]*** This command specifies that delays be propagated through the clock network to determine latency at register clock pins, including the delay resulting from parasitic capacitance and resistance. If propagated clocking is not specified, the tool uses ideal clocking by default.
-
-- Ideal clocking means clock networks have a specified latency (from the set_clock_latency command), or zero latency by default. Latency is the amount of time a clock signal takes to be propagated from the ideal waveform origin point to the clock pin of the sequential device.
-
-- Propagated clock latency is used for after final clock tree generation and layout. Ideal clock latency specifies a prelayout estimate of the clock tree delay.
-
-- If you apply the set_propagated_clock command to pins or ports, it affects all register clock pins in the transitive fanout of the specified pins or ports.
-
-Before this we need to change the input voltage to 1.80V
-
-<img width="800" alt="2.mcmm" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/2.mcmm.png"><br>
-
-
-
-    Then when we source this file we can see buffers in the design
-
-    The schematic is as follows
-
-- Then when we source this file we can see buffers in the design
-- Following image shows the schematic.<br>
-  <img width="800" alt="gui_buffer" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/gui_buffer.png"><br>
-
-- Below image shows some buffers which are inserted.<br>
- <img width="800" alt="1.gui_buffer" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1191fe8a3d3f072986333f5cd5a3a5a588edb5cb/day23/1.gui_buffer.png"><br>
-Here we can see that buffers are added.
-
-- We can see that slack is reduced from -5.91 ns to -0.15 ns.
-
-Before:-<br>
- <img width="800" alt="pic10_40%25_after_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day20/pic10_40%25_after_propagated.png"><br>
-
-After :-<br>
-<img width="800" alt="4.slack_after_buf" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/4.slack_after_buf.png"><br>
-
-
-*Script in routing stage*
-
-- P/G routing<br>
+We can observe this in pns_example.tcl file.
 
 ```ruby
 gvim pns_example.tcl
@@ -3903,8 +3862,7 @@ gvim pns_example.tcl
 
 <img width="800" alt="2.pnsexample.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/731e7f7c66413fb2b012a776e01ed35571f61606/day23/2.pnsexample.tcl.png"><br>
 
-
-- Clock and signal routing
+2. **Clock and signal routing**
 
 1. *place_opt* is used to place and optimize the current design
 
@@ -3917,6 +3875,57 @@ gvim top.tcl
 ```
 
 <img width="800" alt="1.top.tcl" src="https://github.com/Sidv005/Samsung-PD-Training/blob/731e7f7c66413fb2b012a776e01ed35571f61606/day23/1.top.tcl.png"><br>
+	
+***Clock tree with clock buffer insertion***
+
+- We need to add 3 lines between place_opt and clock_opt , to insert the clock buffers in the design
+
+```ruby
+set_lib_cell_purpose -include cts {sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_*}
+synthesize_clock_tree
+set_propagated_clock [all_clocks]
+```
+<img width="800" alt="1.top.tcl(new)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/1.top.tcl(new).png"><br>
+
+**set_lib_cell_purpose -include cts {sky130_fd_sc_hd__tt_025C_1v80/sky130_fd_sc_hd__buf_*}** command specifies that the library cells in the tech_lib library(sky130_fd_sc_hd__tt_025C_1v80) whose names start with "buf" should be used for clock tree synthesis.
+
+**synthesize_clock_tree** This command synthesizes clock trees and updates the design database with the compiled clock trees. The compilation of the clock tree is skew driven. Optionally, this command can optimize compiled clock tree for slack metric.
+
+- The command will work on clocks in active scenarios. It will have clocks balanced if either setup or hold analysis is active. It will fix the transition violations on clock pins if max_transition analysis is active, and fix the capacitance violation on clock nets if max_capacitance analysis is active. At the end of this command it will invoke mark_clock_trees to mark clock synthesized attributes on clock objects.
+
+- Before running the synthesize_clock_trees command, the set_lib_cell_purpose command can be applied to select buffers or inverters which used during clock tree synthesis.
+
+**set_propagated_clock [all_clocks]** This command specifies that delays be propagated through the clock network to determine latency at register clock pins, including the delay resulting from parasitic capacitance and resistance. If propagated clocking is not specified, the tool uses ideal clocking by default.
+
+- Ideal clocking means clock networks have a specified latency (from the set_clock_latency command), or zero latency by default. Latency is the amount of time a clock signal takes to be propagated from the ideal waveform origin point to the clock pin of the sequential device.
+
+- Propagated clock latency is used for after final clock tree generation and layout. Ideal clock latency specifies a prelayout estimate of the clock tree delay.
+
+- If you apply the set_propagated_clock command to pins or ports, it affects all register clock pins in the transitive fanout of the specified pins or ports.
+
+Before this we need to change the input voltage to 1.80V
+
+<img width="800" alt="2.mcmm" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/2.mcmm.png"><br>
+
+- Then when we source this file we can see buffers in the design
+- Following image shows the schematic.<br>
+  <img width="800" alt="gui_buffer" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/gui_buffer.png"><br>
+
+- Below image shows some buffers which are inserted.<br>
+ <img width="800" alt="1.gui_buffer" src="https://github.com/Sidv005/Samsung-PD-Training/blob/1191fe8a3d3f072986333f5cd5a3a5a588edb5cb/day23/1.gui_buffer.png"><br>
+
+Here we can see that 12 buffers are added in the design.
+
+- From the below image we can see that slack is reduced from -5.91 ns to -0.15 ns since clock buffers are inserted.
+
+Before:-<br>
+ <img width="800" alt="pic10_40%25_after_propagated" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day20/pic10_40%25_after_propagated.png"><br>
+
+After :-<br>
+<img width="800" alt="4.slack_after_buf" src="https://github.com/Sidv005/Samsung-PD-Training/blob/99286d3294b2c77f498f2f5a69c650585bee2f62/day23/4.slack_after_buf.png"><br>
+
+
+
 
 
  </details>
