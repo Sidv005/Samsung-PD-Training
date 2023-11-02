@@ -4137,7 +4137,7 @@ Schematic of DECAP cell is shown below.<br>
 </details>
 
 
-## Day 26 Introduction to Mixed signal flow##
+## Day 26 Introduction to Mixed signal flow ##
 
 <details>
  <summary>Theory</summary>
