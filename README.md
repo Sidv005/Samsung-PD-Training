@@ -4225,7 +4225,7 @@ Key aspects of Analog and Mixed-Signal (AMS) design include:
 - These files are essential for modeling and simulating the behavior of particular components or blocks within a design, enabling engineers to understand and analyze how these components function in a broader system.
 </details>
 
-## Day-27 Introduction to crosstalk glitch and delay##
+## Day-27 Introduction to crosstalk glitch and delay ##
 <details>
  <summary>Cross talk noise and reasons</summary>
 	
@@ -4301,3 +4301,69 @@ Noise margin depends on several factors, including:
 - Temperature: Temperature fluctuations can also influence the noise margin by affecting transistor characteristics.
 </details>
 
+<details>
+ <summary>LABS</summary>
+
+ In ICC2_shell following commands are used to write spef of vsdbabysoc.
+ ```ruby
+update_timing
+write_parasitics -format spef -output vsdbabysoc_spef
+```
+Below screenshot shows the execution.<br>
+<img width="800" alt="1.write_spef" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/1.write_spef.png"><br>
+
+- Then we need to extract the zip file containing the synthesized netlist using *gzip -d*.
+- Now pt_shell is invoked and further process is done in pt_shell.
+
+```ruby
+csh
+pt_shell
+```
+
+In pt_shell
+
+```ruby
+set target_library "<location of avsddac.db> <location of avsdpll.db> <location of sky130_fd_sc_hd__tt_025C_1v80.db>"
+set link_library [list  <location of avsddac.db> <location of avsdpll.db> <location of sky130_fd_sc_hd__tt_025C_1v80.db>]
+read_verilog <location of the synthesized netlist>
+link_design
+current_design
+```
+
+<img width="800" alt="2.set_tar_link" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/2.set_tar_link.png"><br>
+
+<img width="800" alt="3.link_design" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/3.link_design.png"><br>
+
+- Then we need to provide sdc file and spef file
+
+```ruby
+read_sdc <location of .sdc>
+set_app_var si_enable_analysis true
+read_parasitics -keep_capacitive_coupling <location of spef>
+```
+<img width="800" alt="4.read_parasitic" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/4.read_parasitic.png"><br>
+
+The schematic of the loaded design is shown below.<br>
+<img width="800" alt="9.schematic" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/9.schematic.png"><br>
+
+Below image displays the rvmyth core schematic.<br>
+<img width="800" alt="8.rvmyth" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/8.rvmyth.png"><br>
+
+- Reports
+
+```ruby
+report_si_bottleneck              
+report_bottleneck                 
+report_si_delay_analysis
+report_si_aggressor_exclusion
+report_si_noise_analysis
+```
+
+- Execution of above commands are done which are shown below.<br>
+<img width="800" alt="6.report_si.png" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/6.report_si.png"><br>
+<img width="800" alt="7.report_si.png" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/7.report_si.png"><br>
+
+- *report_qor* is executed as follows:
+<img width="800" alt="5.qor.png" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/5.qor.png"><br>
+
+</details>
