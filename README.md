@@ -4134,6 +4134,170 @@ From the above images we can conclude that power is getting increased from 4.31e
 
 Schematic of DECAP cell is shown below.<br>
 <img width="800" alt="gui_dcap" src="https://github.com/Sidv005/Samsung-PD-Training/blob/ab56eca941f802a306363ae5c3f15ca09a5b07f6/day24/gui_dcap.png"><br>
-
-
 </details>
+
+
+## Day 26 Introduction to Mixed signal flow##
+
+<details>
+ <summary>Theory</summary>
+
+**Mixed Signal Design**
+In the context of integrated circuits (ICs), mixed-signal design refers to the design and integration of both analog and digital circuitry on a single semiconductor chip. This is often done to create complex systems-on-a-chip (SoCs) that can perform a wide range of functions, combining the capabilities of analog and digital components. Here's a more specific explanation of mixed-signal design in the context of ICs:
+
+- Analog and Digital Integration:
+Mixed-signal ICs combine analog and digital components on the same chip. Analog components might include amplifiers, analog-to-digital converters (ADCs), and oscillators, while digital components could be microcontrollers, processors, memory, and digital logic.
+
+- Functionality:
+These ICs are designed to perform a wide variety of tasks that require both analog and digital processing. For example, they may be used in applications like data acquisition, signal processing, communication, and control systems, where analog sensors or signals need to be processed, digitized, and then acted upon.
+
+- A/D and D/A Conversion:
+Analog-to-digital converters (ADCs) are often a crucial part of mixed-signal ICs. They convert real-world analog signals into digital data that can be processed by the digital components on the chip.
+Conversely, digital-to-analog converters (DACs) are used when the IC needs to convert digital data back into analog signals for output or control purposes.
+
+- Digital Signal Processing:
+Mixed-signal ICs may include digital signal processing (DSP) blocks that manipulate and analyze the digitized analog data. This can involve filtering, modulation, control algorithms, and more.
+
+- Real-world Interfaces:
+These ICs often provide interfaces for connecting with external analog components, sensors, or actuators, bridging the gap between the digital world of the IC and the real-world analog environment.
+
+- Power Management:
+ICs designed for mixed-signal applications often include analog components for power management, voltage regulation, and efficient power conversion to ensure stable and reliable operation of the digital components.
+
+- Noise and Signal Integrity:
+Ensuring good signal integrity and minimizing noise is critical in mixed-signal IC design because noise can disrupt analog signals and affect the quality of converted data.
+
+- Mixed-signal IC design is crucial in various applications, including:
+1. Data converters: ICs that convert analog signals to digital (ADCs) or digital to analog (DACs).
+2. Microcontrollers and SoCs: These chips often include both analog and digital components, enabling a wide range of functions in one package.
+3. Communication ICs: For wireless communication, where analog RF components interface with digital data processing.
+4. Audio ICs: Such as audio codecs, amplifiers, and processing units used in audio equipment and consumer electronics.
+5. Sensor interfaces: ICs that interface with various sensors like temperature, pressure, and motion sensors.
+ 
+Designing mixed-signal ICs is highly specialized and requires a deep understanding of both analog and digital circuit design, as well as semiconductor fabrication processes. Engineers aim to create ICs that perform efficiently while minimizing power consumption, noise, and other factors that can affect overall system performance.
+
+**AMS**
+
+In the context of electronics and integrated circuit (IC) design, "Analog and Mixed-Signal" (AMS) refers to a specialized field that focuses on the design, analysis, and testing of both analog and mixed-signal circuits and systems
+
+Key aspects of Analog and Mixed-Signal (AMS) design include:
+
+1. Analog Circuit Design: This involves designing circuits that handle analog signals, taking into consideration factors such as signal integrity, noise, and power consumption.
+
+2. Digital Circuit Design: AMS engineers must also design digital components for tasks like signal processing, control, and interfacing with other digital systems.
+
+3. Analog-to-Digital Conversion (ADC): Converting real-world analog signals into digital data is a common requirement in AMS design.
+
+4. Digital-to-Analog Conversion (DAC): In some cases, digital data needs to be converted back into analog form for output or control purposes.
+
+5. Real-World Interfaces: AMS circuits often provide interfaces for connecting with external analog components, sensors, and actuators.
+
+6. Power Management: Efficient power management and voltage regulation are essential to ensure the proper operation of both analog and digital components.
+
+**Files used for mixed signal design**
+
+1. Library file:-
+ A ".lib" file, or library file, is a vital component that stores comprehensive data about standard cells, often referred to as library cells or cell models. These standard cells serve as the foundational components used in designing digital integrated circuits.
+
+- Inside the ".lib" file, you'll find extensive details about these library cells, which are pre-designed and reusable digital logic elements. These cells encompass fundamental logic gates like AND, OR, and NOT gates, as well as more complex components like flip-flops, latches, multiplexers, adders, and other essential building blocks used in digital circuit design.
+
+2. Library Exchange Format:-
+- A "LEF" file, short for "Library Exchange Format," serves as a standardized file format crucial for representing the physical characteristics of library cells, often called standard cells. These files are pivotal in the physical design and arrangement of integrated circuits.
+
+- LEF files primarily house the definitions of standard cells that form the fundamental building blocks of digital logic within a microchip.
+
+- Within LEF files, you'll find critical physical details about standard cells, such as their precise dimensions, pin placements, and the specific layers used in the chip manufacturing process. This information is essential for creating the physical layout of the integrated circuit.
+
+- LEF files also outline the layers utilized during semiconductor fabrication, including materials, metal interconnections, vias, and other physical attributes relevant to the chip's construction.
+
+3. Timing File
+- A ".tf" file, commonly known as a timing file, holds vital data regarding timing constraints and delays within a design. It precisely defines timing attributes like input and output delays, setup times, hold times, clock-to-Q delays, and more.
+
+- Timing files are of utmost importance, providing crucial insights into the timing characteristics and constraints of the digital components within an integrated circuit (IC).
+
+- These files play a pivotal role in static timing analysis, ensuring that the design adheres to its performance and timing requirements.
+
+- Throughout the design process, timing files find application in various stages, including synthesis, static timing analysis, and physical design, where they guide the accurate timing performance of the integrated circuit.
+
+4. Transfer Function Lookup Table File
+- A ".tlu" file commonly stores lookup tables that specify the performance characteristics of specific digital or "analog" components, like memory cells, logical operations, or transfer functions for analog devices.
+
+- These files are essential for modeling and simulating the behavior of particular components or blocks within a design, enabling engineers to understand and analyze how these components function in a broader system.
+</details>
+
+## Day-27 Introduction to crosstalk glitch and delay##
+<details>
+ <summary>Cross talk noise and reasons</summary>
+	
+- Crosstalk is the unwanted interference or signal coupling that occurs between neighboring conductive paths on an integrated circuit (IC) or chip. Very Large-Scale Integration (VLSI) design aims to densely pack numerous components and interconnections into a limited physical space, raising concerns about electrical interference issues, with crosstalk being a major issue. Crosstalk can have adverse effects on the performance, reliability, and functionality of VLSI circuits.
+
+- For instance, consider a circuit used for sending and receiving messages. In the past, only one or two instances of this circuit may have been operating within the same area. However, with the reduction in the size of MOSFETs (Metal-Oxide-Semiconductor Field-Effect Transistors), now nine instances of this circuit can coexist in the same chip area. These instances can be engaged in a variety of activities, such as sending and receiving messages, handling calls, processing data, and running other applications concurrently.
+
+- In summary, the shrinking of MOSFET size has enabled a significant increase in the number of applications running in a confined space on the chip, leading to the potential for increased crosstalk and interference challenges in VLSI design.
+
+- Reducing the size of components in very advanced processes, particularly in those below 0.1 micrometers, can introduce interference issues, as illustrated in the figure below. This interference primarily occurs when two closely spaced nets or wires are in operation, leading to the main cause of crosstalk.
+
+- Initially, there are 20 standard cells within the design. However, as the size is decreased, the number of standard cells increases by a factor of 9. These additional cells need to be interconnected, resulting in a significant rise in the number of routes and bringing them into close proximity.
+
+- Consequently, this increased routing density can lead to design failures, where functionality issues arise, often referred to as crosstalk. This is attributed to the proximity of closely routed signals interfering with one another, affecting the intended operation of the circuit.
+
+<img width="800" alt="crosstalk1" src="https://github.com/Sidv005/Samsung-PD-Training/blob/818cd5c1fbd6563a21b627a86ac29816f5da7ed8/day27/crosstalk1.PNG"><br>
+</details>
+
+<details>
+ <summary>Dominant Lateral Capacitance</summary>
+ Increase in number of metal layers resulting in increase in lateral capacitance is also one of the reason for increase in cross talk
+
+- Why increasing lateral capacitance leads to increase in metal layer?
+
+->Breaking into several metal layers helps in reducing the resistance where the higher the area, resulting in lower resistance. That's why we are having a wider metal layer.
+
+->The overlap area between metal 1 and metal 2 as shown in the figure below, is pretty huge, that leads into an increase in interlayer capacitance. That's why 0.25 um and above process, we say that the interlayer capacitance was dominant.
+
+<img width="800" alt="crosstalk2" src="https://github.com/Sidv005/Samsung-PD-Training/blob/818cd5c1fbd6563a21b627a86ac29816f5da7ed8/day27/crosstalk2.PNG"><br>
+
+- Reducing the size of MOSFETs leads to an expansion in the number of standard cells, consequently increasing the number of connections required. Each cell must be linked to the edges of the standard cells, which elevates the connection density. This, in turn, results in a notable increase in the number of routing paths required to establish these connections.
+- Due to the close proximity of routes and the challenge of accommodating the MOSFET area, reducing the width of the metal is often considered. However, even with a narrower metal width, the demand for routing area remains exceedingly high. Thus, simply reducing the width is insufficient to address this significant demand.
+- So, we need to do the connections in different way (i.e. referring to the figure below) which is making the signal travelling in a straight line (only travelling across metal 1) without transferring the signal to metal 3 first. This is happened because of the limited amount of resources/routing resources available in the area. In this case, the amount of area is very compact and we need to accommodate it where we have to connect signals at any cost.
+
+<img width="800" alt="crosstalk3" src="https://github.com/Sidv005/Samsung-PD-Training/blob/818cd5c1fbd6563a21b627a86ac29816f5da7ed8/day27/crosstalk3.PNG"><br>
+</details>
+
+<details>
+ <summary>Noise Margin</summary>
+	
+ - Noise margin in Very Large-Scale Integration (VLSI) design is a critical concept used to characterize the robustness and reliability of digital circuits in the presence of noise, variations, and uncertainties. It represents the amount of noise or voltage fluctuations that a digital circuit can tolerate while still correctly interpreting logic levels (high or low) and producing the expected output. Noise margin is typically expressed in terms of voltage levels and is crucial for ensuring the correct operation of digital circuits.
+ 
+- There are two main components of noise margin:
+
+1. High-Level Noise Margin (NMH): NMH represents the maximum allowable noise on the high logic level (logical '1') before the circuit interprets it as a low logic level (logical '0'). In other words, it quantifies the resilience of the circuit against noise that might pull a high voltage down to the low level.
+
+2. Low-Level Noise Margin (NML): NML represents the maximum allowable noise on the low logic level (logical '0') before the circuit interprets it as a high logic level (logical '1'). It measures the resilience of the circuit against noise that might push a low voltage up to the high level.
+
+The key idea is that a digital circuit should have a sufficient gap or margin between its high and low voltage levels to account for variations in operating conditions, component tolerances, and external noise sources.
+
+Noise margin is particularly important in VLSI design for several reasons:
+
+- Reliability: It ensures that circuits are robust against variations in voltage, temperature, and manufacturing processes, which can affect the voltage levels.
+
+- Interference and Crosstalk: Noise margin helps in designing circuits that can withstand interference and crosstalk between adjacent signal lines.
+
+- Power Consumption: By maintaining adequate noise margins, designers can minimize the chances of false transitions and reduce power consumption.
+
+- Manufacturing Variability: VLSI chips often have variations in transistor characteristics and other factors due to the manufacturing process. Noise margin helps account for these variations.
+
+- Operational Variability: Voltage levels can fluctuate due to factors like power supply fluctuations and noise from other components on the chip. Noise margin ensures that the circuit can still function correctly under such conditions.
+
+<img width="800" alt="crosstalk4" src="https://github.com/Sidv005/Samsung-PD-Training/blob/818cd5c1fbd6563a21b627a86ac29816f5da7ed8/day27/crosstalk4.PNG"><br>
+
+Noise margin depends on several factors, including:
+
+- Power Supply Voltage: Variations in the power supply voltage can directly impact the noise margin. A higher power supply voltage often leads to larger noise margins.
+
+- Threshold Voltage Levels: The noise margin is related to the logic threshold levels, which determine the voltage ranges for logical high and low levels.
+
+- Process Variations: Process variations in semiconductor manufacturing can affect transistor characteristics, leading to variations in logic thresholds and, consequently, noise margin.
+
+- Temperature: Temperature fluctuations can also influence the noise margin by affecting transistor characteristics.
+</details>
+
