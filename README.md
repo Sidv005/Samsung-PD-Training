@@ -4502,3 +4502,55 @@ This will tell ngspice to run a transient simulation for 1 ns and monitor voltag
 - Wait for a while and go to the Simulation menu to check whether a tick mark appears or not. This verifies if we have properly defined a sub circuit for creating a layout cell with pins in the layout.
 
 - A netlist is generated successfully for the schematic by clicking the Netlist button and quit Xschem.
+
+**Importing Schematic To Layout And Inverter Layout Steps**
+
+```ruby
+cd ../mag/
+magic -d XR
+```
+
+ Run the magic, then click on File -> Import SPICE and then select the inverter.spice file from the xschem directory. If done correctly, the following layout has been opened up in magic.
+ 
+<img width="800" alt="" src=""><br>
+
+- Referring to the layout generated above, the schematic import is unaware about analog placing and routing as it is very complex. Therefore, We must place them in the best positions and wire them up manually.
+
+- Now, place the pfet device above the nfet and adjust the placement of the input, output and supply pins. Refer below figure.
+
+<img width="800" alt="" src=""><br>
+
+- Next, set some parameters that are only adjustable in the layout which will make it more convenient to wire the whole layout up.
+
+- To pop out the parameter editing section, use S key and press I key to select the object, then use CTRL+P to open up the parameter options for the selected device.
+
+- Start to paint the wires using metal1 layers by connecting the source of the pfet to Vdd and source of the nfet to Vss. Next, connect the drains of both mosfets to the output. Finally, connect the input to all the poly contacts of the gate.
+
+```ruby
+extract do local    (Ensuring that magic writes all results to the local directory)
+extract all         (Performing the actual extraction)
+ext2spice lvs       (Simulating and setting up the netlist to hierarchical spice output in ngspice format with no parasitic components)
+ext2spice           (Generating the spice netlist)
+```
+<img width="800" alt="" src=""><br>
+
+```ruby
+rm *.ext                                          (Clear any unwanted files -> .ext files are just intermediate results from the extraction)
+/usr/share/pdk/bin/cleanup_unref.py -remove .     (Clean up extra .mag files -> files containing paramaterised cells that were created and saved but not used in the design)
+netgen -batch lvs "../mag/inverter.spice inverter" "../xschem/inverter.spice inverter"    (Run LVS by entering the netgen subdirectory)
+```
+
+- Remember to always use the layout netlist first and schematic netlist second in the netgen command as in side by side, resulting the layout is on the left and the schematic is on the right.
+
+- Each netlist is represented by a pair of keywords in quotes, where the first is the location of the netlist file and the second is the name of the subcircuit to compare.
+
+Modify the test bench netlist file.
+<img width="800" alt="" src=""><br>
+```ruby
+cp ../xschem/.spiceinit .
+ngspice inverter_tb.spice
+```
+The result is almost the same as in previous simulation in xschem.
+
+<img width="800" alt="" src=""><br>
+</details>
