@@ -4378,8 +4378,11 @@ report_si_noise_analysis
 - SkyWater Open Source PDK is a joint project between Google and SkyWater Technology Foundry, where it provides a fully open source Process Design Kit (PDK), and its related resources.
 
 - SkyWater open PDK public repository contains:
+  
        - Documentation: https://skywater-pdk.readthedocs.io/en/main/
+  
        - PDK Library and files: https://github.com/google/skywater-pdk
+  
        - Community: https://invite.skywater.tools/
 
 - "130" in SKY130 stands for the feature size, which is the length of smallest transistor that can be manufactured in the process.
@@ -4408,7 +4411,7 @@ mkdir xschem
 mkdir mag
 mkdir netgen
 ```
-<img width="800" alt="" src=""><br>
+<img width="1000" alt="1.mkdir.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/1.mkdir.PNG"><br>
 
 ```ruby
 cd xschem
@@ -4422,10 +4425,14 @@ cd inverter/xschem/
 xschem
 ```
 Above commands are used to link tools like xschem, netgen and magic.
-<img width="800" alt="" src=""><br>
+<img width="1000" alt="2.ln%20-s.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/2.ln%20-s.PNG"><br>
 
 - This brings up a display for xschem with a lot of example schematics, SKY130 devices are shown in xschem as below.
 - Note: Examples can be accessed by clicking the relevant rectangle and pressing the "E" key on the keyboard. We can return to the menu by pressing "CTRL+E". The "F" key resizes the schematic to fit the window.
+
+<img width="800" alt="3.xschem.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/3.xschem.PNG"><br>
+
+<img width="800" alt="4.xschem2.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/4.xschem2.PNG"><br>
 
 ```ruby
 cd ../mag/
@@ -4435,10 +4442,13 @@ magic -d -OGL   (An OpenGL based graphics package)
 ```
 
 This brings up 2 magic windows, with the layout window displaying "Technology: sky130A", along with many colors and icons displaying the available layers in this technology, as shown below.
-<img width="800" alt="" src=""><br>
+<img width="800" alt="5.magic.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/5.magic.PNG"><br>
+
+<img width="800" alt="6.nfet.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/6.nfet.PNG"><br>
 
 - Changing the device type to sky130_fd_pr__nfet_g5v0d10v5
-<img width="800" alt="" src=""><br>
+
+<img width="800" alt="7.nfet_apply.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/7.nfet_apply.PNG"><br>
 
 **Creating Simple Schematic In Xschem**
 
@@ -4447,6 +4457,7 @@ cd ../xschem/
 xschem
 ```
 Press "Insert" key to pop out Choose symbol window. Select the SkyWater library directory path to access SkyWater components and choose the fd_pr library. To create an inverter, a basic nfet and pfet are needed. Therefore, select nfet and pfet device from the insert window and place it anywhere in the schematic.
+
 
 - As pins are not PDK specific, they can be found under the xschem library in the insert window. These are named as ipin.sym, opin.sym and iopin.sym.
 
@@ -4460,7 +4471,14 @@ Press "Insert" key to pop out Choose symbol window. Select the SkyWater library 
 
 - Similarly, for pfet, adjust the parameters to 3 fingers, width of 1 per finger, and a length of 0.18. We must specify the body to be connected to the Vdd pin as it is a 3 pin pfet.
 
+<img width="800" alt="8.nfet_prop.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/8.nfet_prop.PNG"><br>
+
+<img width="800" alt="9.pfet_prop.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/9.pfet_prop.PNG"><br>
+
 Save the design by clicking tab File --> save as --> inverter.sch
+
+Schematic is shown in below image.<br>
+<img width="800" alt="10.schematic.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/10.schematic.PNG"><br>
 
 **Creating Symbol And Exporting Schematic In Xschem**
 
@@ -4486,14 +4504,14 @@ tran 1n 1u
 plot V(in) V(out)
 .endc"
 ```
-This will tell ngspice to run a transient simulation for 1 ns and monitor voltages for the in and out pins. Therefore, a complete testbench schematic is shown as below, and save this as inverter_tb.sch
-<img width="800" alt="" src=""><br>
+This will tell ngspice to run a transient simulation for 1 ns and monitor voltages for the in and out pins. Therefore, a complete testbench schematic is shown as below, and save this as inverter_tb.sch<br>
+<img width="800" alt="11.tb_inverter_symbol.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/11.tb_inverter_symbol.PNG"><br>
 
 - To generate the netlist, click on the Netlist button, then simulate it in Ngspice by clicking the Simulate button.
 
 - The waveform confirms that the schematic behaves as an inverter as shown below.
 
-<img width="800" alt="" src=""><br>
+<img width="800" alt="12.plot.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/12.plot.PNG"><br>
 
 - After verifying the schematic, layout needs to be created. To do this, go back to the inverter schematic.
 
@@ -4512,13 +4530,13 @@ magic -d XR
 
  Run the magic, then click on File -> Import SPICE and then select the inverter.spice file from the xschem directory. If done correctly, the following layout has been opened up in magic.
  
-<img width="800" alt="" src=""><br>
+<img width="800" alt="13.magic(1)" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/13.magic(1).PNG"><br>
 
 - Referring to the layout generated above, the schematic import is unaware about analog placing and routing as it is very complex. Therefore, We must place them in the best positions and wire them up manually.
 
 - Now, place the pfet device above the nfet and adjust the placement of the input, output and supply pins. Refer below figure.
 
-<img width="800" alt="" src=""><br>
+<img width="800" alt="14.magic2.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/14.magic2.PNG"><br>
 
 - Next, set some parameters that are only adjustable in the layout which will make it more convenient to wire the whole layout up.
 
@@ -4526,13 +4544,20 @@ magic -d XR
 
 - Start to paint the wires using metal1 layers by connecting the source of the pfet to Vdd and source of the nfet to Vss. Next, connect the drains of both mosfets to the output. Finally, connect the input to all the poly contacts of the gate.
 
+<img width="800" alt="15.magic3.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/15.magic3.PNG"><br>
+
+Below image is obtained after fixing DRC errors.<br>
+<img width="800" alt="16.magic_drc.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/16.magic_drc.PNG"><br>
+
+Save the file and Run following commands in magic console.
+
 ```ruby
 extract do local    (Ensuring that magic writes all results to the local directory)
 extract all         (Performing the actual extraction)
 ext2spice lvs       (Simulating and setting up the netlist to hierarchical spice output in ngspice format with no parasitic components)
 ext2spice           (Generating the spice netlist)
 ```
-<img width="800" alt="" src=""><br>
+<img width="1000" alt="17.ext2spice%20lvs.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/63d0273ac79243089b8db52bea1fa4c621ce5283/day28/17.ext2spice%20lvs.PNG"><br>
 
 ```ruby
 rm *.ext                                          (Clear any unwanted files -> .ext files are just intermediate results from the extraction)
@@ -4544,13 +4569,18 @@ netgen -batch lvs "../mag/inverter.spice inverter" "../xschem/inverter.spice inv
 
 - Each netlist is represented by a pair of keywords in quotes, where the first is the location of the netlist file and the second is the name of the subcircuit to compare.
 
-Modify the test bench netlist file.
-<img width="800" alt="" src=""><br>
+<img width="1000" alt="18.remove.png" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3bdda15570df7355490ad026d10df34c4f8f6aa4/day28/18.remove.png"><br>
+
+<img width="1000" alt="19.lvs_done.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3bdda15570df7355490ad026d10df34c4f8f6aa4/day28/19.lvs_done.PNG"><br>
+
+Modify the test bench netlist file.<br>
+<img width="1000" alt="20.tb_inverter_spice.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3bdda15570df7355490ad026d10df34c4f8f6aa4/day28/20.tb_inverter_spice.PNG"><br>
+
 ```ruby
 cp ../xschem/.spiceinit .
 ngspice inverter_tb.spice
 ```
-The result is almost the same as in previous simulation in xschem.
+The result is almost the same as in previous simulation in xschem as shown below.
 
-<img width="800" alt="" src=""><br>
+<img width="1000" alt="12.plot.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3bdda15570df7355490ad026d10df34c4f8f6aa4/day28/12.plot.PNG"><br>
 </details>
