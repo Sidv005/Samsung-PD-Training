@@ -4368,7 +4368,7 @@ report_si_noise_analysis
 
 </details>
 
-## Day-28 Introduction to DRC/LVS##
+## Day-28 Introduction to DRC/LVS ##
 
 <details>
  <summary>Theory</summary>
