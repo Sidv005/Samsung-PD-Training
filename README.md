@@ -4367,3 +4367,138 @@ report_si_noise_analysis
 <img width="800" alt="5.qor.png" src="https://github.com/Sidv005/Samsung-PD-Training/blob/60f4b3f8a87f3a8981fc80a9af72cdde92445993/day27/5.qor.png"><br>
 
 </details>
+
+## Day-28 Introduction to DRC/LVS##
+
+<details>
+ <summary>Theory</summary>
+
+**Introduction to SkyWater PDKs and opensource EDA tools**
+
+- SkyWater Open Source PDK is a joint project between Google and SkyWater Technology Foundry, where it provides a fully open source Process Design Kit (PDK), and its related resources.
+
+- SkyWater open PDK public repository contains:
+       - Documentation: https://skywater-pdk.readthedocs.io/en/main/
+       - PDK Library and files: https://github.com/google/skywater-pdk
+       - Community: https://invite.skywater.tools/
+
+- "130" in SKY130 stands for the feature size, which is the length of smallest transistor that can be manufactured in the process.
+
+**Physical Verification and Design Flow**
+
+Physical verification is perfomed to check whether we have a mask layout that matches what we think the circuit should be.
+
+There are 2 major steps in physical verification.
+
+- Design Rule Checking (DRC) --> Verifies if layout satisfies rules required for manufacturing. Rules may vary from foundary to foundaryand for different technology will have different different rules. It ensures that the layout matches all the rules provided by the foundry for the specific process.
+
+- Layout Vs. Schematic (LVS) --> It ensures that the layout netlist matches the schematic netlist. Usually extraction errors and comparison errors occurs during LVS stage. Extraction errors like short, open device extraction, missing device terminals, duplicate structure placement. Compare errors like ports are swapped, unmatched nets or devices or schematic.
+</details>
+
+<details>
+ <summary>Lab</summary>
+
+**Creating Sky130 Device Layout In Magic**
+
+```ruby
+cd /home/siddhant.v/Desktop
+mkdir inverter
+cd inverter
+mkdir xschem
+mkdir mag
+mkdir netgen
+```
+<img width="800" alt="" src=""><br>
+
+```ruby
+cd xschem
+ln -s /usr/share/pdk/sky130A/libs.tech/xschem/xschemrc
+ln -s ln -s /usr/share/pdk/sky130A/libs.tech/ngspice/spinit .spiceinit
+cd ../mag/
+ln -s /usr/share/pdk/sky130A/libs.tech/magic/sky130A.magicrc .magicrc
+cd ../netgen/
+ln -s /usr/share/pdk/sky130A/libs.tech/netgen/sky130A_setup.tcl setup.tcl
+cd inverter/xschem/
+xschem
+```
+Above commands are used to link tools like xschem, netgen and magic.
+<img width="800" alt="" src=""><br>
+
+- This brings up a display for xschem with a lot of example schematics, SKY130 devices are shown in xschem as below.
+- Note: Examples can be accessed by clicking the relevant rectangle and pressing the "E" key on the keyboard. We can return to the menu by pressing "CTRL+E". The "F" key resizes the schematic to fit the window.
+
+```ruby
+cd ../mag/
+magic
+magic -d XR     (To invoke a cairo graphics package that uses 3D acceleration to get better rendering than the default graphics)
+magic -d -OGL   (An OpenGL based graphics package)
+```
+
+This brings up 2 magic windows, with the layout window displaying "Technology: sky130A", along with many colors and icons displaying the available layers in this technology, as shown below.
+<img width="800" alt="" src=""><br>
+
+- Changing the device type to sky130_fd_pr__nfet_g5v0d10v5
+<img width="800" alt="" src=""><br>
+
+**Creating Simple Schematic In Xschem**
+
+```ruby
+cd ../xschem/
+xschem
+```
+Press "Insert" key to pop out Choose symbol window. Select the SkyWater library directory path to access SkyWater components and choose the fd_pr library. To create an inverter, a basic nfet and pfet are needed. Therefore, select nfet and pfet device from the insert window and place it anywhere in the schematic.
+
+- As pins are not PDK specific, they can be found under the xschem library in the insert window. These are named as ipin.sym, opin.sym and iopin.sym.
+
+- Press Q key to bring up the parameter window and Rename each pin to something sensible.
+
+- Press Q key anfetr left click on component to bring up the parameter windows to configure the properties of the devices.
+
+- For nfet, change the length to 0.18 from default value of 0.15 since its restricted to sram devices only. Set the number of fingers to 3, and the width of each finger to 1.5.
+
+- Since we have 3 fingers now, the total width in the parameter window must be set to 3 times of the finger width, which is 4.5.
+
+- Similarly, for pfet, adjust the parameters to 3 fingers, width of 1 per finger, and a length of 0.18. We must specify the body to be connected to the Vdd pin as it is a 3 pin pfet.
+
+Save the design by clicking tab File --> save as --> inverter.sch
+
+**Creating Symbol And Exporting Schematic In Xschem**
+
+- Testbench is created seperately to verify the functionality of 
+
+- Firstly, create a symbol for the schematic as the schematic will appear as a symbol in the testbench. To do this, click on the Symbol menu and select "Make symbol from schematic". Then, create a testbench schematic using new schematic option and insert the generated symbol from the local directory using the Insert key.
+
+- Select new schematic in File tab and choose inverter.sch under home directory and paste it on the schematic window.
+
+- The testbench will be very simple where we will generate a ramp input and observe the output response after connecting the power supplies. To do this, insert 2 voltage sources from the default xschem library, one for the input and one for the supply. Connect these and add a GND node to the supply connections. Create "ipins" and "opins" for the input and output signals to observe in Ngspice.
+
+- Supply voltage is set to 1.8 V. For the input voltage, we must set the supply to a piece-wise linear function to get ramp. PWL function has voltage and time values stated that the supply will start at 0v, then start to ramp up from 20 ns till it reaches its final value at 900 ns of 1.8 V.
+
+- Next, place two more statements for ngspice, but as these aren't specific to any component, they must be placed in text boxes. To place a text box, select the code_shown.sym component under the xschem library.
+
+- The first text box will specify the location of the device models used in the device schematic, where it is using a .lib statement that selects a top level file that tells ngspice where to find all the models and also specifying a simulation corner for all the models. The first block specifying the typical corner with *value = ".lib /usr/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt"*.
+
+- For the second block, it specifies;
+
+```ruby
+value = ".control
+tran 1n 1u
+plot V(in) V(out)
+.endc"
+```
+This will tell ngspice to run a transient simulation for 1 ns and monitor voltages for the in and out pins. Therefore, a complete testbench schematic is shown as below, and save this as inverter_tb.sch
+<img width="800" alt="" src=""><br>
+
+- To generate the netlist, click on the Netlist button, then simulate it in Ngspice by clicking the Simulate button.
+
+- The waveform confirms that the schematic behaves as an inverter as shown below.
+
+<img width="800" alt="" src=""><br>
+
+- After verifying the schematic, layout needs to be created. To do this, go back to the inverter schematic.
+
+- Firstly, click on the Simulation menu and select "LVS netlist: Top Lvel is a .subckt" option.
+
+- Wait for a while and go to the Simulation menu to check whether a tick mark appears or not. This verifies if we have properly defined a sub circuit for creating a layout cell with pins in the layout.
+
+- A netlist is generated successfully for the schematic by clicking the Netlist button and quit Xschem.
