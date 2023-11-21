@@ -4584,3 +4584,281 @@ The result is almost the same as in previous simulation in xschem as shown below
 
 <img width="1000" alt="12.plot.PNG" src="https://github.com/Sidv005/Samsung-PD-Training/blob/3bdda15570df7355490ad026d10df34c4f8f6aa4/day28/12.plot.PNG"><br>
 </details>
+
+
+
+## Day 30 - Introduction to TCL WORKSHOP ##
+
+<details>
+ <summary>Introduction to TCL and VSDSYNTH Toolbox Usage</summary>
+
+Task is to create a command (in my case, ***synui***) and pass a .csv file from the UNIX shell to the TCL script, taking into consideration mainly three general scenarios from the user's point of view.
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p1.PNG)
+
+**Review of input file - openMSP430_design_details.csv**
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p2.PNG)
+
+
+### Implementation
+
+Creation of the *synui* command script and *synui.tcl* files.
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p3.PNG)
+
+
+*synui Code*
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p4.PNG)
+
+
+
+The basic structure of bash code used for the implementation of general scenarios is shown below.
+
+```bash
+#Code to handle the scenario where user does not give any file, does not give .csv file, gives more than one file as argument
+
+if [ $# -eq 0 ]
+then
+        echo "Info: Please provide a CSV file"
+        exit 1
+elif [ $# -gt 1 ]
+then
+        echo "Info: Please provide only 1 CSV file"
+        exit 1
+else
+        if [[ $1 != *.csv  &&  $1 != "-help" ]]
+        then
+                echo "Info: Please provide a .csv format file"
+                exit 1
+        fi
+fi
+# Code to check if the .csv file is present in directory or not, and also to display information for -help argument.
+if [ ! -f $1 ] || [ $1 == "-help" ]
+then
+        if [ $1 != "-help" ]
+        then
+                echo "Error: The file $1 is not found in current directory."
+                exit 1
+        else
+                echo "USAGE: ./synui <csv_file>"
+                echo
+                echo " where <csv file> consists of 2 columns, below keyword being in 1st column and is Case Sensitive. Please request Niharika for sample csv file."
+                echo
+                echo " <Design Name> is the name of top level module."
+                echo
+                echo " <Output Directory> is the name of output directory where you want to dump synthesis script, synthesized netlist and timing reports."
+                echo
+                echo " <Netlist Directory> is the name of directory where all RTL netlist are present."
+                echo
+                echo " <Early Library Path> is the file path of the early cell library to be used for STA."
+                echo
+                echo " <Late Library Path> is file path of the late cell library to be used for STA."
+                echo
+                echo " <Constraints file> is csv file path of constraints to be used for STA."
+                exit 1
+        fi
+else
+        #Code to execute if the proper CSV file exists.
+        echo "Info: CSV file accepted"
+        tclsh synui.tcl $1
+fi
+```
+
+In my command ***synui***, I have implemented a total of *5 general scenarios* from the user's point of view in the bash script.
+
+#### 1. No input file provided
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p5.PNG)
+
+
+#### 2. File provided exists but is not of .csv format
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p6.PNG)
+
+
+#### 3. More than one file or parameters provided
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p7.PNG)
+
+
+#### 4. Provide a .csv file that does not exist
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p8.PNG)
+
+
+#### 5. Type "-help" to find out usage
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p9.PNG)
+</details>
+
+<details>
+ <summary> Variable Creation and Processing Constraints from CSV</summary>
+	
+Task is to create variables, check file/directory existence, and convert constraints csv file to format[1] and SDc format. This is done by writing the code in *synui.tcl*.
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p10.PNG)
+
+
+**Review of input file - openMSP430_design_constraints.csv**
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p11.PNG)
+
+
+### Implementation
+
+I have successfully completed tasks, namely variable creation, file and directory existence checks, and the processing of the constraints csv file.
+
+**synui.tcl snapshot**
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p12.PNG)
+
+
+#### Variable Creation
+
+I have auto-created the variables (*have used special condition to identify design name*) from the csv file by converting it into a matrix and then to an array (*also added command to capture the start time of the script so that it can be used to calculate runtime at the end*). 
+
+*Code*
+
+```tcl
+#!/bin/tclsh
+
+set start_time [clock clicks -microseconds]
+set csv_design [lindex $argv 0]
+
+package require csv
+package require struct::matrix
+
+struct::matrix m
+
+set f [open $csv_design]
+
+csv::read2matrix $f m , auto
+
+close $f
+
+set n_columns [m columns]
+set n_rows [m rows]
+
+puts "\nInfo:Variable values"
+puts "No. of rows =  $n_rows"
+puts "No. of columns = $n_columns"
+
+m link csv_arr
+
+set i 0
+while {$i < $n_rows} {
+        puts "\nInfo: Setting $csv_arr(0,$i) as '$csv_arr(1,$i)'"
+        if { ![string match "*/*" $csv_arr(1,$i)] && ![string match "*.*" $csv_arr(1,$i)] } {
+                        set [string map {" " "_"} $csv_arr(0,$i)] $csv_arr(1,$i)
+        } else {
+                set [string map {" " "_"} $csv_arr(0,$i)] [file normalize $csv_arr(1,$i)]
+        }
+        set i [expr {$i+1}]
+}
+
+
+```
+
+*Screenshot*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p12.PNG)
+
+
+#### File / Directory Existence Check
+
+Since the existence of these files and directories is essential to the program's operation, I have built code to check for their existence. If the input files do not exist, we exit from the code except for output directory in which case it  is created. Below are screenshots of the terminal displaying the functionality and the basic code for the same.
+
+*Code*
+
+```tcl
+############# FILE EXISTENCE CHECK ###################
+# IF the directory does not exist, then create one 
+
+
+if { ![file isdirectory $Output_Directory] } {
+        puts "\nInfo: Cannot find output directory $Output_Directory. Creating $Output_Directory"
+        file mkdir $Output_Directory
+} else {
+        puts "\nInfo: Output directory found in path $Output_Directory"
+}
+
+# Checking if netlist directory exists if not exits
+if { ![file isdirectory $Netlist_Directory] } {
+        puts "\nError: Cannot find RTL netlist directory in path $Netlist_Directory. Exiting..."
+        exit
+} else {
+        puts "\nInfo: RTL netlist directory found in path $Netlist_Directory"
+}
+
+# Checking if early cell library file exists if not exits
+if { ![file exists $Early_Library_Path] } {
+        puts "\nError: Cannot find early cell library in path $Early_Library_Path. Exiting..."
+        exit
+} else {
+        puts "\nInfo: Early cell library found in path $Early_Library_Path"
+}
+
+# Checking if late cell library file exists if not exits
+if { ![file exists $Late_Library_Path] } {
+        puts "\nError: Cannot find late cell library in path $Late_Library_Path. Exiting..."
+        exit
+} else {
+        puts "\nInfo: Late cell library found in path $Late_Library_Path"
+}
+
+# Checking if constraints file exists if not exits
+if { ![file exists $Constraints_File] } {
+        puts "\nError: Cannot find constraints file in path $Constraints_File. Exiting..."
+        exit
+} else {
+        puts "\nInfo: Constraints file found in path $Constraints_File"
+}
+
+
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p13.PNG)
+
+#### Processing of the constraints openMSP430_design_constraints.csv file
+
+The file was successfully analyzed and turned into a matrix. The beginning rows of the clocks, inputs, and outputs were also extracted, along with the rows and columns count. Below are the basic code for the same and a screenshot of the terminal showing many "puts" writing the variables.
+
+*Code*
+
+```tcl
+# Constraints csv file data processing for convertion to format[1] and SDC
+# ------------------------------------------------------------------------
+puts "\nInfo: Dumping SDC constraints for $Design_Name"
+::struct::matrix m1
+set f1 [open $Constraints_File]
+csv::read2matrix $f1 m1 , auto
+close $f1
+set n_rows_concsv [m1 rows]
+set n_columns_concsv [m1 columns]
+# Finding row number starting for CLOCKS section
+set clocks_start_row [lindex [lindex [m1 search all CLOCKS] 0] 1]
+# Finding column number starting for CLOCKS section
+set clocks_start_column [lindex [lindex [m1 search all CLOCKS] 0] 0]
+# Finding row number starting for INPUTS section
+set inputs_start [lindex [lindex [m1 search all INPUTS] 0] 1]
+# Finding row number starting for OUTPUTS section
+set outputs_start [lindex [lindex [m1 search all OUTPUTS] 0] 1]
+
+puts "\nInfo: Listing value of variables for user debug"
+puts "Number of rows in CSV file = $n_rows_concsv"
+puts "Number of columns in CSV file = $n_columns_concsv"
+puts "CLOCKS starting row in CSV file = $clocks_start_row"
+puts "CLOCKS starting column in CSV file = $clocks_start_column"
+puts "INPUTS starting row in CSV file = $inputs_start "
+puts "OUTPUTS starting row in CSV file = $outputs_start "
+
+```
+
+*Screenshot*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p14.PNG)
+
+</details>
