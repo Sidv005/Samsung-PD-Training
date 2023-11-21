@@ -4820,7 +4820,7 @@ if { ![file exists $Constraints_File] } {
 
 *Screenshots*
 
-![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p13.PNG)
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p14.PNG)
 
 #### Processing of the constraints openMSP430_design_constraints.csv file
 
@@ -4859,6 +4859,464 @@ puts "OUTPUTS starting row in CSV file = $outputs_start "
 
 *Screenshot*
 
-![image](https://github.com/Sidv005/Samsung-PD-Training/blob/979775914611d25ed4101edafc8de4ac5bcb0139/day30/p14.PNG)
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p16.PNG)
 
 </details>
+
+<details>
+ <summary> Processing Clock and Input Constraints from CSV and dumping SDC</summary>
+
+The assignment is to essentially to analyze clock and input constraints in a CSV file and output SDC commands into a .sdc file with the actual processed data. In addition to a number of matrix search algorithms, it also uses an algorithm to distinguish between inputs that are buses and bits.
+
+**Review of input file - openMSP430_design_constraints.csv**
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p17.PNG)
+
+### Implementation
+Tasks are succesfully complete i.e. To process constraints in a csv file for clocks and inputs and dump SDC commands into a .sdc file with actual processed data.
+
+#### Processing of the constraints .csv file for CLOCKS and dumping SDC commands to .sdc
+
+The csv file containing the CLOCKS data has been successfully processed, and clock-based SDC commands (*with distinct clock names by appending "_synyui" to the SDC create_clock command*) have been dumped into the.sdc file. Below are screenshots of the terminal with many "puts" spitting out the variables, user debug information, and output.sdc, along with the basic code for the same.
+
+*Code*
+
+```tcl
+##############################################################################################
+################### Day 3 ###################################################################
+# Conversion of constraints csv file to SDC
+# -----------------------------------------
+# CLOCKS section
+# Finding column number starting for clock latency in CLOCKS section
+#
+#puts "$n_columns_concsv"
+set clk_erd_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] early_rise_delay] 0 ] 0 ]
+set clk_efd_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] early_fall_delay] 0 ] 0 ]
+set clk_lrd_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] late_rise_delay] 0 ] 0 ]
+set clk_lfd_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] late_fall_delay] 0 ] 0 ]
+
+# Finding column number starting for clock transition in CLOCKS section
+#
+
+set clk_ers_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] early_rise_slew] 0 ] 0 ]
+set clk_efs_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] early_fall_slew] 0 ] 0 ]
+set clk_lrs_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] late_rise_slew] 0 ] 0 ]
+set clk_lfs_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] late_fall_slew] 0 ] 0 ]
+
+# Finding column number starting for frequency and duty cycle in CLOCKS section only
+set clk_freq_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] frequency] 0 ] 0 ]
+set clk_dc_st_col [lindex [lindex [m1 search rect $clocks_start_column $clocks_start_row [expr { $n_columns_concsv - 1}] [expr {$inputs_start-1}] duty_cycle] 0 ] 0 ]
+
+# Creating .sdc file with design name in output directory and opening it in write mode
+#
+set sdc_file [open $Output_Directory/$Design_Name.sdc "w"]
+
+# Setting variables for actual clock row start and end
+#
+set i [expr {$clocks_start_row+1}]
+set end_of_clocks [expr {$inputs_start-1}]
+
+puts "\nInfo-SDC: Working on clock constraints and creating clocks. Please wait"
+
+# while loop to write constraint commands to .sdc file
+while { $i < $end_of_clocks } {
+	#Create SDC command to create clocks.
+	puts -nonewline $sdc_file "\ncreate_clock -name [concat [m1 get cell 0 $i]_synui] -period [m1 get cell $clk_freq_st_col $i] -waveform \{0 [expr {[m1 get cell $clk_freq_st_col $i]*[m1 get cell $clk_dc_st_col $i]/100}]\} \[get_ports [m1 get cell 0 $i]\]"
+
+	# set_clock_transition SDC command to set clock transition values
+	puts -nonewline $sdc_file "\nset_clock_transition -min -rise [m1 get cell $clk_ers_st_col $i] \[get_clocks [m1 get cell 0 $i]\]"
+	puts -nonewline $sdc_file "\nset_clock_transition -min -fall [m1 get cell $clk_efs_st_col $i] \[get_clocks [m1 get cell 0 $i]\]"
+	puts -nonewline $sdc_file "\nset_clock_transition -max -rise [m1 get cell $clk_lrs_st_col $i] \[get_clocks [m1 get cell 0 $i]\]"
+	puts -nonewline $sdc_file "\nset_clock_transition -max -fall [m1 get cell $clk_lfs_st_col $i] \[get_clocks [m1 get cell 0 $i]\]"
+
+	# set_clock_latency SDC command to set clock latency values
+	puts -nonewline $sdc_file "\nset_clock_latency -source -early -rise [m1 get cell $clk_erd_st_col $i] \[get_clocks [m1 get cell 0 $i]\]"
+	puts -nonewline $sdc_file "\nset_clock_latency -source -early -fall [m1 get cell $clk_efd_st_col $i] \[get_clocks [m1 get cell 0 $i]\]"
+	puts -nonewline $sdc_file "\nset_clock_latency -source -late -rise [m1 get cell $clk_lrd_st_col $i] \[get_clocks [m1 get cell 0 $i]\]"
+	puts -nonewline $sdc_file "\nset_clock_latency -source -late -fall [m1 get cell $clk_lfd_st_col $i] \[get_clocks [m1 get cell 0 $i]\]"
+
+	set i [expr {$i+1}]
+}
+set clocks_start_row_actual [expr {$clocks_start_row+1}]
+puts "\n Clocks created in .sdc file. Values for debugging: "
+puts "\n Clock early rise delay start column in constraint file = $clk_erd_st_col"
+puts "\n Clock early fall delay start column in constraint file = $clk_efd_st_col"
+puts "\n Clock late rise delay start column in constraint file = $clk_lrd_st_col"
+puts "\n Clock late fall delay start column in constraint file = $clk_lfd_st_col"
+puts "\n Clock early rise slew start column in constraint file = $clk_ers_st_col"
+puts "\n Clock early fall slew start column in constraint file = $clk_efs_st_col"
+puts "\n Clock late rise slew start column in constraint file = $clk_lrs_st_col"
+puts "\n Clock late fall slew start column in constraint file = $clk_lfs_st_col"
+puts "\n Clock frequency start column in constraint file = $clk_freq_st_col"
+puts "\n Clock duty cycle start column in constraint file = $clk_dc_st_col"
+puts "\n Clock actual starting row = $clocks_start_row_actual"
+puts "\n Clock actual ending row = $end_of_clocks"
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p18.PNG)
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p19.PNG)
+
+*openMSP430.sdc*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p20.PNG)
+
+#### Processing of the constraints .csv file for INPUTS and dumping SDC commands to .sdc
+
+I've processed the inputs data csv file, separated bit and bus inputs, and dumped input-based SDC commands into a.sdc file correctly. Below are screenshots of the terminal with many "puts" spitting out the variables, user debug information, and output.sdc, along with the basic code for the same.
+
+*Code*
+
+```tcl
+
+# Finding the starting column number for input clock latency in INPUTS section
+set ip_erd_st_col [lindex [lindex [m1 search rect $clocks_start_column $inputs_start [expr {$n_columns_concsv-1}] [expr {$outputs_start-1}] early_rise_delay] 0 ] 0 ]
+set ip_efd_st_col [lindex [lindex [m1 search rect $clocks_start_column $inputs_start [expr {$n_columns_concsv-1}] [expr {$outputs_start-1}] early_fall_delay] 0 ] 0 ]
+set ip_lrd_st_col [lindex [lindex [m1 search rect $clocks_start_column $inputs_start [expr {$n_columns_concsv-1}] [expr {$outputs_start-1}] late_rise_delay] 0 ] 0 ]
+set ip_lfd_st_col [lindex [lindex [m1 search rect $clocks_start_column $inputs_start [expr {$n_columns_concsv-1}] [expr {$outputs_start-1}] late_fall_delay] 0 ] 0 ]
+
+# Finding column number starting for input clock transition in INPUTS section only
+set ip_ers_st_col [lindex [lindex [m1 search rect $clocks_start_column $inputs_start [expr {$n_columns_concsv-1}] [expr {$outputs_start-1}] early_rise_slew] 0 ] 0 ]
+set ip_efs_st_col [lindex [lindex [m1 search rect $clocks_start_column $inputs_start [expr {$n_columns_concsv-1}] [expr {$outputs_start-1}] early_fall_slew] 0 ] 0 ]
+set ip_lrs_st_col [lindex [lindex [m1 search rect $clocks_start_column $inputs_start [expr {$n_columns_concsv-1}] [expr {$outputs_start-1}] late_rise_slew] 0 ] 0 ]
+set ip_lfs_st_col [lindex [lindex [m1 search rect $clocks_start_column $inputs_start [expr {$n_columns_concsv-1}] [expr {$outputs_start-1}] late_fall_slew] 0 ] 0 ]
+
+# Finding column number starting for input related clock in INPUTS section only
+set ip_rc_st_col [lindex [lindex [m1 search rect $clocks_start_column $inputs_start [expr {$n_columns_concsv-1}] [expr {$outputs_start-1}] clocks] 0 ] 0 ]
+
+# Setting variables for actual input row start and end
+set i [expr {$inputs_start+1}]
+set end_of_inputs [expr {$outputs_start-1}]
+
+puts "\nInfo-SDC: Working on input constraints.."
+puts "\nInfo-SDC: Categorizing input ports as bits and busses"
+
+# while loop to write constraint commands to .sdc file
+while { $i < $end_of_inputs } {
+# Checking if input is bussed or not
+	set netlist [glob -dir $Netlist_Directory *.v]
+	set tmp_file [open /tmp/1 w]
+	foreach f $netlist {
+		set fd [open $f]
+		while { [gets $fd line] != -1 } {
+			set pattern1 " [m1 get cell 0 $i];"
+			if { [regexp -all -- $pattern1 $line] } {
+				set pattern2 [lindex [split $line ";"] 0]
+				if { [regexp -all {input} [lindex [split $pattern2 "\S+"] 0]] } {
+					set s1 "[lindex [split $pattern2 "\S+"] 0] [lindex [split $pattern2 "\S+"] 1] [lindex [split $pattern2 "\S+"] 2]"
+					puts -nonewline $tmp_file "\n[regsub -all {\s+} $s1 " "]"
+				
+				}
+			}
+		}
+		close $fd
+	}
+	close $tmp_file
+	set tmp_file [open /tmp/1 r]
+	set tmp2_file [open /tmp/2 w]
+	puts -nonewline $tmp2_file "[join [lsort -unique [split [read $tmp_file] \n]] \n]"
+	close $tmp_file
+	close $tmp2_file
+	set tmp2_file [open /tmp/2 r]
+	set count [llength [read $tmp2_file]]
+	close $tmp2_file
+	if {$count > 2} {
+		set inp_ports [concat [m1 get cell 0 $i]*]
+	} else {
+		set inp_ports [m1 get cell 0 $i]
+	}
+		# set_input_transition SDC command to set input transition values
+	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [m1 get cell $ip_rc_st_col $i]\] -min -rise -source_latency_included [m1 get cell $ip_ers_st_col $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [m1 get cell $ip_rc_st_col $i]\] -min -fall -source_latency_included [m1 get cell $ip_efs_st_col $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [m1 get cell $ip_rc_st_col $i]\] -max -rise -source_latency_included [m1 get cell $ip_lrs_st_col $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_transition -clock \[get_clocks [m1 get cell $ip_rc_st_col $i]\] -max -fall -source_latency_included [m1 get cell $ip_lfs_st_col $i] \[get_ports $inp_ports\]"
+# set_input_delay SDC command to set input latency values
+	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [m1 get cell $ip_rc_st_col $i]\] -min -rise -source_latency_included [m1 get cell $ip_erd_st_col $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [m1 get cell $ip_rc_st_col $i]\] -min -fall -source_latency_included [m1 get cell $ip_efd_st_col $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [m1 get cell $ip_rc_st_col $i]\] -max -rise -source_latency_included [m1 get cell $ip_lrd_st_col $i] \[get_ports $inp_ports\]"
+	puts -nonewline $sdc_file "\nset_input_delay -clock \[get_clocks [m1 get cell $ip_rc_st_col $i]\] -max -fall -source_latency_included [m1 get cell $ip_lfd_st_col $i] \[get_ports $inp_ports\]"
+	set i [expr {$i+1}]
+
+}
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p21.PNG)
+
+
+*openMSP430.sdc*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p22.PNG)
+
+</details>
+
+<details>
+	<summary>Complete Scripting and Yosys Synthesis Introduction</summary>
+
+The remaining activities are processing the output section and dumping the SDC file, checking the Yosys hierarchy, resolving errors, and doing a sample Yosys synthesis using example memory and explanation.
+
+**Review of input file - openMSP430_design_constraints.csv**
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p23.PNG)
+
+
+### Implementation
+
+I've successfully finished the tasks assigned : writing code to handle errors in hierarchy check, learning about sample memory synthesis and its memory write and read processes, processing constraints csv files for outputs, and dumping SDC commands to.sdc files with actual processed data.
+
+#### Processing of the constraints .csv file for OUTPUTS and dumping SDC commands to .sdc
+
+I've processed the csv file for the outputs data, separated the bit and bus outputs, then dumped the output-based SDC instructions into a.sdc file successfully. Below are images of the terminal with many "puts" spitting out the variables, user debug information, and output.sdc, along with the basic code for the same.
+
+*Code*
+
+```tcl
+#################################################################################################
+######################################## Day 4 ##################################################
+#################################################################################################
+#
+#Output constraint
+#
+
+# Finding column number starting for output clock latency in OUTPUTS section only
+set op_erd_st_col [lindex [lindex [m1 search rect $clocks_start_column $outputs_start [expr {$n_columns_concsv-1}] [expr {$n_rows_concsv-1}] early_rise_delay] 0 ] 0 ]
+set op_efd_st_col [lindex [lindex [m1 search rect $clocks_start_column $outputs_start [expr {$n_columns_concsv-1}] [expr {$n_rows_concsv-1}] early_fall_delay] 0 ] 0 ]
+set op_lrd_st_col [lindex [lindex [m1 search rect $clocks_start_column $outputs_start [expr {$n_columns_concsv-1}] [expr {$n_rows_concsv-1}] late_rise_delay] 0 ] 0 ]
+set op_lfd_st_col [lindex [lindex [m1 search rect $clocks_start_column $outputs_start [expr {$n_columns_concsv-1}] [expr {$n_rows_concsv-1}] late_fall_delay] 0 ] 0 ]
+
+# Finding column number starting for output related clock in OUTPUTS section only
+set op_rc_st_col [lindex [lindex [m1 search rect $clocks_start_column $outputs_start [expr {$n_columns_concsv-1}] [expr {$n_rows_concsv-1}] clocks] 0 ] 0 ]
+
+# Finding column number starting for output load in OUTPUTS section only
+set op_load_st_col [lindex [lindex [m1 search rect $clocks_start_column $outputs_start [expr {$n_columns_concsv-1}] [expr {$n_rows_concsv-1}] load] 0 ] 0 ]
+
+# Setting variables for actual input row start and end
+set i [expr {$outputs_start+1}]
+set end_of_outputs [expr {$n_rows_concsv-1}]
+
+puts "\nInfo-SDC: Working on output constraints.."
+puts "\nInfo-SDC: Categorizing output ports as bits and busses"
+
+# while loop to write constraint commands to .sdc file
+while { $i < $end_of_outputs } {
+	# Checking if input is bussed or not
+	set netlist [glob -dir $Netlist_Directory *.v]
+	set tmp_file [open /tmp/1 w]
+	foreach f $netlist {
+		set fd [open $f]
+		while { [gets $fd line] != -1 } {
+			set pattern1 " [m1 get cell 0 $i];"
+			if { [regexp -all -- $pattern1 $line] } {
+				set pattern2 [lindex [split $line ";"] 0]
+				if { [regexp -all {output} [lindex [split $pattern2 "\S+"] 0]] } {
+					set s1 "[lindex [split $pattern2 "\S+"] 0] [lindex [split $pattern2 "\S+"] 1] [lindex [split $pattern2 "\S+"] 2]"
+					puts -nonewline $tmp_file "\n[regsub -all {\s+} $s1 " "]"
+				}
+			}
+		}
+	close $fd
+	}
+	close $tmp_file
+	set tmp_file [open /tmp/1 r]
+	set tmp2_file [open /tmp/2 w]
+	puts -nonewline $tmp2_file "[join [lsort -unique [split [read $tmp_file] \n]] \n]"
+	close $tmp_file
+	close $tmp2_file
+	set tmp2_file [open /tmp/2 r]
+	set count [llength [read $tmp2_file]]
+	close $tmp2_file
+	if {$count > 2} {
+		set op_ports [concat [m1 get cell 0 $i]*]
+	} else {
+		set op_ports [m1 get cell 0 $i]
+	}
+
+	# set_output_delay SDC command to set output latency values
+	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [m1 get cell $op_rc_st_col $i]\] -min -rise -source_latency_included [m1 get cell $op_erd_st_col $i] \[get_ports $op_ports\]"
+	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [m1 get cell $op_rc_st_col $i]\] -min -fall -source_latency_included [m1 get cell $op_efd_st_col $i] \[get_ports $op_ports\]"
+	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [m1 get cell $op_rc_st_col $i]\] -max -rise -source_latency_included [m1 get cell $op_lrd_st_col $i] \[get_ports $op_ports\]"
+	puts -nonewline $sdc_file "\nset_output_delay -clock \[get_clocks [m1 get cell $op_rc_st_col $i]\] -max -fall -source_latency_included [m1 get cell $op_lfd_st_col $i] \[get_ports $op_ports\]"
+
+	# set_load SDC command to set load values
+	puts -nonewline $sdc_file "\nset_load [m1 get cell $op_load_st_col $i] \[get_ports $op_ports\]"
+
+	set i [expr {$i+1}]
+}
+
+close $sdc_file
+puts "\nInfo-SDC: SDC created. Please use constraints in path $Output_Directory/$Design_Name.sdc"
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p24.PNG)
+
+*openMSP430.sdc*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p25.PNG)
+
+#### Memory module yosys synthesis and explanation
+
+The verilog code *memory.v* for a single-bit address and single-bit data memory unit is given below.
+
+*Code*
+
+```verilog
+module memory (CLK, ADDR, DIN, DOUT);
+
+parameter wordSize = 1;
+parameter addressSize = 1;
+
+input ADDR, CLK;
+input [wordSize-1:0] DIN;
+output reg [wordSize-1:0] DOUT;
+reg [wordSize:0] mem [0:(1<<addressSize)-1];
+
+always @(posedge CLK) begin
+	mem[ADDR] <= DIN;
+	DOUT <= mem[ADDR];
+	end
+
+endmodule
+```
+
+The basic Yosys script *memory.ys* to run this and obtain a gate-level netlist and 2D representation of the memory module in gate components is provided below.
+
+*Script*
+
+```tcl
+# Reading the library
+read_liberty -lib -ignore_miss_dir -setattr blackbox /home/kunalg/Desktop/work/openmsp430/openmsp430/osu018_stdcells.lib
+# Reading the verilog
+read_verilog verilog/memory.v
+synth top memory
+splitnets -ports -format ___
+dfflibmap -liberty /home/kunalg/Desktop/work/openmsp430/openmsp430/osu018_stdcells.lib
+opt
+abc -liberty /home/kunalg/Desktop/work/openmsp430/openmsp430/osu018_stdcells.lib
+flatten
+clean -purge
+opt
+clean
+# Writing the netlist
+write_verilog memory_synth.v
+# Representation of netlist with it's components
+show
+~     
+```
+
+The output view of netlist from the code is shown below.
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p26.PNG)
+
+
+*Memory write process explained in following images using truth table*
+
+Basic illustration of the write process
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p27.PNG)
+
+
+Before first rising edge of the clock
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p28.PNG)
+
+After first rising edge of the clock - write process done
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p29.PNG)
+
+#### Hierarchy check script dumping
+
+I have successfully written the code for dumping the hierarchy check script. The basic code of the same and screenshots of the terminal with several "puts" printing out the variables and user debug information as well as output .hier.ys are shown below.
+
+*Code*
+
+```tcl
+###############################################################################
+# Hierarchy Check
+#############################################################################################
+puts "\nInfo: Creating hierarchy check script to be used by Yosys"
+set data "read_liberty -lib -ignore_miss_dir -setattr blackbox ${Late_Library_Path}"
+set filename "$Design_Name.hier.ys"
+set fileId [open $Output_Directory/$filename "w"]
+puts -nonewline $fileId $data
+set netlist [glob -dir $Netlist_Directory *.v]
+foreach f $netlist {
+	set data $f
+	puts -nonewline $fileId "\nread_verilog $f"
+	puts "\nInfo: Netlist being read for user debug: $f" 
+}
+puts -nonewline $fileId "\nhierarchy -check"
+close $fileId
+
+
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p30.PNG)
+
+*openMSP430.hier.ys*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p31.PNG)
+
+
+#### Hierarchy Check Run & Error Handling
+
+I have successfully written the code for hierarchy check error handling in case any error pops up during hierarchy check run in Yosys and *exits if hierarchy check fails*. The basic code of the same and screenshots of the terminal with several "puts" printing out the variables and user debug information are shown below.
+
+*Code*
+
+```tcl
+# Hierarchy check error handling
+# Hierarchy check error handling done to see any errors popping up in above script.
+# Running hierarchy check in yosys by dumping log to log file and catching execution message
+set error_flag [catch {exec yosys -s $Output_Directory/$Design_Name.hier.ys >& $Output_Directory/$Design_Name.hierarchy_check.log} msg]
+puts "Errfor flag value for user debug: $error_flag"
+if { $error_flag } {
+	set filename "$Output_Directory/$Design_Name.hierarchy_check.log"
+	# EDA tool specific hierarchy error search pattern
+	set pattern {referenced in module}
+	set count 0
+	set fid [open $filename r]
+	while { [gets $fid line] != -1 } {
+		incr count [regexp -all -- $pattern $line]
+		if { [regexp -all -- $pattern $line] } {
+			puts "\nError: Module [lindex $line 2] is not part of design $Design_Name. Please correct RTL in the path '$Netlist_Directory'"
+			puts "\nInfo: Hierarchy check FAIL"
+		}
+	}
+	close $fid
+	puts "\nInfo: Please find hierarchy check details in '[file normalize $Output_Directory/$Design_Name.hierarchy_check.log]' for more info. Exiting..."
+	
+} else {
+	puts "\nInfo: Hierarchy check PASS"
+	puts "\nInfo: Please find hierarchy check details in '[file normalize $Output_Directory/$Design_Name.hierarchy_check.log]' for more info"
+}
+
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p32.PNG)
+
+*openMSP430.hierarchy_check.log*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p33.PNG)
+
+*Change module name by adding _vsd to check error is coming or not.*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p34.PNG)
+
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p35.PNG)
+
+*openMSP430.hierarchy_check.log*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p36.PNG)
+</details>
+
+
