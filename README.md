@@ -5908,3 +5908,76 @@ puts "\n"
 ![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p_68.PNG)
 
 </details>
+
+## Day 31 Low power Design ##
+<details>
+	<summary> Module 1</summary>
+
+Low power Design:-
+
+- Low-power design in Very Large Scale Integration (VLSI) is a critical aspect in modern semiconductor design, especially as portable devices and battery-powered systems become increasingly prevalent.
+- Reducing power consumption in VLSI circuits is essential for extending battery life, minimizing heat dissipation, and meeting energy efficiency goals.
+
+Why low power design ?
+
+- Differentiating between Power and Energy
+
+- Power
+
+Power is the rate at which energy is transferred or converted. It is the amount of energy transferred or converted per unit of time.
+
+In electrical terms, power ((P)) is calculated as the product of voltage ((V)) and current ((I)): [ P = V \times I ]
+
+Observations as Power Increases
+
+1. Heat Dissipation:
+
+Increases with higher power.
+
+2. Cooling Cost:
+
+Increases with the rise in power consumption.
+
+3. Frequency Limitations:
+
+Higher power may limit achievable frequencies in electronic circuits.
+
+4. Material Degradation:
+
+Overall material degradation accelerates with increased power.
+
+- Energy
+
+   - Definition: Energy represents the ability to perform work or generate heat and manifests in diverse forms like electrical, mechanical, and thermal energy.
+
+   - Formula: In electrical terms, energy (E) can be calculated by multiplying power (P) by time (t): E=Pxt or E=VxIxt
+
+Economics of power and energy
+
+1. Performance.
+
+2. Cost.
+
+Packaging
+
+Battery capacity
+
+Shipping
+
+3. Weight.
+
+4. Form factor
+
+5. Functionality.
+
+6. Context of use.
+
+Low power designs are essential for various electronic devices and systems for several reasons:
+
+- Extended Battery Life: In portable devices like smartphones, laptops, and wearables, low power designs help extend battery life. This is crucial for ensuring longer usage between charges, improving the overall convenience and usability of these devices.
+- Energy Efficiency: Lower power consumption contributes to overall energy efficiency, reducing the environmental impact of electronic devices. Energy-efficient designs align with sustainability goals and regulatory requirements.
+- Heat Dissipation: High-power consumption leads to increased heat generation. Low power designs help mitigate heat dissipation challenges, preventing devices from overheating. This is particularly important for compact and densely packed electronic systems.
+- Form Factor and Size: Low power designs often allow for more compact and lightweight devices. This is especially critical in applications where space is limited, such as in IoT devices, medical implants, and other miniaturized electronic systems.
+- Cost Savings: Lower power consumption can lead to cost savings in terms of smaller batteries, reduced cooling requirements, and lower electricity bills. This is important for both manufacturers and end-users.
+- Reliability and Longevity: Reduced power usage can contribute to the longevity and reliability of electronic components. Lower temperatures and less stress on materials can result in longer lifespans for integrated circuits and other electronic components.
+</details>
