@@ -5319,4 +5319,592 @@ if { $error_flag } {
 ![image](https://github.com/Sidv005/Samsung-PD-Training/blob/27c7bbc2898276942cd24a2fda07c5f60b68a23e/day30/p36.PNG)
 </details>
 
+<details>
+	<summary>Advanced Scripting Techniques and Quality of Results (QoR) Generation </summary>
 
+The remaining activities include running Yosys' main synthesis, learning about and using procedures at the application level, creating commands, and writing the files needed for the OpenTimer tool, like .conf,.spef, and timing Create an OpenTimer script, launch an OpenTimer STA, and gather the information needed to create a QoR.final step is to print the gathered data in a tool-standard QoR output format using the results file that was created during the OpenTimer STA run.
+
+### Implementation
+
+I have successfully coded all the required elements to achieve left over tasks, and all the details of the sub-tasks achieved are shown below.
+
+#### Main Yosys synthesis script dumping
+
+I have successfully written the code for the main Yosys synthesis script .ys file and dumped the script. The basic code of the same and screenshots of the terminal with several "puts" printing out the variables and user debug information are shown below.
+
+*Code*
+
+```tcl
+##################################################################################################################################################
+
+# Main Synthesis Script for yosys
+# ---------------------
+puts "\nInfo: Creating main synthesis script to be used by Yosys"
+set data "read_liberty -lib -ignore_miss_dir -setattr blackbox ${Late_Library_Path}"
+set filename "$Design_Name.ys"
+set fileId [open $Output_Directory/$filename "w"]
+puts -nonewline $fileId $data
+set netlist [glob -dir $Netlist_Directory *.v]
+foreach f $netlist {
+	puts -nonewline $fileId "\nread_verilog $f"
+}
+puts -nonewline $fileId "\nhierarchy -top $Design_Name"
+puts -nonewline $fileId "\nsynth -top $Design_Name"
+puts -nonewline $fileId "\nsplitnets -ports -format ___\ndfflibmap -liberty ${Late_Library_Path} \nopt"
+puts -nonewline $fileId "\nabc -liberty ${Late_Library_Path}"
+puts -nonewline $fileId "\nflatten"
+puts -nonewline $fileId "\nclean -purge\niopadmap -outpad BUFX2 A:Y -bits\nopt\nclean"
+puts -nonewline $fileId "\nwrite_verilog $Output_Directory/$Design_Name.synth.v"
+close $fileId
+puts "\nInfo: Synthesis script created and can be accessed from path $Output_Directory/$Design_Name.ys"
+
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p37.PNG)
+
+
+*openMSP430.ys*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p38.PNG)
+
+#### Running main synthesis script & error handling
+
+I have successfully written the code for running the main Yosys synthesis script and exiting if errors are found. The basic code and screenshots of the terminal are shown below.
+
+*Code*
+
+```tcl
+puts "\nInfo: Running synthesis......."
+# Main synthesis error handling
+# Running main synthesis in yosys by dumping logs to the log directory and catching execution message
+if { [catch {exec yosys -s $Output_Directory/$Design_Name.ys >& $Output_Directory/$Design_Name.synthesis.log} msg] } {
+	puts "\nError: Synthesis failed due to errors. Please refer to log $Output_Directory/$Design_Name.synthesis.log for errors. Exiting...."
+	exit
+} else {
+	puts "\nInfo: Synthesis finished successfully"
+}
+puts "\nInfo: Please refer to log $Output_Directory/$Design_Name.synthesis.log"
+
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p39.PNG)
+
+
+*openMSP430.synthesis.log*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p40.PNG)
+
+*openMSP430.synth.v*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p41.PNG)
+
+*Error handling*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p42.PNG)
+
+*Log file for error handling*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p43.PNG)
+
+#### Editing .synth.v to be usable by OpenTimer
+
+I have successfully written the code to edit the main synthesis output netlist .synth.v to make it usable for OpenTimer and other STA and PnR needs by replacing lines with "*" as a word and by removing "\" from any and all lines that have it. The basic code of the same and screenshots of the terminal with several "puts" printing out the variables and user debug information are shown below.
+
+*Code*
+
+```tcl
+############################################## Editing .synth.v to be usable by Opentimer #######################################################
+
+puts "\nInfo: Removing '*' and '\\' from netlist"
+set fileId [open /tmp/1 "w"]
+puts -nonewline $fileId [exec grep -v -w "*" $Output_Directory/$Design_Name.synth.v]
+close $fileId
+set output [open $Output_Directory/$Design_Name.final.synth.v "w"]
+set filename "/tmp/1"
+set fid [open $filename r]
+while { [gets $fid line] != -1 } {
+	puts -nonewline $output [string map {"\\" ""} $line]
+	puts -nonewline $output "\n"
+}
+close $fid
+close $output
+puts "\nInfo: Please find the synthesized netlist for $Design_Name at below path. You can use this netlist for STA or PNR"
+puts "\nPath: $Output_Directory/$Design_Name.final.synth.v"
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p44.PNG)
+
+
+*openMSP430.synth.v*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p45.PNG)
+
+
+*/tmp/1*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p46.PNG)
+
+*openMSP430.final.synth.v*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p47.PNG)
+
+#### World of Procs (TCL Procedure)
+
+Procs can be used to create user-defined commands, as shown below. I have successfully written the code for all the procs. The basic codes of all the procs and screenshots of the terminal with several "puts" printing out the variables and user debug information for the 'set_multi_cpu_usage' and the 'read_sdc' procs are shown below.
+
+##### reopenStdout.proc
+
+This proc redirects the 'stdout' screen log to the file in the proc's argument.
+
+*Code*
+
+```tcl
+#!/bin/tclsh
+# proc to redirect screen log to file
+proc reopenStdout {file} {
+    close stdout
+    open $file w       
+}
+```
+
+##### set_multi_cpu_usage.proc
+
+This proc outputs multiple threads of the CPU usage command required for the OpenTimer tool.
+
+*Code*
+
+```tcl
+#!/bin/tclsh
+
+proc set_multi_cpu_usage {args} {
+        array set options {-localCpu <num_of_threads> -help "" }
+        foreach {switch value} [array get options] {
+       # puts "Option $switch is $value"
+        }
+        while {[llength $args]} {
+       # puts "llength is [llength $args]"
+       # puts "lindex 0 of \"$args\" is [lindex $args 0]"
+                switch -glob -- [lindex $args 0] {
+                -localCpu {
+                           #puts "old args is $args"
+                           set args [lassign $args - options(-localCpu)]
+                           #puts "new args is \"$args\""
+                           puts "set_num_threads $options(-localCpu)"
+                          }
+                -help {
+                           #puts "old args is $args"
+                           set args [lassign $args - options(-help) ]
+                           #puts "new args is \"$args\""
+                           puts "Usage: set_multi_cpu_usage -localCpu <num_of_threads> -help"
+                           puts "\t-localCpu - To limit number of threads used"
+                           puts "\t-help - To print details of proc"
+                      }
+                }
+        }
+}
+
+#set_multi_cpu_usage -localCpu 5 -help
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p48.PNG)
+
+##### read_lib.proc
+
+This proc outputs commands to read early and late libraries required for the OpenTimer tool.
+
+*Code*
+
+```tcl
+#!/bin/tclsh
+proc read_lib args {
+	# Setting command parameter options and its values
+	array set options {-late <late_lib_path> -early <early_lib_path> -help ""}
+	while {[llength $args]} {
+		switch -glob -- [lindex $args 0] {
+		-late {
+			set args [lassign $args - options(-late) ]
+			puts "set_late_celllib_fpath $options(-late)"
+		      }
+		-early {
+			set args [lassign $args - options(-early) ]
+			puts "set_early_celllib_fpath $options(-early)"
+		       }
+		-help {
+			set args [lassign $args - options(-help) ]
+			puts "Usage: read_lib -late <late_lib_path> -early <early_lib_path>"
+			puts "-late <provide late library path>"
+			puts "-early <provide early library path>"
+			puts "-help - Provides user deatails on how to use the command"
+		      }	
+		default break
+		}
+	}
+}
+```
+
+##### read_verilog.proc
+
+This proc outputs commands to read the synthesised netlist required for the OpenTimer tool.
+
+*Code*
+
+```tcl
+#!/bin/tclsh
+
+# Proc to convert read_verilog to OpenTimer format
+proc read_verilog {arg1} {
+	puts "set_verilog_fpath $arg1"
+}
+```
+
+##### read_sdc.proc
+
+This proc outputs commands to read constraints .timing file required for the OpenTimer tool. This procs converts SDC file contents to .timing file format for use by the OpenTimer tool, and the conversion code is explained stage by stage with sufficient screenshots.
+
+###### Converting 'create_clock' constraints
+
+Initially, the proc takes the SDC file as an input argument or parameter and processes the 'create_clock' constraints part of SDC.
+
+*Code*
+
+```tcl
+#!/bin/tclsh
+proc read_sdc {arg1} {
+
+# 'file dirname <>' to get directory path only from full path
+set sdc_dirname [file dirname $arg1]
+# 'file tail <>' to get last element
+set sdc_filename [lindex [split [file tail $arg1] .] 0 ]
+set sdc [open $arg1 r]
+set tmp_file [open /tmp/1 w]
+
+# Removing "[" & "]" from SDC for further processing the data with 'lindex'
+# 'read <>' to read entire file
+puts -nonewline $tmp_file [string map {"\[" "" "\]" " "} [read $sdc]]     
+close $tmp_file
+
+# Opening tmp file to write constraints converted from generated SDC
+set timing_file [open /tmp/3 w]
+
+# Converting create_clock constraints
+# -----------------------------------
+set tmp_file [open /tmp/1 r]
+set lines [split [read $tmp_file] "\n"]
+# 'lsearch -all -inline' to search list for pattern and retain elementas with pattern only
+set find_clocks [lsearch -all -inline $lines "create_clock*"]
+foreach elem $find_clocks {
+	set clock_port_name [lindex $elem [expr {[lsearch $elem "get_ports"]+1}]]
+	set clock_period [lindex $elem [expr {[lsearch $elem "-period"]+1}]]
+	set duty_cycle [expr {100 - [expr {[lindex [lindex $elem [expr {[lsearch $elem "-waveform"]+1}]] 1]*100/$clock_period}]}]
+	puts $timing_file "\nclock $clock_port_name $clock_period $duty_cycle"
+}
+close $tmp_file
+```
+
+*Screenshots*
+
+*openMSP430.sdc*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p49.PNG)
+
+*/tmp/1*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p50.PNG)
+
+*/tmp/3*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p51.PNG)
+
+###### Converting 'set_clock_latency' constraints
+
+Processes 'set_clock_latency' constraints part of SDC.
+
+*Code*
+
+```tcl
+# Converting set_clock_latency constraints
+# ----------------------------------------
+set find_keyword [lsearch -all -inline $lines "set_clock_latency*"]
+set tmp2_file [open /tmp/2 w]
+set new_port_name ""
+foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_clocks"]+1}]]
+	if {![string match $new_port_name $port_name]} {
+        	set new_port_name $port_name
+        	set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+        	set delay_value ""
+        	foreach new_elem $delays_list {
+        		set port_index [lsearch $new_elem "get_clocks"]
+        		lappend delay_value [lindex $new_elem [expr {$port_index-1}]]
+        	}
+		puts -nonewline $tmp2_file "\nat $port_name $delay_value"
+	}
+}
+
+close $tmp2_file
+set tmp2_file [open /tmp/2 r]
+puts -nonewline $timing_file [read $tmp2_file]
+close $tmp2_file
+```
+
+*Screenshots*
+
+*/tmp/2*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p52.PNG)
+
+*/tmp/3*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p53.PNG)
+
+###### Converting 'set_clock_transition' constraints
+
+Processes 'set_clock_transition' constraints part of SDC.
+
+*Code*
+
+```tcl
+# Converting set_clock_transition constraints
+# -------------------------------------------
+set find_keyword [lsearch -all -inline $lines "set_clock_transition*"]
+set tmp2_file [open /tmp/2 w]
+set new_port_name ""
+foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_clocks"]+1}]]
+        if {![string match $new_port_name $port_name]} {
+		set new_port_name $port_name
+		set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+        	set delay_value ""
+        	foreach new_elem $delays_list {
+        		set port_index [lsearch $new_elem "get_clocks"]
+        		lappend delay_value [lindex $new_elem [expr {$port_index-1}]]
+        	}
+        	puts -nonewline $tmp2_file "\nslew $port_name $delay_value"
+	}
+}
+
+close $tmp2_file
+set tmp2_file [open /tmp/2 r]
+puts -nonewline $timing_file [read $tmp2_file]
+close $tmp2_file
+```
+
+*Screenshots*
+
+*/tmp/2*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p54.PNG)
+
+*/tmp/3*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p55.PNG)
+
+
+###### Converting 'set_input_delay' constraints
+
+Processes 'set_input_delay' constraints part of SDC.
+
+*Code*
+
+```tcl
+# Converting set_input_delay constraints
+# --------------------------------------
+set find_keyword [lsearch -all -inline $lines "set_input_delay*"]
+set tmp2_file [open /tmp/2 w]
+set new_port_name ""
+foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_ports"]+1}]]
+        if {![string match $new_port_name $port_name]} {
+                set new_port_name $port_name
+        	set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+		set delay_value ""
+        	foreach new_elem $delays_list {
+        		set port_index [lsearch $new_elem "get_ports"]
+        		lappend delay_value [lindex $new_elem [expr {$port_index-1}]]
+        	}
+        	puts -nonewline $tmp2_file "\nat $port_name $delay_value"
+	}
+}
+close $tmp2_file
+set tmp2_file [open /tmp/2 r]
+puts -nonewline $timing_file [read $tmp2_file]
+close $tmp2_file
+```
+
+*Screenshots*
+
+*/tmp/2*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p56.PNG)
+
+*/tmp/3*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p57.PNG)
+
+###### Converting 'set_input_transition' constraints
+
+Processes 'set_input_transition' constraints part of SDC.
+
+*Code*
+
+```tcl
+# Converting set_input_transition constraints
+# -------------------------------------------
+set find_keyword [lsearch -all -inline $lines "set_input_transition*"]
+set tmp2_file [open /tmp/2 w]
+set new_port_name ""
+foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_ports"]+1}]]
+        if {![string match $new_port_name $port_name]} {
+                set new_port_name $port_name
+        	set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+        	set delay_value ""
+        	foreach new_elem $delays_list {
+        		set port_index [lsearch $new_elem "get_ports"]
+        		lappend delay_value [lindex $new_elem [expr {$port_index-1}]]
+        	}
+        	puts -nonewline $tmp2_file "\nslew $port_name $delay_value"
+	}
+}
+
+close $tmp2_file
+set tmp2_file [open /tmp/2 r]
+puts -nonewline $timing_file [read $tmp2_file]
+close $tmp2_file
+```
+
+*Screenshots*
+
+*/tmp/2*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p58.PNG)
+
+*/tmp/3*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p59.PNG)
+
+###### Converting 'set_output_delay' constraints
+
+Processes 'set_output_delay' constraints part of SDC.
+
+*Code*
+
+```tcl
+# Converting set_output_delay constraints
+# ---------------------------------------
+set find_keyword [lsearch -all -inline $lines "set_output_delay*"]
+set tmp2_file [open /tmp/2 w]
+set new_port_name ""
+foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_ports"]+1}]]
+        if {![string match $new_port_name $port_name]} {
+                set new_port_name $port_name
+        	set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*"] ""]]
+        	set delay_value ""
+        	foreach new_elem $delays_list {
+        		set port_index [lsearch $new_elem "get_ports"]
+        		lappend delay_value [lindex $new_elem [expr {$port_index-1}]]
+        	}
+        	puts -nonewline $tmp2_file "\nrat $port_name $delay_value"
+	}
+}
+
+close $tmp2_file
+set tmp2_file [open /tmp/2 r]
+puts -nonewline $timing_file [read $tmp2_file]
+close $tmp2_file
+```
+
+*Screenshots*
+
+*/tmp/2*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p60.PNG)
+
+*/tmp/3*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p61.PNG)
+
+###### Converting 'set_load' constraints
+
+Processes 'set_load' constraints part of SDC. And with that, all SDC constarints are processed, so we close the /tmp/3 file containing all processed data for now.
+
+*Code*
+
+```tcl
+# Converting set_load constraints
+# -------------------------------
+set find_keyword [lsearch -all -inline $lines "set_load*"]
+set tmp2_file [open /tmp/2 w]
+set new_port_name ""
+foreach elem $find_keyword {
+        set port_name [lindex $elem [expr {[lsearch $elem "get_ports"]+1}]]
+        if {![string match $new_port_name $port_name]} {
+                set new_port_name $port_name
+        	set delays_list [lsearch -all -inline $find_keyword [join [list "*" " " $port_name " " "*" ] ""]]
+        	set delay_value ""
+        	foreach new_elem $delays_list {
+        	set port_index [lsearch $new_elem "get_ports"]
+        	lappend delay_value [lindex $new_elem [expr {$port_index-1}]]
+        	}
+        	puts -nonewline $timing_file "\nload $port_name $delay_value"
+	}
+}
+close $tmp2_file
+set tmp2_file [open /tmp/2 r]
+puts -nonewline $timing_file  [read $tmp2_file]
+close $tmp2_file
+
+# Closing tmp file after writing constraints converted from generated SDC
+close $timing_file
+```
+
+*Screenshots*
+
+*/tmp/3*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p62.PNG)
+
+#### QoR (Quality of Results) Generation
+
+I have successfully written the code for QoR generation. The basic code and screenshots of the terminal are shown below.
+
+*Code*
+
+```tcl
+# Quality of Results (QoR) generation
+puts "\n"
+puts "                                                           ****PRELAYOUT TIMING RESULTS_SYNUI****\n"
+set formatStr {%15s%14s%21s%16s%16s%15s%15s%15s%15s}
+puts [format $formatStr "-----------" "-------" "--------------" "---------" "---------" "--------" "--------" "-------" "-------"]
+puts [format $formatStr "Design Name" "Runtime" "Instance Count" "WNS Setup" "FEP Setup" "WNS Hold" "FEP Hold" "WNS RAT" "FEP RAT"]
+puts [format $formatStr "-----------" "-------" "--------------" "---------" "---------" "--------" "--------" "-------" "-------"]
+foreach design_name $Design_Name runtime $time_elapsed_in_sec instance_count $Instance_count wns_setup $worst_negative_setup_slack fep_setup $Number_of_setup_violations wns_hold $worst_negative_hold_slack fep_hold $Number_of_hold_violations wns_rat $worst_RAT_slack fep_rat $Number_output_violations {
+	puts [format $formatStr $design_name $runtime $instance_count $wns_setup $fep_setup $wns_hold $fep_hold $wns_rat $fep_rat]
+}
+puts [format $formatStr "-----------" "-------" "--------------" "---------" "---------" "--------" "--------" "-------" "-------"]
+puts "\n"
+
+```
+
+*Screenshots*
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p_63.PNG)
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p_64.PNG)
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p_65.PNG)
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p_66.PNG)
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p_67.PNG)
+
+![image](https://github.com/Sidv005/Samsung-PD-Training/blob/9dce68881f2263913db3a03a59e7b183e91056d7/day30/p_68.PNG)
+
+</details>
